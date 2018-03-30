@@ -2000,6 +2000,36 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /licenses/:
+    x-resource: Licenses
+    get:
+      summary: Get a list of licenses
+      tags:
+        - Licenses
+      parameters:
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+      responses:
+        200:
+          description: SUCCESS
+          schema:
+            $ref: '#/definitions/LicensePaginated'
+
+  /licenses/{licenseId}:
+    x-resource: Licenses
+    get:
+      summary: Get a license based on its id
+      tags:
+        - Licenses
+      parameters:
+        - $ref: '#/parameters/licenseId'
+      responses:
+        200:
+          description: SUCCESS
+          schema:
+            $ref: '#/definitions/License'
+
+
 parameters:
   orderingBase:
     name: ordering
@@ -2383,6 +2413,12 @@ parameters:
     in: query
     type: string
     required: false
+  licenseId:
+    name: licenseId
+    description: id/shortName of a license
+    in: path
+    type: string
+    required: true
 
 definitions:
   RenderDefinition:
@@ -2716,26 +2752,21 @@ definitions:
       count:
         type: integer
         format: int32
-        readOnly: true
         description: number of total objects matching query
       hasNext:
         type: boolean
-        readOnly: true
         description: True if more results can be fetched, otherwise false
       hasPrevious:
         type: boolean
-        readOnly: true
         description: True if previous results can be fetched, otherwise false
       page:
         type: integer
-        readOnly: true
         format: int32
         description: Current page of paginated query results
       pageSize:
         type: integer
         format: int32
         description: Number of results per page
-        readOnly: true
   UserPaginated:
     allOf:
     - $ref: '#/definitions/PaginatedResponse'
@@ -2889,6 +2920,32 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/Datasource'
+  License:
+    type: object
+    description: A record of license
+    properties:
+      name:
+        type: string
+        description: Name of a license
+      osiApproved:
+        type: boolean
+        description: If a license is OSI approved
+      shortName:
+        type: string
+        description: Short name of a license
+      url:
+        type: string
+        description: URL to details of a license
+
+  LicensePaginated:
+    allOf:
+    - $ref: '#/definitions/PaginatedResponse'
+    - type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/definitions/License'
 
   Scene:
     allOf:
