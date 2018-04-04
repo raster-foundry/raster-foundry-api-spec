@@ -85,6 +85,13 @@ x-resources:
   - name: Shapes
     description: |
       "Shapes are vectors that each user can create and manage. These shapes can then be used in various ways within the Raster Foundry platform."
+  - name: Licenses
+    description: |
+      "A license is an official permission or permit to do, use, or own something."
+  - name: Teams
+    description: |
+      "Teams represent groups of users within (and across) organizations. Each team belongs to one organization. A user can be a member of any number of teams."
+
 
 tags:
   - name: Users
@@ -2010,7 +2017,8 @@ paths:
     get:
       summary: Get a list of licenses
       tags:
-        - Licenses
+        - Imagery
+        - Lab
       parameters:
         - $ref: '#/parameters/pageSize'
         - $ref: '#/parameters/page'
@@ -2018,14 +2026,15 @@ paths:
         200:
           description: SUCCESS
           schema:
-            $ref: '#/definitions/LicensePaginated'
+            $ref: '#/definitions/LicensesPaginated'
 
   /licenses/{licenseId}:
     x-resource: Licenses
     get:
       summary: Get a license based on its id
       tags:
-        - Licenses
+        - Imagery
+        - Lab
       parameters:
         - $ref: '#/parameters/licenseId'
       responses:
@@ -2033,6 +2042,97 @@ paths:
           description: SUCCESS
           schema:
             $ref: '#/definitions/License'
+
+  /teams/:
+    x-resource: Teams
+    get:
+      summary: Get a list of teams
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+      responses:
+        200:
+          description: SUCCESS
+          schema:
+            $ref: '#/definitions/TeamsPaginated'
+    post:
+      summary: Create a team
+      tags:
+        - Users
+      parameters:
+        - name: team
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Team'
+      responses:
+        201:
+          description: Get a newly created team
+          schema:
+            $ref: '#/definitions/Team'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /teams/{uuid}:
+    x-resource: Teams
+    get:
+      summary: Get team details
+      tags:
+        - User
+      parameters:
+        - $ref: '#/parameters/uuid'
+      responses:
+        200:
+          description: Detail about a team
+          schema:
+            $ref: '#/definitions/Team'
+        404:
+          description: |
+            UUID parameter does not refer to a team or the user is not able to view the team it refers to
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Update a team
+      tags:
+        - User
+      parameters:
+        - name: team
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Team'
+        - $ref: '#/parameters/uuid'
+      responses:
+        204:
+          description: Update successful (no further processing needed)
+        404:
+          description: |
+            UUID parameter does not refer to a team or the user is not able to view the team it refers to
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete a team
+      description: delete a team based on team id
+      tags:
+        - User
+      parameters:
+        - $ref: '#/parameters/uuid'
+      responses:
+        204:
+          description: Deletion successful (no content)
+        404:
+          description: |
+            UUID parameter does not refer to a team or the user is not able to view the team it refers to
+          schema:
+            $ref: '#/definitions/Error'
 
 
 parameters:
@@ -2816,6 +2916,46 @@ definitions:
       required:
         - name
         - id
+
+  TeamsPaginated:
+    allOf:
+    - $ref: '#/definitions/PaginatedResponse'
+    - type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/definitions/Team'
+
+  Team:
+    allOf:
+    - $ref: '#/definitions/TimeModelMixin'
+    - type: object
+      properties:
+        id:
+          type: string
+          format: UUID
+          description: Team ID
+        createdBy:
+          type: string
+          description: User who created the object
+          readOnly: true
+        modifiedBy:
+          type: string
+          description: User who most recently modified the object
+          readOnly: true
+        organizationId:
+          type: string
+          format: UUID
+          description: uuid for organization
+        name:
+          type: string
+          description: name of a team
+        settings:
+          type: object
+          description: settings for a team, default to {}
+
+
   Geometry:
       type: object
       description: GeoJSON geometry
@@ -2944,7 +3084,7 @@ definitions:
         type: string
         description: URL to details of a license
 
-  LicensePaginated:
+  LicensesPaginated:
     allOf:
     - $ref: '#/definitions/PaginatedResponse'
     - type: object
