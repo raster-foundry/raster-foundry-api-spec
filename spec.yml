@@ -531,6 +531,11 @@ paths:
         - $ref: '#/parameters/ingested'
         - $ref: '#/parameters/ingestStatus'
         - $ref: '#/parameters/forProjectId'
+        - name: shape
+          in: query
+          type: string
+          format: uuid
+          description: UUID of a shape in shapes table
       responses:
         200:
           description: Paginated list of scenes
