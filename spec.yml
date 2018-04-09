@@ -87,7 +87,7 @@ x-resources:
       "Shapes are vectors that each user can create and manage. These shapes can then be used in various ways within the Raster Foundry platform."
   - name: Licenses
     description: |
-      "A license is an official permission or permit to do, use, or own something."
+      "A license is an official permission or permit to do, use, or own something." Users can add licenses to the data they create and share in Raster Foundry to communicate to others if and how that data can be used.
   - name: Teams
     description: |
       "Teams represent groups of users within (and across) organizations. Each team belongs to one organization. A user can be a member of any number of teams."
@@ -491,10 +491,7 @@ paths:
         - Authentication
         - Imagery
       parameters:
-        - name: uuid
-          in: path
-          required: true
-          type: string
+        - $ref: '#/parameters/uuid'
       responses:
         200:
           description: AWS credentials scoped to the upload bucket with prefix
@@ -2061,7 +2058,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Team'
+            $ref: '#/definitions/TeamCreate'
       responses:
         201:
           description: Get a newly created team
@@ -2077,7 +2074,7 @@ paths:
     get:
       summary: Get team details
       tags:
-        - User
+        - Users
       parameters:
         - $ref: '#/parameters/uuid'
       responses:
@@ -2093,17 +2090,19 @@ paths:
     put:
       summary: Update a team
       tags:
-        - User
+        - Users
       parameters:
         - name: team
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Team'
+            $ref: '#/definitions/TeamCreate'
         - $ref: '#/parameters/uuid'
       responses:
         204:
           description: Update successful (no further processing needed)
+          schema:
+            $ref: '#/definitions/Team'
         404:
           description: |
             UUID parameter does not refer to a team or the user is not able to view the team it refers to
@@ -2117,7 +2116,7 @@ paths:
       summary: Delete a team
       description: delete a team based on team id
       tags:
-        - User
+        - Users
       parameters:
         - $ref: '#/parameters/uuid'
       responses:
@@ -2922,13 +2921,8 @@ definitions:
 
   Team:
     allOf:
-    - $ref: '#/definitions/TimeModelMixin'
     - type: object
       properties:
-        id:
-          type: string
-          format: UUID
-          description: Team ID
         createdBy:
           type: string
           description: User who created the object
@@ -2937,16 +2931,27 @@ definitions:
           type: string
           description: User who most recently modified the object
           readOnly: true
-        organizationId:
+        id:
           type: string
           format: UUID
-          description: uuid for organization
-        name:
-          type: string
-          description: name of a team
-        settings:
-          type: object
-          description: settings for a team, default to {}
+          description: Team ID
+    - $ref: '#/definitions/TimeModelMixin'
+    - $ref: '#/definitions/TeamCreate'
+
+
+  TeamCreate:
+    type: object
+    properties:
+      organizationId:
+        type: string
+        format: UUID
+        description: uuid for organization
+      name:
+        type: string
+        description: name of a team
+      settings:
+        type: object
+        description: settings for a team, default to {}
 
 
   Geometry:
