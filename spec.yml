@@ -87,7 +87,7 @@ x-resources:
       "Shapes are vectors that each user can create and manage. These shapes can then be used in various ways within the Raster Foundry platform."
   - name: Licenses
     description: |
-      "A license is an official permission or permit to do, use, or own something." Users can add licenses to the data they create and share in Raster Foundry to communicate to others if and how that data can be used.
+      "A license is an official permission or permit to do, use, or own something. Users can add licenses to the data they create and share in Raster Foundry to communicate to others if and how that data can be used."
   - name: Teams
     description: |
       "Teams represent groups of users within (and across) organizations. Each team belongs to one organization. A user can be a member of any number of teams."
