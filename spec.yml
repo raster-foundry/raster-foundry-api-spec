@@ -3498,6 +3498,7 @@ definitions:
             - S3
             - LOCAL
             - PLANET
+            - MODIS_USGS
         fileType:
           type: string
           description: type of data being uploaded, limited to two options right now
