@@ -3011,6 +3011,12 @@ definitions:
             $ref: '#/definitions/FilterFields'
           statusFields:
             $ref: '#/definitions/StatusFields'
+          sceneType:
+            type: string
+            description: How to produce tiles of this scene
+            enum:
+              - AVRO
+              - COG
 
   FilterFields:
     type: object
