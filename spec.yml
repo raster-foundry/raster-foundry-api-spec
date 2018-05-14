@@ -213,6 +213,23 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
+  /users/me/roles:
+    x-resource: Users
+    get:
+      summary: Get a logged-in user's roles
+      tags:
+        - Users
+      responses:
+        200:
+          description: Roles found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UserGroupRole'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
   /users/{uuid}/:
     x-resource: Users
     get:
@@ -2846,6 +2863,33 @@ definitions:
           - USER
           - VIEWER
           - OWNER
+  UserGroupRole:
+    type: object
+    allOf:
+    - $ref: '#/definitions/TimeModelMixin'
+    - type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        isActive:
+          type: boolean
+        userId:
+          type: string
+        groupType:
+          type: string
+          enum:
+          - Platform
+          - Organization
+          - Team
+        groupId:
+          type: string
+          format: uuid
+        groupRole:
+          type: string
+          enum: 
+          - Admin
+          - Member
   PaginatedResponse:
     type: object
     required:
