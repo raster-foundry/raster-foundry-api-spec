@@ -3075,9 +3075,6 @@ definitions:
         type: string
         description: unique identifier for object
         format: uuid
-      organizationId:
-        type: string
-        description: uuid for organization
   BaseCreate:
     type: object
     properties:
@@ -3184,9 +3181,6 @@ definitions:
   AOI:
     type: object
     properties:
-      organizationId:
-        type: string
-        format: uuid
       area:
         type: object
       filters:
@@ -3316,16 +3310,11 @@ definitions:
     - type: object
       required:
         - id
-        - organizationId
         - role
       properties:
         id:
           type: string
           description: User ID for Raster Foundry
-        organizationId:
-          type: string
-          format: uuid
-          description: UUID of organization to which user belongs
         role:
           type: string
           description: User role in organization
@@ -3429,10 +3418,6 @@ definitions:
       id:
         type: string
         description: Auth0 ID for user
-      organizationId:
-        type: string
-        format: uuid
-        description: UUID for organization that user is being created for
       role:
         type: string
         description: Role to create user with in the provided organization
@@ -3615,6 +3600,9 @@ definitions:
           type: string
           description: User who most recently modified the object
           readOnly: true
+        organizationId:
+          type: string
+          description: uuid for organization
         id:
           type: string
           format: UUID
@@ -3721,9 +3709,6 @@ definitions:
               - PUBLIC
               - ORGANIZATION
               - PRIVATE
-          organizationId:
-            type: string
-            description: uuid for organization
           name:
             type: string
             description: human label name for datasource
