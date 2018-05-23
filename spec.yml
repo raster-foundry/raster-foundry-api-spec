@@ -104,6 +104,8 @@ tags:
     description: Geospatial processing discovery and endpoints
   - name: Statistics
     description: Statistical metadata about geospatial data
+  - name: Permissions
+    description: Resources relating to object-level access
 
 paths:
   /users/:
@@ -209,6 +211,23 @@ paths:
           description: User not found
           schema:
             $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /users/me/roles:
+    x-resource: Users
+    get:
+      summary: Get a logged-in user's roles
+      tags:
+        - Users
+      responses:
+        200:
+          description: Roles found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UserGroupRole'
         default:
           description: Unexpected error
           schema:
@@ -1150,6 +1169,58 @@ paths:
       responses:
         204:
           description: Successfully updated order of scenes in project
+
+  /projects/{uuid}/permissions/:
+    x-resource: Projects
+    get:
+      summary: List access control rules for this project
+      tags:
+        - Permissions
+      responses:
+        200:
+          description: All access control rules for this project
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
+        403:
+          description: Insufficient permissions to list permissions on this project
+    put:
+      summary: Replace permissions defined on this project
+      tags:
+        - Permissions
+      parameters:
+        - name: accessControlRules
+          in: body
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRuleCreate'
+      responses:
+        200:
+          description: Access control rules replaced with response successfully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
+    post:
+      summary: Add a new access control rule to this project
+      tags:
+        - Permissions
+      parameters:
+        - name: accessControlRule
+          in: body
+          required: true
+          schema:
+            $ref: '#/definition/AccessControlRuleCreate'
+      responses:
+        200:
+          description: Access control rule appended successfully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
 
   /areas-of-interest/:
     get:
@@ -2545,15 +2616,69 @@ definitions:
         type: string
         description: unique identifier for object
         format: uuid
-      organizationId:
-        type: string
-        description: uuid for organization
   BaseCreate:
     type: object
     properties:
       owner:
         type: string
         description: Optional during object creation, owner of an object
+  AccessControlRuleCreate:
+    type: object
+    properties:
+      isActive:
+        type: boolean
+        description: Whether this access control rule is active
+      subjectType:
+        type: string
+        description: The target this access control rule applies to
+        enum:
+          - ALL
+          - PLATFORM
+          - ORGANIZATION
+          - TEAM
+          - USER
+      subjectId:
+        type: string
+        description: The id of the subject this access control rule applies to
+      actionType:
+        type: string
+        description: What this access control rule authorizes subjects to do
+        enum:
+          - VIEW
+          - EDIT
+          - DEACTIVATE
+          - DELETE
+          - ANNOTATE
+  AccessControlRule:
+    allOf:
+      - $ref: '#/definitions/AccessControlRuleCreate'
+      - type: object
+        properties:
+          id:
+            type: string
+            format: uuid
+          createdAt:
+            type: string
+            description: timestamp of object creation
+            format: date-time
+          createdBy:
+            type: string
+            description: user who created this object
+          objectType:
+            type: string
+            description: type of object this access control rule applies to
+            enum:
+              - PROJECT
+              - SCENE
+              - DATASOURCE
+              - SHAPE
+              - WORKSPACE
+              - TEMPLATE
+              - ANALYSIS
+          objectId:
+            type: string
+            description: id of the object this access control rule applies to
+            format: uuid
   MapToken:
     allOf:
     - $ref: '#/definitions/BaseModel'
@@ -2597,9 +2722,6 @@ definitions:
   AOI:
     type: object
     properties:
-      organizationId:
-        type: string
-        format: uuid
       area:
         type: object
       filters:
@@ -2729,16 +2851,11 @@ definitions:
     - type: object
       required:
         - id
-        - organizationId
         - role
       properties:
         id:
           type: string
           description: User ID for Raster Foundry
-        organizationId:
-          type: string
-          format: uuid
-          description: UUID of organization to which user belongs
         role:
           type: string
           description: User role in organization
@@ -2835,10 +2952,6 @@ definitions:
       id:
         type: string
         description: Auth0 ID for user
-      organizationId:
-        type: string
-        format: uuid
-        description: UUID for organization that user is being created for
       role:
         type: string
         description: Role to create user with in the provided organization
@@ -2846,6 +2959,33 @@ definitions:
           - USER
           - VIEWER
           - OWNER
+  UserGroupRole:
+    type: object
+    allOf:
+    - $ref: '#/definitions/TimeModelMixin'
+    - type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        isActive:
+          type: boolean
+        userId:
+          type: string
+        groupType:
+          type: string
+          enum:
+          - Platform
+          - Organization
+          - Team
+        groupId:
+          type: string
+          format: uuid
+        groupRole:
+          type: string
+          enum: 
+          - Admin
+          - Member
   PaginatedResponse:
     type: object
     required:
@@ -2938,6 +3078,9 @@ definitions:
           type: string
           description: User who most recently modified the object
           readOnly: true
+        organizationId:
+          type: string
+          description: uuid for organization
         id:
           type: string
           format: UUID
@@ -3044,9 +3187,6 @@ definitions:
               - PUBLIC
               - ORGANIZATION
               - PRIVATE
-          organizationId:
-            type: string
-            description: uuid for organization
           name:
             type: string
             description: human label name for datasource
