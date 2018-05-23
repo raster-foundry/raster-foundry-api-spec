@@ -110,25 +110,6 @@ tags:
 paths:
   /users/:
     x-resource: Users
-    get:
-      summary: Get a list of users
-      description: |
-        Search for and list users by different characteristics
-      tags:
-        - Users
-      parameters:
-        - $ref: '#/parameters/orderingBase'
-        - $ref: '#/parameters/pageSize'
-        - $ref: '#/parameters/page'
-      responses:
-        200:
-          description: Paginated list of users
-          schema:
-            $ref: '#/definitions/UserPaginated'
-        default:
-          description: Unexpected error
-          schema:
-            $ref: '#/definitions/Error'
     post:
       summary: Create a user
       tags:
