@@ -218,7 +218,7 @@ paths:
   /users/me/roles:
     x-resource: Users
     get:
-      summary: Get a logged-in user's roles
+      summary: Get a logged-in user''s roles
       tags:
         - Users
       responses:
@@ -285,7 +285,7 @@ paths:
         200:
           description: Paginated list of organizations
           schema:
-            $ref: '#/definitions/OrganizationPaginated'
+            $ref: '#/definitions/OrganizationsPaginated'
     post:
       summary: Create an organization
       tags:
@@ -305,17 +305,14 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-  /organizations/{organizationId}/:
+  /organizations/{organizationID}/:
     x-resource: Organizations
     get:
       summary: Get details for an organization
       tags:
         - Users
       parameters:
-        - name: organizationId
-          in: path
-          required: true
-          type: string
+        - $ref: '#/parameters/organizationID'
       responses:
         200:
           description: Returned organization
@@ -330,15 +327,12 @@ paths:
       tags:
         - Users
       parameters:
+        - $ref: '#/parameters/organizationID'
         - name: organization
           in: body
           required: true
           schema:
             $ref: '#/definitions/Organization'
-        - name: organizationId
-          in: path
-          required: true
-          type: string
       responses:
         204:
           description: Update successful (No Content)
@@ -346,22 +340,464 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-  /organizations/{organizationId}/users/:
+  /organizations/{organizationID}/users/:
     x-resource: Organizations
     get:
       summary: Get users and roles for an organization
       tags:
         - Users
       parameters:
-        - name: organizationId
-          in: path
-          required: true
-          type: string
+        - $ref: '#/parameters/organizationID'
       responses:
         200:
           description: Paginated list of user roles
           schema:
             $ref: '#/definitions/UserPaginated'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /platforms/:
+    x-resource: Platforms
+    get:
+      summary: Get a list of platforms
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/pageSize'
+      responses:
+        200:
+          description: Paginated list platforms
+          schema:
+            $ref: '#/definitions/PlatformsPaginated'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create a platform
+      tags:
+        - Platforms
+      parameters:
+        - name: Platform
+          in: body
+          schema:
+            $ref: '#/definitions/Platform'
+      responses:
+        201:
+          description: Platform created
+          schema:
+            $ref: '#/definitions/Platform'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /platforms/{platformID}/:
+    x-resource: Platforms
+    get:
+      summary: Get a platform
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+      responses: 
+        200:
+          description: Platform found
+          schema:
+            $ref: '#/definitions/Platform'
+        404:
+          description: Platform not found
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Update a platform
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - name: Platform
+          in: body
+          schema:
+            $ref: '#/definitions/Platform'
+      responses:
+        204:
+          description: No Content (Update successful)
+        404:
+          description: Platform not found
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete a platform
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+      responses:
+        204:
+          description: Deletion Successful (no content)
+        404:
+          description: |
+            The UUID parameter does not refer to platform or the user does not have permission to perform this action
+          schema:
+            $ref: '#/definitions/Error'
+  /platforms/{platformID}/members/:
+    x-resource: Platforms
+    get:
+      summary: Get a list of users for the platform
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/search'
+      responses:
+        200:
+          description: Paginated list of users with their platform role
+          schema:
+            $ref: '#/definitions/UserWithRolePaginated'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Move a user to the platform
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - name: userRole
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UserRole'
+      responses:
+        200:
+          description: List of modified user roles
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UserGroupRole'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /platforms/{platformID}/organizations/:
+    x-resource: Platforms
+    get:
+      summary: List platform organizations that the user has permissions to view
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/pageSize'
+      responses:
+        200:
+          description: Paginated Organizations
+          schema:
+            $ref: '#/definitions/OrganizationsPaginated'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create an Organization.
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - name: Organization
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/OrganizationCreate'
+      responses:
+        201:
+          description: Organization created
+          schema:
+            $ref: '#/definitions/Organization'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /platforms/{platformID}/organizations/{organizationID}/:
+    x-resource: Platforms
+    get:
+      summary: Fetch platform organization
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - $ref: '#/parameters/organizationID'
+      responses:
+        200:
+          description: Organization
+          schema:
+            $ref: '#/definitions/Organization'
+        404:
+          description: Organization not found
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Update platform organization
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - $ref: '#/parameters/organizationID'
+        - name: Organization
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Organization'
+      responses:
+        204:
+          description: No Content (success)
+        404:
+          description: Organization not found
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Deactivate platform organization
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - $ref: '#/parameters/organizationID'
+      responses:
+        204:
+          description: No Content (success)
+        404:
+          description: Organization not found
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /platforms/{platformID}/organizations/{organizationID}/members/:
+    x-resource: Platforms
+    get:
+      summary: Fetch organization member list
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - $ref: '#/parameters/organizationID'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/search'
+      responses:
+        200:
+          description: Organization members
+          schema:
+            $ref: '#/definitions/UserWithRolePaginated'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Move a user to the organization
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - $ref: '#/parameters/organizationID'
+        - name: userOrganizationRole
+          description: Role that the user will have in the organization
+          in: body
+          schema:
+            $ref: '#/definitions/UserRole'
+      responses:
+        200:
+          description: Modified roles
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UserGroupRole'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /platforms/{platformID}/organizations/{organizationID}/teams/:
+    x-resource: Platforms
+    get:
+      summary: Fetch organization teams
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - $ref: '#/parameters/organizationID'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+      responses:
+        200:
+          description: Organization teams
+          schema:
+            $ref: '#/definitions/TeamsPaginated'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create organization team
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - $ref: '#/parameters/organizationID'
+        - name: team
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/TeamCreate'
+      responses:
+        201:
+          description: Team Created
+          schema:
+            $ref: '#/definitions/Team'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /platforms/{platformID}/organizations/{organizationID}/teams/{teamID}/:
+    x-resource: Platforms
+    get:
+      summary: Fetch team
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - $ref: '#/parameters/organizationID'
+        - $ref: '#/parameters/teamID'
+      responses:
+        200:
+          description: Team
+          schema:
+            $ref: '#/definitions/Team'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Update team
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - $ref: '#/parameters/organizationID'
+        - $ref: '#/parameters/teamID'
+        - name: team
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Team'
+      responses:
+        204:
+          description: No Content (success)
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete team
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - $ref: '#/parameters/organizationID'
+        - $ref: '#/parameters/teamID'
+      responses:
+        204:
+          description: No Content (success)
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /platforms/{platformID}/organizations/{organizationID}/teams/{teamID}/members/:
+    x-resource: Platforms
+    get:
+      summary: Fetch team members
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - $ref: '#/parameters/organizationID'
+        - $ref: '#/parameters/teamID'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/search'
+      responses:
+        200:
+          description: Organization teams
+          schema:
+            $ref: '#/definitions/TeamsPaginated'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Add team member
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - $ref: '#/parameters/organizationID'
+        - $ref: '#/parameters/teamID'
+        - name: userRole
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UserRole'
+      responses:
+        200:
+          description: List of modified user roles
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UserGroupRole'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /platforms/{platformID}/organizations/{organizationID}/teams/{teamID}/members/{userID}:
+    x-resource: Platforms
+    delete:
+      summary: Remove team member
+      tags:
+        - Platforms
+      parameters:
+        - $ref: '#/parameters/platformID'
+        - $ref: '#/parameters/organizationID'
+        - $ref: '#/parameters/teamID'
+        - $ref: '#/parameters/userID'
+      responses:
+        200:
+          description: List of modified user roles
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UserGroupRole'
         default:
           description: Unexpected error
           schema:
@@ -2281,6 +2717,29 @@ parameters:
     required: true
     type: string
     format: uuid
+  platformID:
+    name: platformID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  organizationID:
+    name: organizationID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  teamID:
+    name: teamID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  userID:
+    name: userID
+    in: path
+    required: true
+    type: string
   slugLabel:
     name: slugLabel
     description: A url-safe slug label
@@ -2879,6 +3338,13 @@ definitions:
         $ref: '#/definitions/User'
       oauth:
         $ref: '#/definitions/Auth0User'
+  UserWithRole:
+    allOf:
+      - $ref: '#/definitions/User'
+      - type: object
+        properties:
+          groupRole:
+            type: string
   Auth0User:
     type: object
     properties:
@@ -2959,6 +3425,16 @@ definitions:
           - USER
           - VIEWER
           - OWNER
+  UserRole:
+    type: object
+    properties:
+      userId:
+        type: string
+      groupRole:
+        type: string
+        enum: 
+        - Admin
+        - Member
   UserGroupRole:
     type: object
     allOf:
@@ -2970,8 +3446,6 @@ definitions:
           format: uuid
         isActive:
           type: boolean
-        userId:
-          type: string
         groupType:
           type: string
           enum:
@@ -2981,11 +3455,7 @@ definitions:
         groupId:
           type: string
           format: uuid
-        groupRole:
-          type: string
-          enum: 
-          - Admin
-          - Member
+    - $ref: '#/definitions/UserRole'
   PaginatedResponse:
     type: object
     required:
@@ -3013,6 +3483,15 @@ definitions:
         type: integer
         format: int32
         description: Number of results per page
+  UserWithRolePaginated:
+    allOf:
+    - $ref: '#/definitions/PaginatedResponse'
+    - type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/definitions/UserWithRole'
   UserPaginated:
     allOf:
     - $ref: '#/definitions/PaginatedResponse'
@@ -3032,7 +3511,42 @@ definitions:
           items:
             $ref: '#/definitions/Scene'
 
-  OrganizationPaginated:
+  PlatformsPaginated:
+    allOf:
+      - $ref: '#/definitions/PaginatedResponse'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/definitions/Platform'
+
+  Platform:
+    type: object
+    properties:
+      id:
+        type: string
+        format: UUID
+        description: Platform Id
+        readOnly: true
+      name:
+        type: string
+        description: Platform display name
+      settings:
+        type: object
+      isActive:
+        type: boolean
+      defaultOrganizationId:
+        type: string
+        format: UUID
+        description: Default organization to add users to if one isn''t specified
+    required:
+      - id
+      - name
+      - settings
+      - isActive
+
+  OrganizationsPaginated:
     allOf:
     - $ref: '#/definitions/PaginatedResponse'
     - type: object
@@ -3055,6 +3569,14 @@ definitions:
       required:
         - name
         - id
+  OrganizationCreate:
+    type: object
+    properties:
+      name:
+        type: string
+      platformId:
+        type: string
+        format: UUID
 
   TeamsPaginated:
     allOf:
