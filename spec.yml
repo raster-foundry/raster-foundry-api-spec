@@ -1797,39 +1797,6 @@ paths:
             The UUID parameter does not refer to a map token or the user does not have access to the token it refers to
           schema:
             $ref: '#/definitions/Error'
-  /thumbnails/:
-    x-resource: Scenes
-    get:
-      summary: Get a list of thumbnails
-      tags:
-        - Imagery
-      parameters:
-        - $ref: '#/parameters/orderingBase'
-        - $ref: '#/parameters/pageSize'
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/sceneId'
-      responses:
-        200:
-          description: Paginated list of thumbnail images
-          schema:
-            $ref: '#/definitions/ThumbnailPaginated'
-  /thumbnails/{uuid}/:
-    x-resource: Scenes
-    get:
-      summary: Get thumbnail details
-      tags:
-        - Imagery
-      parameters:
-        - $ref: '#/parameters/uuid'
-      responses:
-        200:
-          description: Details on Thumbnail object
-          schema:
-            $ref: '#/definitions/Thumbnail'
-        404:
-          description: Thumbnail UUID was not found
-          schema:
-            $ref: '#/definitions/Error'
   /tokens/:
     x-resource: Tokens
     get:
