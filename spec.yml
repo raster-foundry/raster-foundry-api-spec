@@ -108,26 +108,6 @@ tags:
     description: Resources relating to object-level access
 
 paths:
-  /users/:
-    x-resource: Users
-    post:
-      summary: Create a user
-      tags:
-        - Users
-      parameters:
-        - name: User
-          in: body
-          schema:
-            $ref: '#/definitions/UserCreate'
-      responses:
-        201:
-          description: User created
-          schema:
-            $ref: '#/definitions/User'
-        default:
-          description: Unexpected error
-          schema:
-            $ref: '#/definitions/Error'
   /users/dropbox-setup/:
     x-resource: Users
     post:
