@@ -1168,6 +1168,23 @@ paths:
             type: array
             items:
               $ref: '#/definitions/AccessControlRule'
+  /scenes/{uuid}/datasource:
+    x-resource: Scenes
+    get:
+      summary: Get the datasource for a scene you can view
+    tags:
+      - Imagery
+    parameters:
+      - $ref: '#/parameters/uuid'
+    responses:
+      200:
+        description: A datasource
+        schema:
+          $ref: '#/definitions/Datasource'
+      403:
+        description: The scene does not exist or the requesting user cannot view it
+        schema:
+          $ref: '#/definitions/Error'
   /scene-grid/{zoom}/{column}/{row}/:
     x-resource: Scenes
     get:
