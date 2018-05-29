@@ -837,6 +837,57 @@ paths:
           description: SUCCESS
           schema:
             $ref: '#/definitions/Datasource'
+  /datasources/{uuid}/permissions/:
+    x-resource: Datasources
+    get:
+      summary: List access control rules for this datasource
+      tags:
+        - Permissions
+      responses:
+        200:
+          description: All access control rules for this datasource
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
+        403:
+          description: Insufficient permissions to list permissions on this datasource
+    put:
+      summary: Replace permissions defined on this datasource
+      tags:
+        - Permissions
+      parameters:
+        - name: accessControlRules
+          in: body
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRuleCreate'
+      responses:
+        200:
+          description: Access control rules replaced with response successfully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
+    post:
+      summary: Add a new access control rule to this datasource
+      tags:
+        - Permissions
+      parameters:
+        - name: accessControlRule
+          in: body
+          required: true
+          schema:
+            $ref: '#/definition/AccessControlRuleCreate'
+      responses:
+        200:
+          description: Access control rule appended successfully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
   /uploads/:
     x-resource: Uploads
     get:
@@ -1097,6 +1148,57 @@ paths:
             UUID parameter does not refer to an scene or the user is not able to view the scene it refers to
           schema:
             $ref: '#/definitions/Error'
+  /scenes/{uuid}/permissions/:
+    x-resource: Scenes
+    get:
+      summary: List access control rules for this scene
+      tags:
+        - Permissions
+      responses:
+        200:
+          description: All access control rules for this scene
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
+        403:
+          description: Insufficient permissions to list permissions on this scene
+    put:
+      summary: Replace permissions defined on this scene
+      tags:
+        - Permissions
+      parameters:
+        - name: accessControlRules
+          in: body
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRuleCreate'
+      responses:
+        200:
+          description: Access control rules replaced with response successfully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
+    post:
+      summary: Add a new access control rule to this scene
+      tags:
+        - Permissions
+      parameters:
+        - name: accessControlRule
+          in: body
+          required: true
+          schema:
+            $ref: '#/definition/AccessControlRuleCreate'
+      responses:
+        200:
+          description: Access control rule appended successfully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
   /scene-grid/{zoom}/{column}/{row}/:
     x-resource: Scenes
     get:
@@ -2085,6 +2187,57 @@ paths:
             $ref: '#/definitions/ToolTag'
         default:
           description: Error message if insufficient permissions to create a tool
+  /tools/{uuid}/permissions/:
+    x-resource: Tools
+    get:
+      summary: List access control rules for this tool
+      tags:
+        - Permissions
+      responses:
+        200:
+          description: All access control rules for this tool
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
+        403:
+          description: Insufficient permissions to list permissions on this tool
+    put:
+      summary: Replace permissions defined on this tool
+      tags:
+        - Permissions
+      parameters:
+        - name: accessControlRules
+          in: body
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRuleCreate'
+      responses:
+        200:
+          description: Access control rules replaced with response successfully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
+    post:
+      summary: Add a new access control rule to this tool
+      tags:
+        - Permissions
+      parameters:
+        - name: accessControlRule
+          in: body
+          required: true
+          schema:
+            $ref: '#/definition/AccessControlRuleCreate'
+      responses:
+        200:
+          description: Access control rule appended successfully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
   /tool-tags/{uuid}/:
     x-resource: Tools
     get:
@@ -2241,6 +2394,57 @@ paths:
       responses:
         204:
           description: Successfully deleted a tool run
+  /tool-runs/{uuid}/permissions/:
+    x-resource: Tools
+    get:
+      summary: List access control rules for this tool run
+      tags:
+        - Permissions
+      responses:
+        200:
+          description: All access control rules for this tool run
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
+        403:
+          description: Insufficient permissions to list permissions on this tool run
+    put:
+      summary: Replace permissions defined on this tool run
+      tags:
+        - Permissions
+      parameters:
+        - name: accessControlRules
+          in: body
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRuleCreate'
+      responses:
+        200:
+          description: Access control rules replaced with response successfully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
+    post:
+      summary: Add a new access control rule to this tool run
+      tags:
+        - Permissions
+      parameters:
+        - name: accessControlRule
+          in: body
+          required: true
+          schema:
+            $ref: '#/definition/AccessControlRuleCreate'
+      responses:
+        200:
+          description: Access control rule appended successfully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
   /feed/:
     get:
       summary: Get the cached RSS feed
@@ -2516,6 +2720,57 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /shapes/{uuid}/permissions/:
+    x-resource: Shapes
+    get:
+      summary: List access control rules for this shape
+      tags:
+        - Permissions
+      responses:
+        200:
+          description: All access control rules for this shape
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
+        403:
+          description: Insufficient permissions to list permissions on this shape
+    put:
+      summary: Replace permissions defined on this shape
+      tags:
+        - Permissions
+      parameters:
+        - name: accessControlRules
+          in: body
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRuleCreate'
+      responses:
+        200:
+          description: Access control rules replaced with response successfully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
+    post:
+      summary: Add a new access control rule to this shape
+      tags:
+        - Permissions
+      parameters:
+        - name: accessControlRule
+          in: body
+          required: true
+          schema:
+            $ref: '#/definition/AccessControlRuleCreate'
+      responses:
+        200:
+          description: Access control rule appended successfully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessControlRule'
   /licenses/:
     x-resource: Licenses
     get:
