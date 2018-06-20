@@ -3459,6 +3459,15 @@ definitions:
         emailNotifications:
           type: boolean
           description: An opt-in (defaults to false) setting to recieve email notifications
+  UserThin:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      profileImageUri:
+        type: string
   UserWithOAuth:
     type: object
     properties:
@@ -4401,7 +4410,9 @@ definitions:
       modifiedBy:
         type: string
       owner:
-        type: string
+        oneOf:
+          - type: string
+          - $ref: '#/definitions/UserThin'
 
   TimestampParams:
     type: object
