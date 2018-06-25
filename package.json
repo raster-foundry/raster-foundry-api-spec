@@ -1,0 +1,11 @@
+{
+  "name": "raster-foundry-api-spec",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "https://github.com/raster-foundry/raster-foundry-api-spec",
+  "license": "MIT",
+  "author": "Azavea",
+  "devDependencies": {
+    "swagger-cli": "^2.1.0"
+  }
+}
