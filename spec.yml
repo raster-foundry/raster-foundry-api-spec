@@ -802,6 +802,8 @@ paths:
     x-resource: Datasources
     get:
       summary: List access control rules for this datasource
+      parameters:
+        - $ref: '#/parameters/uuid'
       tags:
         - Permissions
       responses:
@@ -818,6 +820,7 @@ paths:
       tags:
         - Permissions
       parameters:
+        - $ref: '#/parameters/uuid'
         - name: accessControlRules
           in: body
           required: true
@@ -837,11 +840,12 @@ paths:
       tags:
         - Permissions
       parameters:
+        - $ref: '#/parameters/uuid'
         - name: accessControlRule
           in: body
           required: true
           schema:
-            $ref: '#/definition/AccessControlRuleCreate'
+            $ref: '#/definitions/AccessControlRuleCreate'
       responses:
         200:
           description: Access control rule appended successfully
@@ -1113,6 +1117,8 @@ paths:
     x-resource: Scenes
     get:
       summary: List access control rules for this scene
+      parameters:
+        - $ref: '#/parameters/uuid'
       tags:
         - Permissions
       responses:
@@ -1129,6 +1135,7 @@ paths:
       tags:
         - Permissions
       parameters:
+        - $ref: '#/parameters/uuid'
         - name: accessControlRules
           in: body
           required: true
@@ -1148,11 +1155,12 @@ paths:
       tags:
         - Permissions
       parameters:
+        - $ref: '#/parameters/uuid'
         - name: accessControlRule
           in: body
           required: true
           schema:
-            $ref: '#/definition/AccessControlRuleCreate'
+            $ref: '#/definitions/AccessControlRuleCreate'
       responses:
         200:
           description: Access control rule appended successfully
@@ -1673,6 +1681,8 @@ paths:
     x-resource: Projects
     get:
       summary: List access control rules for this project
+      parameters:
+        - $ref: '#/parameters/uuid'
       tags:
         - Permissions
       responses:
@@ -1689,6 +1699,7 @@ paths:
       tags:
         - Permissions
       parameters:
+        - $ref: '#/parameters/uuid'
         - name: accessControlRules
           in: body
           required: true
@@ -1708,11 +1719,12 @@ paths:
       tags:
         - Permissions
       parameters:
+        - $ref: '#/parameters/uuid'
         - name: accessControlRule
           in: body
           required: true
           schema:
-            $ref: '#/definition/AccessControlRuleCreate'
+            $ref: '#/definitions/AccessControlRuleCreate'
       responses:
         200:
           description: Access control rule appended successfully
@@ -2040,6 +2052,8 @@ paths:
     x-resource: Tools
     get:
       summary: List access control rules for this tool
+      parameters:
+        - $ref: '#/parameters/uuid'
       tags:
         - Permissions
       responses:
@@ -2056,6 +2070,7 @@ paths:
       tags:
         - Permissions
       parameters:
+        - $ref: '#/parameters/uuid'
         - name: accessControlRules
           in: body
           required: true
@@ -2075,11 +2090,12 @@ paths:
       tags:
         - Permissions
       parameters:
+        - $ref: '#/parameters/uuid'
         - name: accessControlRule
           in: body
           required: true
           schema:
-            $ref: '#/definition/AccessControlRuleCreate'
+            $ref: '#/definitions/AccessControlRuleCreate'
       responses:
         200:
           description: Access control rule appended successfully
@@ -2247,6 +2263,8 @@ paths:
     x-resource: Tools
     get:
       summary: List access control rules for this tool run
+      parameters:
+        - $ref: '#/parameters/uuid'
       tags:
         - Permissions
       responses:
@@ -2263,6 +2281,7 @@ paths:
       tags:
         - Permissions
       parameters:
+        - $ref: '#/parameters/uuid'
         - name: accessControlRules
           in: body
           required: true
@@ -2282,11 +2301,12 @@ paths:
       tags:
         - Permissions
       parameters:
+        - $ref: '#/parameters/uuid'
         - name: accessControlRule
           in: body
           required: true
           schema:
-            $ref: '#/definition/AccessControlRuleCreate'
+            $ref: '#/definitions/AccessControlRuleCreate'
       responses:
         200:
           description: Access control rule appended successfully
@@ -2573,6 +2593,8 @@ paths:
     x-resource: Shapes
     get:
       summary: List access control rules for this shape
+      parameters:
+        - $ref: '#/parameters/uuid'
       tags:
         - Permissions
       responses:
@@ -2589,6 +2611,7 @@ paths:
       tags:
         - Permissions
       parameters:
+        - $ref: '#/parameters/uuid'
         - name: accessControlRules
           in: body
           required: true
@@ -2608,11 +2631,12 @@ paths:
       tags:
         - Permissions
       parameters:
+        - $ref: '#/parameters/uuid'
         - name: accessControlRule
           in: body
           required: true
           schema:
-            $ref: '#/definition/AccessControlRuleCreate'
+            $ref: '#/definitions/AccessControlRuleCreate'
       responses:
         200:
           description: Access control rule appended successfully
@@ -3670,9 +3694,13 @@ definitions:
         name:
           type: string
           description: Display name for organization
+        status:
+          type: string
+          description: status of organization
       required:
         - name
         - id
+        - status
   OrganizationCreate:
     type: object
     properties:
@@ -5007,3 +5035,4 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/ShapeFeatureCreate'
+
