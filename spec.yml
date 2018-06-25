@@ -91,6 +91,9 @@ x-resources:
   - name: Teams
     description: |
       Teams represent groups of users within (and across) organizations. Each team belongs to one organization. A user can be a member of any number of teams.
+  - name: Admin
+    description: |
+      Platforms, Organizations, and Teams can be used to manage users and visibility of projects, analyses, and scenes. Most of these functions will only be available to uses who are administrating groups.
 
 
 tags:
@@ -106,6 +109,8 @@ tags:
     description: 'Statistical metadata about geospatial data'
   - name: Permissions
     description: 'Resources relating to object-level access'
+  - name: Admin
+    description: 'Resources related to administration'
 
 paths:
   /users/dropbox-setup/:
@@ -355,11 +360,11 @@ paths:
             $ref: '#/definitions/Error'
 
   /platforms/:
-    x-resource: Platforms
+    x-resource: Admin
     get:
       summary: 'Get a list of platforms'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/pageSize'
@@ -375,7 +380,7 @@ paths:
     post:
       summary: 'Create a platform'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - name: Platform
           in: body
@@ -391,11 +396,11 @@ paths:
           schema:
             $ref: '#/definitions/Error'
   /platforms/{platformID}/:
-    x-resource: Platforms
+    x-resource: Admin
     get:
       summary: 'Get a platform'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
       responses: 
@@ -414,7 +419,7 @@ paths:
     put:
       summary: 'Update a platform'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - name: Platform
@@ -435,7 +440,7 @@ paths:
     delete:
       summary: 'Delete a platform'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
       responses:
@@ -447,11 +452,11 @@ paths:
           schema:
             $ref: '#/definitions/Error'
   /platforms/{platformID}/members/:
-    x-resource: Platforms
+    x-resource: Admin
     get:
       summary: 'Get a list of users for the platform. Platform admin only'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/page'
@@ -469,7 +474,7 @@ paths:
     post:
       summary: 'Move a user to the platform'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - name: userRole
@@ -489,11 +494,11 @@ paths:
           schema:
             $ref: '#/definitions/Error'
   /platforms/{platformID}/organizations/:
-    x-resource: Platforms
+    x-resource: Admin
     get:
       summary: 'List platform organizations. Platform admin only.'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/page'
@@ -510,7 +515,7 @@ paths:
     post:
       summary: 'Create an Organization.'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - name: Organization
@@ -528,11 +533,11 @@ paths:
           schema:
             $ref: '#/definitions/Error'
   /platforms/{platformID}/organizations/{organizationID}/:
-    x-resource: Platforms
+    x-resource: Admin
     get:
       summary: 'Fetch platform organization'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/organizationID'
@@ -552,7 +557,7 @@ paths:
     put:
       summary: 'Update platform organization'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/organizationID'
@@ -575,7 +580,7 @@ paths:
     delete:
       summary: 'Deactivate platform organization'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/organizationID'
@@ -592,11 +597,11 @@ paths:
             $ref: '#/definitions/Error'
 
   /platforms/{platformID}/organizations/{organizationID}/members/:
-    x-resource: Platforms
+    x-resource: Admin
     get:
       summary: 'Fetch organization member list. Organization admin only'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/organizationID'
@@ -615,7 +620,7 @@ paths:
     post:
       summary: 'Move a user to the organization'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/organizationID'
@@ -636,11 +641,11 @@ paths:
           schema:
             $ref: '#/definitions/Error'
   /platforms/{platformID}/organizations/{organizationID}/teams/:
-    x-resource: Platforms
+    x-resource: Admin
     get:
       summary: 'Fetch organization teams'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/organizationID'
@@ -658,7 +663,7 @@ paths:
     post:
       summary: 'Create organization team'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/organizationID'
@@ -677,11 +682,11 @@ paths:
           schema:
             $ref: '#/definitions/Error'
   /platforms/{platformID}/organizations/{organizationID}/teams/{teamID}/:
-    x-resource: Platforms
+    x-resource: Admin
     get:
       summary: 'Fetch team'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/organizationID'
@@ -702,7 +707,7 @@ paths:
     put:
       summary: 'Update team'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/organizationID'
@@ -722,7 +727,7 @@ paths:
     delete:
       summary: 'Delete team'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/organizationID'
@@ -735,11 +740,11 @@ paths:
           schema:
             $ref: '#/definitions/Error'
   /platforms/{platformID}/organizations/{organizationID}/teams/{teamID}/members/:
-    x-resource: Platforms
+    x-resource: Admin
     get:
       summary: 'Fetch team members'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/organizationID'
@@ -759,7 +764,7 @@ paths:
     post:
       summary: 'Add team member'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/organizationID'
@@ -781,11 +786,11 @@ paths:
           schema:
             $ref: '#/definitions/Error'
   /platforms/{platformID}/organizations/{organizationID}/teams/{teamID}/members/{userID}:
-    x-resource: Platforms
+    x-resource: Admin
     delete:
       summary: 'Remove team member'
       tags:
-        - Platforms
+        - Admin
       parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/organizationID'
