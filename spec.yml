@@ -192,6 +192,22 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
+  /users/search/:
+    x-resource: Users
+    get:
+      summary: 'Search for users'
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/parameters/search'
+      responses:
+        200:
+          description: 'Up to 5 users matching search'
+          schema:
+            type: array
+            maxItems: 5
+            items:
+              $ref: '#/definitions/UserSearched'
   /users/{uuid}/:
     x-resource: Users
     get:
@@ -204,7 +220,7 @@ paths:
         200:
           description: 'User found'
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/UserSearched'
         404:
           description: 'User not found'
           schema:
@@ -214,7 +230,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
     put:
-      summary: 'Update a user'
+      summary: 'Update a user. Dev use only'
       tags:
         - Users
       parameters:
@@ -227,6 +243,10 @@ paths:
       responses:
         204:
           description: 'Update successful (No Content)'
+        403:
+          description: 'Insufficient permissions or object not found'
+          schema:
+            $ref: '#/definitions/Error'
         default:
           description: 'Unexpected error'
           schema:
@@ -265,6 +285,22 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
+  /organizations/search/:
+    x-resource: Organizations
+    get:
+      summary: 'Search for organizations'
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/parameters/search'
+      responses:
+        200:
+          description: 'Up to 5 organizations matching search'
+          schema:
+            type: array
+            maxItems: 5
+            items:
+              $ref: '#/definitions/Organization'
   /organizations/{organizationID}/:
     x-resource: Organizations
     get:
@@ -413,7 +449,7 @@ paths:
   /platforms/{platformID}/members/:
     x-resource: Platforms
     get:
-      summary: 'Get a list of users for the platform'
+      summary: 'Get a list of users for the platform. Platform admin only'
       tags:
         - Platforms
       parameters:
@@ -455,7 +491,7 @@ paths:
   /platforms/{platformID}/organizations/:
     x-resource: Platforms
     get:
-      summary: 'List platform organizations that the user has permissions to view'
+      summary: 'List platform organizations. Platform admin only.'
       tags:
         - Platforms
       parameters:
@@ -558,7 +594,7 @@ paths:
   /platforms/{platformID}/organizations/{organizationID}/members/:
     x-resource: Platforms
     get:
-      summary: 'Fetch organization member list'
+      summary: 'Fetch organization member list. Organization admin only'
       tags:
         - Platforms
       parameters:
@@ -4030,7 +4066,7 @@ definitions:
         $ref: '#/definitions/Auth0User'
   UserWithRole:
     allOf:
-      - $ref: '#/definitions/User'
+      - $ref: '#/definitions/UserSearched'
       - type: object
         properties:
           groupRole:
@@ -4190,7 +4226,7 @@ definitions:
         results:
           type: array
           items:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/UserSearched'
   ScenePaginated:
     allOf:
     - $ref: '#/definitions/PaginatedResponse'
