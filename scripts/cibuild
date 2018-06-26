@@ -1,9 +1,8 @@
 #!/bin/bash
 
 set -e
-set -u
 
-if [[ -n "${CI}" ]]; then
+if [[ -n "${RF_API_SPEC_DEBUG}" ]]; then
     set -x
 fi
 
