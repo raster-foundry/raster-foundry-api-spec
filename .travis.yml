@@ -1,0 +1,16 @@
+language: bash
+services: docker
+script:
+- "./scripts/cibuild"
+deploy:
+  provider: s3
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  bucket: rasterfoundry-production-docs-site-us-east-1
+  upload-dir: spec
+  local_dir: spec
+  skip_cleanup: true
+  on:
+    repo: raster-foundry/raster-foundry-api-spec
+    tags: true
+    
