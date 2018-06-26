@@ -6,9 +6,10 @@ deploy:
   provider: s3
   access_key_id: $AWS_ACCESS_KEY_ID
   secret_access_key: $AWS_SECRET_ACCESS_KEY
-  bucket: rasterfoundry-staging-docs-site-us-east-1
+  bucket: 'rasterfoundry-staging-docs-site-us-east-1'
   skip_cleanup: true
-  upload-dir: spec
+  upload-dir: 'spec'
+  file: 'spec.yml'
   on:
     repo: raster-foundry/raster-foundry-api-spec
     branch: feature/jrb/setup-ci
