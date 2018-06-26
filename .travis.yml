@@ -11,3 +11,6 @@ deploy:
   bucket: rasterfoundry-staging-docs-site-us-east-1
   skip_cleanup: true
   upload-dir: spec
+  on:
+    repo: raster-foundry/raster-foundry-api-spec
+    branch: master
