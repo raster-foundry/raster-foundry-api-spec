@@ -5,6 +5,9 @@
   "repository": "https://github.com/raster-foundry/raster-foundry-api-spec",
   "license": "Apache-2.0",
   "author": "Azavea",
+  "scripts": {
+    "test": "swagger-cli validate spec/spec.yml"
+  },
   "devDependencies": {
     "swagger-cli": "^2.1.0"
   }

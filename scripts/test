@@ -18,9 +18,9 @@ then
     then
         usage
     else
-        # Validate spec
+        # Execute yarn tests
         docker-compose \
             run --rm app \
-            yarn run swagger-cli validate spec.yml
+            yarn run test
     fi
 fi
