@@ -20,7 +20,7 @@ then
     else
         # Validate spec
         docker-compose \
-            run --rm \
+            run --rm app \
             yarn run swagger-cli validate spec.yml
     fi
 fi
