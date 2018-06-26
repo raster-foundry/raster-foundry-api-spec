@@ -1,7 +1,7 @@
 language: bash
 services: docker
-script:
-- "./scripts/cibuild"
+#script:
+#- "./scripts/cibuild"
 deploy:
   provider: s3
   access_key_id: 
@@ -13,4 +13,6 @@ deploy:
   upload-dir: spec
   on:
     repo: raster-foundry/raster-foundry-api-spec
-    branch: master
+    branch: feature/jrb/setup-ci
+    tags: true
+    
