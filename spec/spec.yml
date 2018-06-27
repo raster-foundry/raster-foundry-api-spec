@@ -1522,6 +1522,8 @@ paths:
       summary: 'Import annotations from a shapefile'
       tags:
         - Imagery
+      consumes:
+        - multipart/form-data
       parameters:
         - $ref: '#/parameters/uuid'
         - in: formData
