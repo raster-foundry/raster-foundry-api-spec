@@ -1524,17 +1524,16 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/uuid'
-          - in: formData
-            name: name
-            type: file
-            description: The shapefile to upload
+        - in: formData
+          name: name
+          type: file
+          description: The shapefile to upload
       responses:
         201:
           description: 'Annotations imported successfully'
-          schema:
-            array:
-              items:
-                $ref: '#/definitions/AnnotationFeature'
+          type: array
+          items:
+            $ref: '#/definitions/AnnotationFeature'
         400:
           description: 'Some records could not be parsed to annotations'
           schema:
