@@ -1532,7 +1532,7 @@ paths:
         201:
           description: 'Annotations imported successfully'
           schema:
-          type: array
+            type: array
             items:
               $ref: '#/definitions/AnnotationFeature'
         400:
