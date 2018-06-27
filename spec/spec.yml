@@ -1531,9 +1531,10 @@ paths:
       responses:
         201:
           description: 'Annotations imported successfully'
+          schema:
           type: array
-          items:
-            $ref: '#/definitions/AnnotationFeature'
+            items:
+              $ref: '#/definitions/AnnotationFeature'
         400:
           description: 'Some records could not be parsed to annotations'
           schema:
