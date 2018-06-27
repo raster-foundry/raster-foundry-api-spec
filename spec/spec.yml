@@ -1498,6 +1498,53 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /projects/{uuid}/annotations/shapefile:
+    x-resource: Projects
+    get:
+      summary: 'Get a url for annotations exported to a shapefile'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/uuid'
+      responses:
+        200:
+          description: 'Annotations retrieved successfully'
+        403:
+          description: 'Insufficient permissions or object does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
+    post:
+      summary: 'Import annotations from a shapefile'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/uuid'
+          - in: formData
+            name: name
+            type: file
+            description: The shapefile to upload
+      responses:
+        201:
+          description: 'Annotations imported successfully'
+          schema:
+            array:
+              items:
+                $ref: '#/definitions/AnnotationFeature'
+        400:
+          description: 'Some records could not be parsed to annotations'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        
+
   /projects/{uuid}/annotations/{uuid2}:
     x-resouce: Projects
     get:
