@@ -1,0 +1,487 @@
+swagger: '2.0'
+info:
+  title: Raster Foundry Prediction API
+  description: An API to upload data, browse models, and make predictions on imagery
+  version: "0.1.0"
+
+host: predict.rasterfoundry.com
+
+schemes:
+  - https
+
+basePath: /api
+
+produces:
+  - application/json
+consumes:
+  - application/json
+
+
+paths:
+  /data/:
+    get:
+      summary: This endpoint serves as a way for users to upload data.
+      description: |
+        List uploaded data
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/parameters/orderingBase'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/uploadStatus'
+      responses:
+        200:
+          description: Paginated list of users
+          schema:
+            $ref: '#/definitions/DataPaginated'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create Data
+      tags:
+        - Users
+      parameters:
+        - name: User
+          in: body
+          schema:
+            $ref: '#/definitions/DataCreate'
+      responses:
+        201:
+          description: User created
+          schema:
+            $ref: '#/definitions/Data'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /data/{uuid}/:
+    get:
+      parameters:
+        - $ref: '#/parameters/uuid'
+      summary: Detail view of uploaded data
+      responses:
+        200:
+          description: Data object successfully retrieved
+          schema:
+            $ref: '#/definitions/Data'
+    put:
+      parameters:
+        - $ref: '#/parameters/uuid'
+      summary: Update data fields
+      responses:
+        200:
+          description: Update to Data
+
+  /data/{uuid}/upload/:
+    post:
+      summary: Endpoint to post geotiff data to
+      parameters:
+        - $ref: '#/parameters/uuid'
+      responses:
+        202:
+          description: Processing upload
+          schema:
+            $ref: '#/definitions/Data'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /models/:
+    get:
+      summary: List available models
+      parameters:
+        - $ref: '#/parameters/orderingBase'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+      responses:
+        200:
+          description: User found
+          schema:
+            $ref: '#/definitions/ModelPaginated'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /models/{uuid}/:
+    get:
+      summary: Retrieve details on model
+      parameters:
+        - $ref: '#/parameters/uuid'
+      responses:
+        200:
+          description: Paginated list of organizations
+          schema:
+            $ref: '#/definitions/Model'
+
+  /predictions/:
+    get:
+      summary: List predictions with summary information
+      responses:
+        200:
+          description: Returned organization
+          schema:
+            $ref: '#/definitions/PredictionSummaryPaginated'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Kick off an asynchronous prediction with data
+      responses:
+        200:
+          description: Returned organization
+          schema:
+            $ref: '#/definitions/PredictionSummaryPaginated'
+
+  /predictions/{uuid}/results/:
+    get:
+      description: Paginated GeoJSON for results
+      parameters:
+        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/pageSize'
+      responses:
+        200:
+          description: Returns GeoJSON for predictions
+          schema:
+            $ref: '#/definitions/PredictionFeatureCollectionPaginated'
+
+  /predictions/{uuid}/:
+    get:
+      summary: Get a paginated set of predictions
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/pageSize'
+      responses:
+        200:
+          description: GeoJSON feature collection containing paginated annotations of this project
+          schema:
+            $ref: '#/definitions/PredictionSummary'
+
+parameters:
+  orderingBase:
+    name: ordering
+    in: query
+    description: Field to order results; meaning of label varies based on endpoint
+    type: array
+    collectionFormat: pipes
+    items:
+      type: string
+      enum:
+        - createdAt,desc
+        - createdAt,asc
+        - modifiedAt,desc
+        - modifiedAt,asc
+  page:
+    name: page
+    in: query
+    description: Page of results to go to
+    type: number
+    format: int32
+  pageSize:
+    name: pageSize
+    in: query
+    description: Number of results per page in paginated response
+    type: number
+    format: int32
+  uuid:
+    name: uuid
+    in: path
+    required: true
+    type: string
+    format: uuid
+  uploadStatus:
+    name: uploadStatus
+    description: Status of upload
+    in: query
+    type: string
+    required: false
+    enum:
+      - CREATED
+      - UPLOADING
+      - UPLOADED
+      - FAILED
+      - ABORTED
+
+definitions:
+
+  BaseCreate:
+    type: object
+    properties:
+      owner:
+        type: string
+        description: Optional during object creation, user who owns of an object
+
+  BaseModel:
+    type: object
+    readOnly: true
+    properties:
+      id:
+        type: string
+        description: unique identifier for object
+        format: uuid
+
+  TimeModelMixin:
+    type: object
+    readOnly: true
+    properties:
+      createdAt:
+        type: string
+        description: timestamp of object creation
+        format: date-time
+      modifiedAt:
+        type: string
+        description: timestamp of object modificiation
+        format: date-time
+
+  UserTrackingMixin:
+    type: object
+    allOf:
+      - $ref: '#/definitions/BaseCreate'
+    properties:
+      createdBy:
+        type: string
+        description: User who created the object
+        readOnly: true
+      modifiedBy:
+        type: string
+        description: User who most recently modified the object
+        readOnly: true
+  DataCreate:
+    type: object
+    properties:
+      name:
+        type: string
+      acquisitionDate:
+        type: string
+        format: date-time
+      fileLocation:
+        type: string
+        description: Optional accessible URL for a COG, if provided upload is not necessary
+
+  Data:
+    type: object
+    allOf:
+      - $ref: '#/definitions/BaseModel'
+      - $ref: '#/definitions/TimeModelMixin'
+      - $ref: '#/definitions/UserTrackingMixin'
+      - $ref: '#/definitions/DataCreate'
+    properties:
+      uploadStatus:
+          type: string
+          description: Status of upload
+          enum:
+            - CREATED
+            - UPLOADING
+            - UPLOADED
+            - QUEUED
+            - PROCESSING
+            - COMPLETE
+            - FAILED
+            - ABORTED
+      tileURL:
+        type: string
+      fileLocation:
+        type: string
+      projectId:
+        type: string
+        description: Associated Raster Foundry Project ID
+
+  Model:
+    type: object
+    allOf:
+      - $ref: '#/definitions/BaseModel'
+      - $ref: '#/definitions/TimeModelMixin'
+      - $ref: '#/definitions/UserTrackingMixin'
+    properties:
+      model_url:
+        type: string
+        description: 'URL of model for download'
+      prediction_config_url:
+        type: string
+        description: 'URL to prediction config used for generating predictions'
+      raster_stats_config_url:
+        type: string
+        description: 'URL to raster stats used when normalizing input data'
+      name:
+        type: string
+        description: 'Human readable label for Model'
+
+  DataPaginated:
+    type: object
+    allOf:
+    - $ref: '#/definitions/PaginatedResponse'
+    - type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/definitions/Data'
+  ModelPaginated:
+    type: object
+    allOf:
+      - $ref: '#/definitions/PaginatedResponse'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/definitions/Model'
+
+
+  PredictionSummary:
+    type: object
+    allOf:
+      - $ref: '#/definitions/BaseModel'
+      - $ref: '#/definitions/TimeModelMixin'
+      - $ref: '#/definitions/UserTrackingMixin'
+    properties:
+      status:
+        type: string
+        enum:
+          - CREATED
+          - QUEUED
+          - PROCESSING
+          - COMPLETE
+          - FAILED
+          - ABORTED
+      model:
+        type: string
+      data:
+        type: string
+
+  PredictionSummaryPaginated:
+    type: object
+    allOf:
+      - $ref: '#/definitions/PaginatedResponse'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/definitions/PredictionSummary'
+
+  PredictionFeature:
+    type: object
+    properties:
+      type:
+        type: string
+      properties:
+        allOf:
+        - $ref: '#/definitions/BaseModel'
+        - $ref: '#/definitions/TimeModelMixin'
+        - $ref: '#/definitions/UserTrackingMixin'
+        - type: object
+        properties:
+          dataId:
+            type: string
+            description: ID of data used to make prediction
+          modelId:
+            type: string
+            description: ID of model used to make prediction
+          label:
+            type: string
+          description:
+            type: string
+          machineGenerated:
+            type: boolean
+          confidence:
+            type: number
+            format: float
+          quality:
+            type: string
+            enum:
+              - YES
+              - NO
+              - MISS
+              - MATCH
+          projectId:
+            type: string
+            format: uuid
+            description: Raster Foundry project associated with prediction
+      geometry:
+        $ref: "#/definitions/Geometry"
+
+  PredictionFeatureCollectionPaginated:
+    type: object
+    allOf:
+      - $ref: '#/definitions/PaginatedResponse'
+      - type: object
+        properties:
+          type:
+            type: string
+          features:
+            type: array
+            items:
+              $ref: '#/definitions/PredictionFeature'
+
+
+  PaginatedResponse:
+    type: object
+    required:
+      - count
+      - hasNext
+      - hasPrevious
+      - page
+      - pageSize
+    properties:
+      count:
+        type: integer
+        format: int32
+        readOnly: true
+        description: number of total objects matching query
+      hasNext:
+        type: boolean
+        readOnly: true
+        description: True if more results can be fetched, otherwise false
+      hasPrevious:
+        type: boolean
+        readOnly: true
+        description: True if previous results can be fetched, otherwise false
+      page:
+        type: integer
+        readOnly: true
+        format: int32
+        description: Current page of paginated query results
+      pageSize:
+        type: integer
+        format: int32
+        description: Number of results per page
+        readOnly: true
+
+  Geometry:
+      type: object
+      description: GeoJSON geometry
+      discriminator: type
+      required:
+        - type
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7946#section-3.1
+      properties:
+        type:
+          type: string
+          enum:
+            - MultiPolygon
+            - Polygon
+            - MultiLineString
+            - LineString
+            - MuliPoint
+            - Point
+          description: the geometry type
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
