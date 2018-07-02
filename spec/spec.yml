@@ -1307,7 +1307,7 @@ paths:
   /scenes/{uuid}/thumbnail:
     x-resource: Scenes
     get:
-      summary: 'Get a thumbnail for this COG scene'
+      summary: 'Get a thumbnail for this COG scene. Only works for scenes of type COG'
       tags:
         - Imagery
       parameters:
