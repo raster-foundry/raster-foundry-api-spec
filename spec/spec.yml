@@ -1312,14 +1312,14 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/uuid'
+      produces:
+        - image/png
       responses:
         200:
           description: 'PNG of a thumbnail for this scene'
-          content:
-            image/png:
-              schema:
-                type: string
-                format: binary
+          schema:
+            type: string
+            format: binary
         403:
           description: 'Insufficient permissions or object does not exist'
           schema:
