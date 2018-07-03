@@ -1430,6 +1430,119 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
+  /projects/{uuid}/annotation-groups/:
+    x-resource: Projects
+    get:
+      summary: 'Get annotation groups belonging to a project'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/uuid'
+      responses:
+        200:
+          description: 'Array containing annotation groups for this project'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AnnotationGroup'
+        403:
+          description: 'Insufficient permissions or object does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: 'Create annotation group for this project'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/uuid'
+        - name: annotationGroup
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AnnotationGroupCreate'
+      responses:
+        201:
+          description: 'Created annotation group'
+          schema:
+            $ref: '#/definitions/AnnotationGroupCreate'
+        403:
+          description: 'Insufficient permissions or object does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+  /projects/{uuid}/annotations-groups/{uuid2}/:
+    x-resource: Projects
+    get:
+      summary: 'Get annotation group for project'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/uuid2'
+      responses:
+        200:
+          description: 'fetched annotation group'
+          schema:
+            $ref: '#/definitions/AnnotationGroup'
+        403:
+          description: 'Insufficient permissions or object does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: 'Update annotation group'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/uuid2'
+        - name: annotationGroup
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AnnotationGroup'
+      responses:
+        200:
+          description: 'fetched annotation group'
+          schema:
+            $ref: '#/definitions/AnnotationGroup'
+        403:
+          description: 'Insufficient permissions or object does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: 'Delete annotation group and all associated annotations'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/uuid2'
+      responses:
+        204:
+          description: 'Delete successful (No Content)'
+        403:
+          description: 'Insufficient permissions or object does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        
   /projects/{uuid}/annotations/:
     x-resource: Projects
     get:
@@ -5537,6 +5650,9 @@ definitions:
           projectId:
             type: string
             format: uuid
+          annotationGroup:
+            type: string
+            format: uuid
       geometry:
         $ref: "#/definitions/Geometry"
 
@@ -5564,6 +5680,9 @@ definitions:
               - 'NO'
               - 'MISS'
               - 'MATCH'
+          annotationGroup:
+            type: string
+            format: uuid
       geometry:
         $ref: "#/definitions/Geometry"
 
@@ -5593,6 +5712,9 @@ definitions:
               - 'NO'
               - 'MISS'
               - 'MATCH'
+          annotationGroup:
+            type: string
+            format: uuid
       geometry:
         $ref: "#/definitions/Geometry"
 
@@ -5711,4 +5833,30 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/ShapeFeatureCreate'
+
+  AnnotationGroupCreate:
+    type: object
+    properties:
+      name:
+        type: string
+      projectId:
+        type: string
+        format: uuid
+      defaultStyle:
+        type: object
+
+  AnnotationGroup:
+    type: object
+    allOf:
+    - $ref: '#/definitions/BaseModel'
+    - $ref: '#/definitions/TimeModelMixin'
+    - $ref: '#/definitions/UserTrackingMixin'
+    properties:
+      name:
+        type: string
+      projectId:
+        type: string
+        format: uuid
+      defaultStyle:
+        type: object
 
