@@ -1465,7 +1465,7 @@ paths:
           schema:
             $ref: '#/definitions/AnnotationGroupCreate'
       responses:
-        201:
+        200:
           description: 'Created annotation group'
           schema:
             $ref: '#/definitions/AnnotationGroupCreate'
@@ -1513,9 +1513,10 @@ paths:
             $ref: '#/definitions/AnnotationGroup'
       responses:
         200:
-          description: 'fetched annotation group'
+          description: 'Number of updated annotation groups from this request'
           schema:
-            $ref: '#/definitions/AnnotationGroup'
+            type: number
+            format: integer
         403:
           description: 'Insufficient permissions or object does not exist'
           schema:
@@ -1532,8 +1533,11 @@ paths:
         - $ref: '#/parameters/uuid'
         - $ref: '#/parameters/uuid2'
       responses:
-        204:
-          description: 'Delete successful (No Content)'
+        200:
+          description: 'Number of deleted annotation groups from this request'
+          schema:
+            type: number
+            format: integer
         403:
           description: 'Insufficient permissions or object does not exist'
           schema:
