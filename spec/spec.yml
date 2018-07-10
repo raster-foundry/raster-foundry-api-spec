@@ -1315,7 +1315,7 @@ paths:
         - $ref: '#/parameters/redBand'
         - $ref: '#/parameters/greenBand'
         - $ref: '#/parameters/blueBand'
-        - $ref: '#/parameters/floor'
+        - $ref: '#/parameters/brightnessFloor'
         - $ref: '#/parameters/queryAuthToken'
       produces:
         - image/png
