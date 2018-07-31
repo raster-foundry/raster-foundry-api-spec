@@ -4642,9 +4642,6 @@ definitions:
           ingestLocation:
             type: string
             description: 'Where scene is ingested (pyramided/tiled)'
-          ingestSizeBytes:
-            type: integer
-            description: 'Size of ingested data in bytes.'
           visibility:
             type: string
             description: 'Level of restriction on viewing'
