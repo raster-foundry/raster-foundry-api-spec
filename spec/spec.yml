@@ -1317,6 +1317,8 @@ paths:
         - $ref: '#/parameters/blueBand'
         - $ref: '#/parameters/brightnessFloor'
         - $ref: '#/parameters/queryAuthToken'
+        - $ref: '#/parameters/width'
+        - $ref: '#/parameters/height'
       produces:
         - image/png
       responses:
