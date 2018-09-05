@@ -1312,6 +1312,13 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/redBand'
+        - $ref: '#/parameters/greenBand'
+        - $ref: '#/parameters/blueBand'
+        - $ref: '#/parameters/brightnessFloor'
+        - $ref: '#/parameters/queryAuthToken'
+        - $ref: '#/parameters/width'
+        - $ref: '#/parameters/height'
       produces:
         - image/png
       responses:
@@ -3442,48 +3449,6 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /teams/:
-    x-resource: Teams
-    get:
-      summary: 'List teams the user has permission to view'
-      tags:
-        - Users
-      parameters:
-        - $ref: '#/parameters/pageSize'
-        - $ref: '#/parameters/page'
-      responses:
-        200:
-          description: 'Paginated teams'
-          schema:
-            $ref: '#/definitions/TeamsPaginated'
-        default:
-          description: 'Unexpected error'
-          schema:
-            $ref: '#/definitions/Error'
-    post:
-      summary: Create a team
-      tags:
-        - Users
-      parameters:
-        - name: team
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/TeamCreate'
-      responses:
-        201:
-          description: 'Team created' 
-          schema:
-            $ref: '#/definitions/Team'
-        403:
-          description: 'Insufficient permissions'
-          schema:
-            $ref: '#/definitions/Error'
-        default:
-          description: 'Unexpected error'
-          schema:
-            $ref: '#/definitions/Error'
-
   /teams/{uuid}:
     x-resource: Teams
     get:
@@ -3505,49 +3470,6 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-    put:
-      summary: 'Update a team'
-      tags:
-        - Users
-      parameters:
-        - name: team
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/TeamCreate'
-        - $ref: '#/parameters/uuid'
-      responses:
-        204:
-          description: 'Update successful (No content)'
-          schema:
-            $ref: '#/definitions/Team'
-        403:
-          description: 'Insufficient permissions or object does not exist'
-          schema:
-            $ref: '#/definitions/Error'
-        default:
-          description: 'Unexpected error'
-          schema:
-            $ref: '#/definitions/Error'
-    delete:
-      summary: 'Delete a team'
-      description: 'Delete a team by id'
-      tags:
-        - Users
-      parameters:
-        - $ref: '#/parameters/uuid'
-      responses:
-        204:
-          description: 'Deletion successful (no content)'
-        403:
-          description: 'Insufficient permissions or object does not exist'
-          schema:
-            $ref: '#/definitions/Error'
-        default:
-          description: 'Unexpected error'
-          schema:
-            $ref: '#/definitions/Error'
-
 
 parameters:
   orderingBase:
@@ -3595,6 +3517,47 @@ parameters:
     description: 'UUID for project'
     type: string
     format: uuid
+  queryAuthToken:
+    name: token
+    in: query
+    description: 'JWT in query parameter'
+    type: string
+  width:
+    name: width
+    in: query
+    description: 'Approximate thumbnail rendering width'
+    type: number
+    format: integer
+  height:
+    name: height
+    in: query
+    description: 'Approximate thumbnail rendering height'
+    type: number
+    format: integer
+  redBand:
+    name: red
+    in: query
+    description: 'Index to use for a red band'
+    type: number
+    format: integer
+  greenBand:
+    name: green
+    in: query
+    description: 'Index to use for a green band'
+    type: number
+    format: integer
+  blueBand:
+    name: blue
+    in: query
+    description: 'Index to user for a blue band'
+    type: number
+    format: integer
+  brightnessFloor:
+    name: floor
+    in: query
+    description: 'False minimum brightness for rendering thumbnails'
+    type: number
+    format: integer
   page:
     name: page
     in: query
@@ -4084,8 +4047,9 @@ definitions:
   AOI:
     type: object
     properties:
-      area:
-        type: object
+      shape:
+        type: string
+        format: uuid
       filters:
         $ref: '#/definitions/CombinedSceneQueryParams'
       isActive:
