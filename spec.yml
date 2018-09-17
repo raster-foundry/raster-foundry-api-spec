@@ -4546,7 +4546,6 @@ definitions:
         type: string
         format: UUID
         description: 'Platform Id'
-        readOnly: true
       name:
         type: string
         description: 'Platform display name'
