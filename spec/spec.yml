@@ -1873,7 +1873,7 @@ paths:
               type: string
               format: uuid
       responses:
-        201:
+        200:
           description: 'List of scenes added to project'
           schema:
             type: array
@@ -1903,8 +1903,12 @@ paths:
               type: string
               format: uuid
       responses:
-        204:
+        200:
           description: 'No content, update successful'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Scene'
         403:
           description: 'Insufficient permissions or object does not exist'
           schema:
