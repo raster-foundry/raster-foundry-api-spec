@@ -5416,6 +5416,8 @@ definitions:
             $ref: '#/definitions/ToolRun'
 
   ToolRunCreate:
+    type:
+      object
     properties:
       execution_parameters:
         type: object
