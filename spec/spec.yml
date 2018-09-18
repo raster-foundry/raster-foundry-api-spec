@@ -5406,6 +5406,8 @@ definitions:
             - 'PRIVATE'
 
   ToolRunCreate:
+    type:
+      object
     properties:
       execution_parameters:
         type: object
