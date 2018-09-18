@@ -2844,6 +2844,12 @@ paths:
       summary: 'Create a tool run'
       tags:
         - Lab
+      parameters:
+        - name: analysisCreate
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ToolRunCreate'
       responses:
         201:
           description: 'Successfully created tool run'
@@ -5408,6 +5414,21 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/ToolRun'
+
+  ToolRunCreate:
+    properties:
+      execution_parameters:
+        type: object
+        description: 'Parameters for running the tool'
+      name:
+        type : string
+      visibility:
+          type: string
+          description: 'Level of restriction on viewing'
+          enum:
+            - 'PUBLIC'
+            - 'ORGANIZATION'
+            - 'PRIVATE'      
 
   Error:
     type: object
