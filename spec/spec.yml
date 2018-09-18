@@ -5413,12 +5413,12 @@ definitions:
       name:
         type : string
       visibility:
-          type: string
-          description: 'Level of restriction on viewing'
-          enum:
-            - 'PUBLIC'
-            - 'ORGANIZATION'
-            - 'PRIVATE'      
+        type: string
+        description: 'Level of restriction on viewing'
+        enum:
+          - 'PUBLIC'
+          - 'ORGANIZATION'
+          - 'PRIVATE'      
 
   ToolRunPaginated:
     allOf:
