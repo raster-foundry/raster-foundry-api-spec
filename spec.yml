@@ -4284,8 +4284,8 @@ definitions:
             - 'PUBLIC'
             - 'PRIVATE'
         personalInfo:
-          allOf:
-          - $ref: '#/definitions/UserPersonalInfo'
+          type: object
+          $ref: '#/definitions/UserPersonalInfo'
 
   UserPersonalInfo:
     type: object
