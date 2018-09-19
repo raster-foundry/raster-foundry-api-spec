@@ -1312,6 +1312,13 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/redBand'
+        - $ref: '#/parameters/greenBand'
+        - $ref: '#/parameters/blueBand'
+        - $ref: '#/parameters/brightnessFloor'
+        - $ref: '#/parameters/queryAuthToken'
+        - $ref: '#/parameters/width'
+- $ref: '#/parameters/height'
       produces:
         - image/png
       responses:
