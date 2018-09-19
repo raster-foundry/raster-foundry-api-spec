@@ -137,7 +137,7 @@ paths:
         200:
           description: 'Profile found'
           schema:
-            $ref: '#/definitions/UserWithOAuth'
+            $ref: '#/definitions/UserSelf'
         default:
           description: 'Unexpected error'
           schema:
@@ -403,7 +403,7 @@ paths:
         - Admin
       parameters:
         - $ref: '#/parameters/platformID'
-      responses: 
+      responses:
         200:
           description: 'Platform found'
           schema:
@@ -1578,7 +1578,7 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-        
+
   /projects/{uuid}/annotations/:
     x-resource: Projects
     get:
@@ -1694,7 +1694,7 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-        
+
 
   /projects/{uuid}/annotations/{uuid2}:
     x-resouce: Projects
@@ -2817,7 +2817,7 @@ paths:
           description: 'Unexpected Error'
           schema:
             $ref: '#/definitions/Error'
-          
+
   /tool-runs/:
     x-resource: Tools
     get:
@@ -4199,6 +4199,102 @@ definitions:
           type: boolean
           description: 'An opt-in (defaults to false) setting to recieve email notifications'
 
+  UserSelf:
+    allOf:
+    - $ref: '#/definitions/TimeModelMixin'
+    - type: object
+      required:
+      - id
+      - role
+      properties:
+        id:
+          type: string
+          description: 'User ID for Raster Foundry'
+        role:
+          type: string
+          description: 'User role in organization'
+          enum:
+            - 'USER'
+            - 'VIEWER'
+            - 'OWNER'
+        dropboxCredential:
+          type: string
+          description: "Contains the user's dropbox credential if a connection has been configured"
+        planetCredential:
+          type: string
+          description: "Contains the user's planet credential if a connection has been configured"
+        emailNotifications:
+          type: boolean
+          description: 'An opt-in (defaults to false) setting to receive email notifications to login email address'
+        email:
+          type: string
+          description: "Login email"
+        name:
+          type: string
+          description: "User's name"
+        profileImageUri:
+          type: string
+          description: "Link to user's avatar image"
+        isSuperuser:
+          type: boolean
+          description: "User is a superuser or not. Default to false."
+        isActive:
+          type: boolean
+          description: "User is an active user or not. Default to true."
+        visibility:
+          type: string
+          description: "User's visibility. Default to 'PRIVATE'"
+          enum:
+            - 'PUBLIC'
+            - 'PRIVATE'
+        personalInfo:
+          type: object
+          $ref: '#/definitions/UserPersonalInfo'
+
+  UserPersonalInfo:
+    type: object
+    properties:
+      firstName:
+        type: string
+        description: "User's first name. Default to an empty string"
+      lastName:
+        type: string
+        description: "User's laste name. Default to an empty string"
+      email:
+        type: string
+        description: "User's contact email. Default to an empty string"
+      emailNotifications:
+        type: boolean
+        description: 'An opt-in (defaults to false) setting to receive email notifications to contact email address'
+      phoneNumber:
+        type: string
+        description: "User's phone number. Default to an empty string"
+      organizationName:
+        type: string
+        description: "User's organization name. Default to an empty string"
+      organizationType:
+        type: string
+        description: "User's organization type. Default to 'OTHER'"
+        enum:
+          - 'COMMERCIAL'
+          - 'GOVERNMENT'
+          - 'NON-PROFIT'
+          - 'ACADEMIC'
+          - 'MILITARY'
+          - 'OTHER'
+      organizationWebsite:
+        type: string
+        description: "User's organization website. Default to an empty string"
+      profileWebsite:
+        type: string
+        description: "User's profile website. Default to an empty string"
+      profileBio:
+        type: string
+        description: "User's profile bio. Default to an empty string"
+      profileUrl:
+        type: string
+        description: "User's profile url. Default to an empty string"
+
   UserThin:
     type: object
     properties:
@@ -4318,7 +4414,7 @@ definitions:
         type: string
       groupRole:
         type: string
-        enum: 
+        enum:
         - 'ADMIN'
         - 'MEMBER'
   UserGroupRole:
@@ -4414,7 +4510,6 @@ definitions:
         type: string
         format: UUID
         description: 'Platform Id'
-        readOnly: true
       name:
         type: string
         description: 'Platform display name'
@@ -5852,4 +5947,3 @@ definitions:
         format: uuid
       defaultStyle:
         type: object
-
