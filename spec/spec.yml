@@ -213,14 +213,14 @@ paths:
             maxItems: 5
             items:
               $ref: '#/definitions/UserSearched'
-  /users/{uuid}/:
+  /users/{userID}/:
     x-resource: Users
     get:
       summary: 'Get a single user'
       tags:
         - Users
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/userID'
       responses:
         200:
           description: 'User found'
@@ -239,7 +239,7 @@ paths:
       tags:
         - Users
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/userID'
         - name: User
           in: body
           required: true
@@ -848,12 +848,12 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /datasources/{uuid}/permissions/:
+  /datasources/{datasourceID}/permissions/:
     x-resource: Datasources
     get:
       summary: 'List access control rules for this datasource'
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/datasourceID'
       tags:
         - Permissions
       responses:
@@ -876,7 +876,7 @@ paths:
       tags:
         - Permissions
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/datasourceID'
         - name: accessControlRules
           in: body
           required: true
@@ -904,7 +904,7 @@ paths:
       tags:
         - Permissions
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/datasourceID'
         - name: accessControlRule
           in: body
           required: true
@@ -970,14 +970,14 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /uploads/{uuid}/:
+  /uploads/{uploadID}/:
     x-resource: Uploads
     get:
       summary: 'Get upload details'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/uploadID'
       responses:
         200:
           description: 'Info about upload'
@@ -997,7 +997,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/uploadID'
         - name: upload
           in: body
           required: true
@@ -1019,7 +1019,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/uploadID'
       responses:
         204:
           description: 'Deletion successful (no content)'
@@ -1031,7 +1031,7 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /uploads/{uuid}/credentials/:
+  /uploads/{uploadID}/credentials/:
     x-resource: Uploads
     get:
       summary: 'Get credentials for an AWS S3 bucket'
@@ -1039,7 +1039,7 @@ paths:
         - Authentication
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/uploadID'
       responses:
         200:
           description: 'AWS credentials scoped to the upload bucket with prefix'
@@ -1120,14 +1120,14 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /scenes/{uuid}/:
+  /scenes/{sceneID}/:
     x-resource: Scenes
     get:
       summary: 'Get scene details'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/sceneID'
       responses:
         200:
           description: 'Info about Scene'
@@ -1151,7 +1151,7 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Scene'
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/sceneID'
       responses:
         204:
           description: 'Update successful (no further processing needed)'
@@ -1171,7 +1171,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/sceneID'
       responses:
         204:
           description: 'Deletion successful (no content)'
@@ -1183,14 +1183,14 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /scenes/{uuid}/download:
+  /scenes/{sceneID}/download:
     x-resource: Scenes
     get:
       summary: 'Get list of downloadable Images'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/sceneID'
       responses:
         200:
           description: 'An array of downloadable images. Each image has a `downloadUri` property.'
@@ -1206,12 +1206,12 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /scenes/{uuid}/permissions/:
+  /scenes/{sceneID}/permissions/:
     x-resource: Scenes
     get:
       summary: 'List access control rules for this scene'
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/sceneID'
       tags:
         - Permissions
       responses:
@@ -1234,7 +1234,7 @@ paths:
       tags:
         - Permissions
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/sceneID'
         - name: accessControlRules
           in: body
           required: true
@@ -1262,7 +1262,7 @@ paths:
       tags:
         - Permissions
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/sceneID'
         - name: accessControlRule
           in: body
           required: true
@@ -1283,14 +1283,14 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /scenes/{uuid}/datasource:
+  /scenes/{sceneID}/datasource:
     x-resource: Scenes
     get:
       summary: 'Get the datasource for a scene you can view'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/sceneID'
       responses:
         200:
           description: 'A datasource'
@@ -1304,14 +1304,14 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /scenes/{uuid}/thumbnail:
+  /scenes/{sceneID}/thumbnail:
     x-resource: Scenes
     get:
       summary: 'Get a thumbnail for this COG scene. Only works for scenes of type COG'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/sceneID'
         - $ref: '#/parameters/redBand'
         - $ref: '#/parameters/greenBand'
         - $ref: '#/parameters/blueBand'
@@ -1379,14 +1379,14 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /projects/{uuid}/:
+  /projects/{projectID}/:
     x-resource: Projects
     get:
       summary: 'Get project details'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
       responses:
         200:
           description: 'Project details found'
@@ -1410,7 +1410,7 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Project'
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
       responses:
         204:
           description: 'Update successful (no further processing needed)'
@@ -1427,7 +1427,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
       responses:
         204:
           description: 'Deletion successful (no content)'
@@ -1439,14 +1439,14 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /projects/{uuid}/labels/:
+  /projects/{projectID}/labels/:
     x-resource: Projects
     get:
       summary: 'Get a list of the labels used on a project'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
       responses:
         200:
           description: 'A list of labels'
@@ -1462,14 +1462,14 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /projects/{uuid}/annotation-groups/:
+  /projects/{projectID}/annotation-groups/:
     x-resource: Projects
     get:
       summary: 'Get annotation groups belonging to a project'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
       responses:
         200:
           description: 'Array containing annotation groups for this project'
@@ -1490,7 +1490,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
         - name: annotationGroup
           in: body
           required: true
@@ -1509,15 +1509,15 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /projects/{uuid}/annotations-groups/{uuid2}/:
+  /projects/{projectID}/annotations-groups/{annotationsGroupID}/:
     x-resource: Projects
     get:
       summary: 'Get annotation group for project'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
-        - $ref: '#/parameters/uuid2'
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/annotationsGroupID'
       responses:
         200:
           description: 'fetched annotation group'
@@ -1536,8 +1536,8 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
-        - $ref: '#/parameters/uuid2'
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/annotationsGroupID'
         - name: annotationGroup
           in: body
           required: true
@@ -1562,8 +1562,8 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
-        - $ref: '#/parameters/uuid2'
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/annotationsGroupID'
       responses:
         200:
           description: 'Number of deleted annotation groups from this request'
@@ -1579,14 +1579,14 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /projects/{uuid}/annotations/:
+  /projects/{projectID}/annotations/:
     x-resource: Projects
     get:
       summary: 'Get annotations belonging to a project'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
         - $ref: '#/parameters/AnnotationLabel'
         - $ref: '#/parameters/AnnotationQualityCheck'
         - $ref: '#/parameters/page'
@@ -1610,7 +1610,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
         - name: annotations
           in: body
           required: true
@@ -1634,7 +1634,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
       responses:
         201:
           description: 'Annotations Deleted'
@@ -1647,14 +1647,14 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /projects/{uuid}/annotations/shapefile:
+  /projects/{projectID}/annotations/shapefile:
     x-resource: Projects
     get:
       summary: 'Get a url for annotations exported to a shapefile'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
       responses:
         200:
           description: 'Annotations retrieved successfully'
@@ -1674,7 +1674,7 @@ paths:
       consumes:
         - multipart/form-data
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
         - in: formData
           name: name
           type: file
@@ -1696,15 +1696,15 @@ paths:
             $ref: '#/definitions/Error'
 
 
-  /projects/{uuid}/annotations/{uuid2}:
+  /projects/{projectID}/annotations/{annotationID}:
     x-resouce: Projects
     get:
       summary: 'Get an annotation belonging to a project'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
-        - $ref: '#/parameters/uuid2'
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/annotationID'
       responses:
         200:
           description: 'GeoJSON feature containing one annotation from this project'
@@ -1724,8 +1724,8 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
-        - $ref: '#/parameters/uuid2'
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/annotationID'
         - name: annotation
           in: body
           required: true
@@ -1748,8 +1748,8 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
-        - $ref: '#/parameters/uuid2'
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/annotationID'
       responses:
         204:
           description: 'Deletion successful.'
@@ -1763,14 +1763,14 @@ paths:
             $ref: '#/definitions/Error'
 
 
-  /projects/{uuid}/areas-of-interest/:
+  /projects/{projectID}/areas-of-interest/:
     x-resource: Projects
     get:
       summary: 'Get all areas of interest for a project'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
         - $ref: '#/parameters/pageSize'
         - $ref: '#/parameters/page'
       responses:
@@ -1792,7 +1792,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
         - name: aoi
           in: body
           required: true
@@ -1812,7 +1812,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /projects/{uuid}/scenes/:
+  /projects/{projectID}/scenes/:
     x-resource: Projects
     get:
       summary: 'Get a list of scenes associated with a project'
@@ -1822,7 +1822,7 @@ paths:
         - $ref: '#/parameters/orderingScene'
         - $ref: '#/parameters/pageSize'
         - $ref: '#/parameters/page'
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
         - $ref: '#/parameters/organization'
         - $ref: '#/parameters/maxCloudCover'
         - $ref: '#/parameters/minCloudCover'
@@ -1862,7 +1862,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
         - name: scenes
           in: body
           required: true
@@ -1892,7 +1892,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
         - name: scenes
           in: body
           required: true
@@ -1927,7 +1927,7 @@ paths:
             items:
               type: string
               format: uuid
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
       responses:
         204:
           description: 'No content, delete successful'
@@ -1940,14 +1940,14 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /projects/{uuid}/scenes/{uuid2}/accept:
+  /projects/{projectID}/scenes/{sceneID}/accept:
     post:
       summary: 'Approve a pending scene which has passed an area of interest check.'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
-        - $ref: '#/parameters/uuid2'
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/sceneID'
       responses:
         204:
           description: 'Successfully accepted the Scene.'
@@ -1960,13 +1960,13 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /projects/{uuid}/scenes/accept:
+  /projects/{projectID}/scenes/accept:
     post:
       summary: 'Approve a list of pending scenes which have passed an area of interest check.'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
         - name: scenes
           in: body
           required: true
@@ -1986,14 +1986,14 @@ paths:
             $ref: '#/definitions/Error'
 
 
-  /projects/{uuid}/scenes/bulk-add-from-query/:
+  /projects/{projectID}/scenes/bulk-add-from-query/:
     x-resource: Projects
     post:
       summary: 'Add scenes to a project based on search parameters'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
         - name: combinedSceneQueryParameters
           description: 'combined query parameters for finding scenes to add to this project'
           in: body
@@ -2015,14 +2015,14 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /projects/{uuid}/mosaic/:
+  /projects/{projectID}/mosaic/:
     x-resource: Projects
     get:
       summary: "Get a list of a project's scene IDs and their color-correction parameters"
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
       responses:
         200:
           description: 'An ordered list of scene IDs and corresponding color correction parameters'
@@ -2037,14 +2037,14 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /projects/{uuid}/mosaic/bulk-update-color-corrections/:
+  /projects/{projectID}/mosaic/bulk-update-color-corrections/:
     x-resource: Projects
     post:
       summary: 'Save color-correction parameters for all scenes in a project'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
         - name: combinedSceneCorrectionParameters
           description: 'Combined color correction parameters'
           in: body
@@ -2062,15 +2062,15 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /projects/{uuid}/mosaic/{uuid2}:
+  /projects/{projectID}/mosaic/{mosaicID}:
     x-resource: Projects
     get:
       summary: "Get a project's saved color-correction parameters"
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
-        - $ref: '#/parameters/uuid2'
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/mosaicID'
       responses:
         200:
           description: 'Color correction parameters'
@@ -2089,8 +2089,8 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
-        - $ref: '#/parameters/uuid2'
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/mosaicID'
         - name: updatedColorCorrection
           description: 'Updated color corrections'
           in: body
@@ -2107,14 +2107,14 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /projects/{uuid}/order:
+  /projects/{projectID}/order:
     x-resource: Projects
     get:
       summary: 'Get a list of scene IDs belonging to a project'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
       responses:
         200:
           description: 'Order of scenes in project for mosaic purposes'
@@ -2131,7 +2131,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
       responses:
         204:
           description: 'Successfully updated order of scenes in project'
@@ -2144,12 +2144,12 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /projects/{uuid}/permissions/:
+  /projects/{projectID}/permissions/:
     x-resource: Projects
     get:
       summary: 'List access control rules for this project'
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
       tags:
         - Permissions
       responses:
@@ -2172,7 +2172,7 @@ paths:
       tags:
         - Permissions
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
         - name: accessControlRules
           in: body
           required: true
@@ -2200,7 +2200,7 @@ paths:
       tags:
         - Permissions
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/projectID'
         - name: accessControlRule
           in: body
           required: true
@@ -2238,11 +2238,11 @@ paths:
           schema:
             $ref: '#/definitions/AoiPaginated'
 
-  /areas-of-interest/{uuid}/:
+  /areas-of-interest/{aoiID}/:
     get:
       summary: 'Get a specific area of interest'
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/aoiID'
       responses:
         200:
           description: "JSON summary of the given AOI's filters and Polygons."
@@ -2261,7 +2261,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/aoiID'
         - name: aoi
           in: body
           required: true
@@ -2283,7 +2283,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/aoiID'
       responses:
         204:
           description: 'Deletion successful.'
@@ -2337,14 +2337,14 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /map-tokens/{uuid}/:
+  /map-tokens/{mapTokenID}/:
     x-resource: Tokens
     get:
       summary: 'Get map token details'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/mapTokenID'
       responses:
         200:
           description: 'Info about map token'
@@ -2368,7 +2368,7 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/MapToken'
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/mapTokenID'
       responses:
         204:
           description: 'Update successful (no further processing needed)'
@@ -2385,7 +2385,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/mapTokenID'
       responses:
         204:
           description: 'Deletion successful (no content)'
@@ -2446,14 +2446,11 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /tokens/{refreshTokenId}/:
+  /tokens/{refreshTokenID}/:
     x-resource: Tokens
     delete:
       parameters:
-        - name: refreshTokenId
-          in: path
-          required: true
-          type: string
+        - $ref: '#/parameters/refreshTokenID'
       summary: 'Delete a refresh token and revoke its access'
       tags:
         - Authentication
@@ -2506,14 +2503,14 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /tools/{uuid}/:
+  /tools/{toolID}/:
     x-resource: Tools
     get:
       summary: 'Get details for a particular tool'
       tags:
         - Lab
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/toolID'
       responses:
         200:
           description: 'Geoprocessing tool record'
@@ -2532,7 +2529,7 @@ paths:
       tags:
         - Lab
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/toolID'
       responses:
         204:
           description: 'Delete successful'
@@ -2549,7 +2546,7 @@ paths:
       tags:
         - Lab
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/toolID'
       responses:
         204:
           description: 'Update an existing geoprocessing tool'
@@ -2592,12 +2589,12 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /tools/{uuid}/permissions/:
+  /tools/{toolID}/permissions/:
     x-resource: Tools
     get:
       summary: 'List access control rules for this tool'
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/toolID'
       tags:
         - Permissions
       responses:
@@ -2620,7 +2617,7 @@ paths:
       tags:
         - Permissions
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/toolID'
         - name: accessControlRules
           in: body
           required: true
@@ -2648,7 +2645,7 @@ paths:
       tags:
         - Permissions
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/toolID'
         - name: accessControlRule
           in: body
           required: true
@@ -2669,14 +2666,14 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /tool-tags/{uuid}/:
+  /tool-tags/{toolTagID}/:
     x-resource: Tools
     get:
       summary: 'Get the details of a tool tag'
       tags:
         - Lab
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/toolTagID'
       responses:
         200:
           description: 'Successfully retrieved a tool tag'
@@ -2695,7 +2692,7 @@ paths:
       tags:
         - Lab
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/toolTagID'
       responses:
         204:
           description: 'Successfully deleted a tag'
@@ -2712,7 +2709,7 @@ paths:
       tags:
         - Lab
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/toolTagID'
       responses:
         204:
           description: 'Successfully updated tag'
@@ -2860,14 +2857,14 @@ paths:
           description: 'Unexpected Error'
           schema:
             $ref: '#/definitions/Error'
-  /tool-runs/{uuid}/:
+  /tool-runs/{toolRunID}/:
     x-resource: Tools
     get:
       summary: 'Get details about a tool run'
       tags:
         - Lab
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/toolRunID'
       responses:
         200:
           description: 'Details about object'
@@ -2886,7 +2883,7 @@ paths:
       tags:
         - Lab
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/toolRunID'
       responses:
         204:
           description: 'Successfully updated tool run'
@@ -2907,7 +2904,7 @@ paths:
       tags:
         - Lab
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/toolRunID'
       responses:
         204:
           description: 'Successfully deleted a tool run'
@@ -2919,12 +2916,12 @@ paths:
           description: 'Unexpected Error'
           schema:
             $ref: '#/definitions/Error'
-  /tool-runs/{uuid}/permissions/:
+  /tool-runs/{toolRunID}/permissions/:
     x-resource: Tools
     get:
       summary: 'List access control rules for this tool run'
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/toolRunID'
       tags:
         - Permissions
       responses:
@@ -2947,7 +2944,7 @@ paths:
       tags:
         - Permissions
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/toolRunID'
         - name: accessControlRules
           in: body
           required: true
@@ -2975,7 +2972,7 @@ paths:
       tags:
         - Permissions
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/toolRunID'
         - name: accessControlRule
           in: body
           required: true
@@ -3061,14 +3058,14 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /exports/{uuid}/:
+  /exports/{exportID}/:
     x-resource: Exports
     get:
       summary: 'Get export details'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/exportID'
       responses:
         200:
           description: 'Info about export'
@@ -3092,7 +3089,7 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Export'
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/exportID'
       responses:
         204:
           description: 'Update successful (no further processing needed)'
@@ -3110,7 +3107,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/exportID'
       responses:
         204:
           description: 'Deletion successful (no content)'
@@ -3123,14 +3120,14 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /exports/{uuid}/definition:
+  /exports/{exportID}/definition:
     x-resource: Exports
     get:
       summary: 'Get export details'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/exportID'
       responses:
         200:
           description: 'Info about export, in export job format'
@@ -3145,14 +3142,14 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /exports/{uuid}/files:
+  /exports/{exportID}/files:
     x-resource: Exports
     get:
       summary: 'Get available files for the export'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/exportID'
       responses:
         200:
           description: 'List of files within an export'
@@ -3168,14 +3165,14 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /exports/{uuid}/files/{filename}:
+  /exports/{exportID}/files/{filename}:
     x-resource: Exports
     get:
       summary: 'Download a file from an export'
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/exportID'
         - name: filename
           required: true
           in: path
@@ -3270,14 +3267,14 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /shapes/{uuid}:
+  /shapes/{shapeID}:
     x-resouce: Projects
     get:
       summary: Get a specific shape
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/shapeID'
       responses:
         200:
           description: 'GeoJSON feature containing one shape'
@@ -3297,7 +3294,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/shapeID'
         - name: shape
           in: body
           required: true
@@ -3320,7 +3317,7 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/shapeID'
       responses:
         204:
           description: 'Deletion successful'
@@ -3333,12 +3330,12 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /shapes/{uuid}/permissions/:
+  /shapes/{shapeID}/permissions/:
     x-resource: Shapes
     get:
       summary: 'List access control rules for this shape'
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/shapeID'
       tags:
         - Permissions
       responses:
@@ -3361,7 +3358,7 @@ paths:
       tags:
         - Permissions
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/shapeID'
         - name: accessControlRules
           in: body
           required: true
@@ -3389,7 +3386,7 @@ paths:
       tags:
         - Permissions
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/shapeID'
         - name: accessControlRule
           in: body
           required: true
@@ -3430,7 +3427,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /licenses/{licenseId}:
+  /licenses/{licenseID}:
     x-resource: Licenses
     get:
       summary: 'Get a license based on its id'
@@ -3438,7 +3435,7 @@ paths:
         - Imagery
         - Lab
       parameters:
-        - $ref: '#/parameters/licenseId'
+        - $ref: '#/parameters/licenseID'
       responses:
         200:
           description: 'License object'
@@ -3449,14 +3446,56 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /teams/{uuid}:
+  /teams/:
+    x-resource: Teams
+    get:
+      summary: 'List teams the user has permission to view'
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+      responses:
+        200:
+          description: 'Paginated teams'
+          schema:
+            $ref: '#/definitions/TeamsPaginated'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create a team
+      tags:
+        - Users
+      parameters:
+        - name: team
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/TeamCreate'
+      responses:
+        201:
+          description: 'Team created'
+          schema:
+            $ref: '#/definitions/Team'
+        403:
+          description: 'Insufficient permissions'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
+  /teams/{teamID}:
     x-resource: Teams
     get:
       summary: 'Get team details'
       tags:
         - Users
       parameters:
-        - $ref: '#/parameters/uuid'
+        - $ref: '#/parameters/teamID'
       responses:
         200:
           description: 'Detail about a team'
@@ -3470,6 +3509,49 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
+    put:
+      summary: 'Update a team'
+      tags:
+        - Users
+      parameters:
+        - name: team
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/TeamCreate'
+        - $ref: '#/parameters/teamID'
+      responses:
+        204:
+          description: 'Update successful (No content)'
+          schema:
+            $ref: '#/definitions/Team'
+        403:
+          description: 'Insufficient permissions or object does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: 'Delete a team'
+      description: 'Delete a team by id'
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/parameters/teamID'
+      responses:
+        204:
+          description: 'Deletion successful (no content)'
+        403:
+          description: 'Insufficient permissions or object does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
 
 parameters:
   orderingBase:
@@ -3570,14 +3652,91 @@ parameters:
     description: 'Number of results per page in paginated response'
     type: number
     format: int32
-  uuid:
-    name: uuid
+  refreshTokenID:
+    name: refreshTokenID
+    in: path
+    required: true
+    type: string
+  datasourceID:
+    name: datasourceID
     in: path
     required: true
     type: string
     format: uuid
-  uuid2:
-    name: uuid2
+  uploadID:
+    name: uploadID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  sceneID:
+    name: sceneID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  projectID:
+    name: projectID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  annotationID:
+    name: annotationID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  mosaicID:
+    name: mosaicID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  annotationsGroupID:
+    name: annotationsGroupID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  aoiID:
+    name: aoiID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  mapTokenID:
+    name: mapTokenID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  toolID:
+    name: toolID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  toolTagID:
+    name: toolTagID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  toolRunID:
+    name: toolRunID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  exportID:
+    name: exportID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  shapeID:
+    name: shapeID
     in: path
     required: true
     type: string
@@ -3912,8 +4071,8 @@ parameters:
     in: query
     type: string
     required: false
-  licenseId:
-    name: licenseId
+  licenseID:
+    name: licenseID
     description: 'id/shortName of a license'
     in: path
     type: string
@@ -4197,7 +4356,7 @@ definitions:
           description: "Contains the user's planet credential if a connection has been configured"
         emailNotifications:
           type: boolean
-          description: 'An opt-in (defaults to false) setting to recieve email notifications'
+          description: 'An opt-in (defaults to false) setting to receive email notifications'
 
   UserSelf:
     allOf:
