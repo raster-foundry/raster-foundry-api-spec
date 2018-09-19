@@ -4356,7 +4356,7 @@ definitions:
           description: "Contains the user's planet credential if a connection has been configured"
         emailNotifications:
           type: boolean
-          description: 'An opt-in (defaults to false) setting to recieve email notifications'
+          description: 'An opt-in (defaults to false) setting to receive email notifications'
 
   UserSelf:
     allOf:
