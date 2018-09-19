@@ -3517,6 +3517,47 @@ parameters:
     description: 'UUID for project'
     type: string
     format: uuid
+  queryAuthToken:
+    name: token
+    in: query
+    description: 'JWT in query parameter'
+    type: string
+  width:
+    name: width
+    in: query
+    description: 'Approximate thumbnail rendering width'
+    type: number
+    format: integer
+  height:
+    name: height
+    in: query
+    description: 'Approximate thumbnail rendering height'
+    type: number
+    format: integer
+  redBand:
+    name: red
+    in: query
+    description: 'Index to use for a red band'
+    type: number
+    format: integer
+  greenBand:
+    name: green
+    in: query
+    description: 'Index to use for a green band'
+    type: number
+    format: integer
+  blueBand:
+    name: blue
+    in: query
+    description: 'Index to user for a blue band'
+    type: number
+    format: integer
+  brightnessFloor:
+    name: floor
+    in: query
+    description: 'False minimum brightness for rendering thumbnails'
+    type: number
+format: integer
   page:
     name: page
     in: query
