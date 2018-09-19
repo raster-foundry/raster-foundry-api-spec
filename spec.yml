@@ -4047,8 +4047,9 @@ definitions:
   AOI:
     type: object
     properties:
-      area:
-        type: object
+      shape:
+        type: str
+        format: uuid
       filters:
         $ref: '#/definitions/CombinedSceneQueryParams'
       isActive:
