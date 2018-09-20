@@ -18,9 +18,20 @@ then
     then
         usage
     else
-        # Execute yarn tests
-        docker-compose \
-            run --rm app \
-            yarn run test
+        # # Execute yarn tests
+        # docker-compose \
+        #     run --rm app \
+        #     yarn run test
+
+        # Make sure there's no difference between the two specs
+        echo 'Checking for differences between specs'
+        # specDiff=$(diff spec.yml spec/spec.yml)
+        # echo "${specDiff}"
+        # echo 'foo'
+        specDiffLines=$(diff ./spec.yml ./spec/spec.yml | wc -l)
+        if (("${specDiffLines}" > 0 )); then
+            echo 'Difference between spec.yml in repository root and spec/spec.yml'
+            exit 1
+        fi
     fi
 fi
