@@ -5405,16 +5405,6 @@ definitions:
             - 'ORGANIZATION'
             - 'PRIVATE'
 
-  ToolRunPaginated:
-    allOf:
-    - $ref: '#/definitions/PaginatedResponse'
-    - type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/definitions/ToolRun'
-
   ToolRunCreate:
     type:
       object
@@ -5431,6 +5421,16 @@ definitions:
           - 'PUBLIC'
           - 'ORGANIZATION'
           - 'PRIVATE'      
+
+  ToolRunPaginated:
+    allOf:
+    - $ref: '#/definitions/PaginatedResponse'
+    - type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/definitions/ToolRun'
 
   Error:
     type: object
