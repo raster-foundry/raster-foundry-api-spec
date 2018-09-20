@@ -1904,7 +1904,7 @@ paths:
               format: uuid
       responses:
         200:
-          description: 'No content, update successful'
+          description: 'Scenes in this project'
           schema:
             type: array
             items:
