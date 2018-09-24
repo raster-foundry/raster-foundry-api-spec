@@ -851,6 +851,70 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
+
+  /datasources/{datasourceID}:
+    x-resource: Datasources
+    get:
+      summary: 'Get datasource by ID'
+      parameters:
+        - $ref: '#/parameters/datasourceID'
+      tags:
+        - Datasources
+      responses:
+        200:
+          description: SUCCESS
+          schema:
+            $ref: '#/definitions/Datasource'
+        403:
+          description: 'Insufficient permissions to get this datasource'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: 'Replace a datasource'
+      tags:
+        - Datasources
+      parameters:
+        - $ref: '#/parameters/datasourceID'
+        - name: datasource
+          in: body
+          required: true
+          schema:
+            allOf:
+              - $ref: '#/definitions/Datasource'
+              - $ref: '#/definitions/DatasourceBands'
+      responses:
+        204:
+          description: 'Update successful (no further processing needed)'
+        403:
+          description: 'Insufficient permissions or object does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: 'Delete a datasource'
+      tags:
+        - Datasources
+      parameters:
+        - $ref: '#/parameters/datasourceID'
+      responses:
+        204:
+          description: 'Deletion successful (no content)'
+        403:
+          description: 'Insufficient permissions or object does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
   /datasources/{datasourceID}/permissions/:
     x-resource: Datasources
     get:
@@ -4854,23 +4918,15 @@ definitions:
     type: object
     description: 'Datasource to be created'
     allOf:
+      - $ref: '#/definitions/DatasourceCreated'
+      - $ref: '#/definitions/DatasourceBands'
+
+  DatasourceBands:
+    type: object
+    description: 'Band definitions of a datasource'
+    allOf:
       - type: object
         properties:
-          visibility:
-            type: string
-            description: 'Level of restriction on viewing'
-            enum:
-              - 'PUBLIC'
-              - 'ORGANIZATION'
-              - 'PRIVATE'
-          name:
-            type: string
-            description: 'human label name for datasource'
-          extras:
-            type: object
-            description: 'additional related information for a datasource'
-          composites:
-            $ref: '#/definitions/Composite'
           bands:
             type: array
             items:
