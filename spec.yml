@@ -837,8 +837,11 @@ paths:
       tags:
         - Datasources
       parameters:
-        - $ref: '#/parameters/owner'
-        - $ref: '#/parameters/name'
+        - name: datasource
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DatasourceToCreate'
       responses:
         201:
           description: SUCCESS
@@ -4847,6 +4850,39 @@ definitions:
           blueBand:
             type: integer
 
+  DatasourceToCreate:
+    type: object
+    description: 'Datasource to be created'
+    allOf:
+      - type: object
+        properties:
+          visibility:
+            type: string
+            description: 'Level of restriction on viewing'
+            enum:
+              - 'PUBLIC'
+              - 'ORGANIZATION'
+              - 'PRIVATE'
+          name:
+            type: string
+            description: 'human label name for datasource'
+          extras:
+            type: object
+            description: 'additional related information for a datasource'
+          composites:
+            $ref: '#/definitions/Composite'
+          bands:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                number:
+                  type: string
+                wavelength:
+                  type: number
+                  format: float
 
   DatasourceCreated:
     type: object
@@ -4910,6 +4946,7 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/Datasource'
+
   License:
     type: object
     description: 'A record of license'
