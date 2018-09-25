@@ -1,5 +1,16 @@
 # Change Log
 
+
+## [1.11.0](https://github.com/raster-foundry/raster-foundry-api-spec/tree/1.11.0) (2018-09-05)
+
+[Full Changelog](https://github.com/raster-foundry/raster-foundry-api-spec/compare/1.5.0...1.11.0)
+
+**Merged pull requests:**
+
+- Replace generic params with sensible names in routes [\#47](https://github.com/raster-foundry/raster-foundry-api-spec/pull/47)
+- Update users/me endpoint specs [\#45](https://github.com/raster-foundry/raster-foundry-api-spec/pull/45)
+- Update responses for adding scenes to projects [\#44](https://github.com/raster-foundry/raster-foundry-api-spec/pull/44)
+
 ## [1.5.0](https://github.com/raster-foundry/raster-foundry-api-spec/tree/1.5.0) (2018-09-05)
 
 [Full Changelog](https://github.com/raster-foundry/raster-foundry-api-spec/compare/1.4.0...1.5.0)
