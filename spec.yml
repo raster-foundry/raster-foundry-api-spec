@@ -904,7 +904,7 @@ paths:
       parameters:
         - $ref: '#/parameters/datasourceID'
       responses:
-        204:
+        200:
           description: 'Deletion successful (no content)'
         403:
           description: 'Insufficient permissions or object does not exist'
