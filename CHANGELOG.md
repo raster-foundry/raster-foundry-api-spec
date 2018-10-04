@@ -6,7 +6,7 @@
 
 ### Changed
 
-- Switched to [keepachangelog](https://keepachangelog.com/en/1.0.0/) CHANGELOG format [\#xxx](https://github.com/raster-foundry/raster-foundry-api-spec/pull/xxx)
+- Switched to [keepachangelog](https://keepachangelog.com/en/1.0.0/) CHANGELOG format [\#52](https://github.com/raster-foundry/raster-foundry-api-spec/pull/52)
 
 ### Deprecated
 
