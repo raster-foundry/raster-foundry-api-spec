@@ -1,16 +1,18 @@
 # Change Log
 
-## Unreleased(https://github.com/raster-foundry/raster-foundry/tree/develop)
+## [Unreleased](https://github.com/raster-foundry/raster-foundry/tree/develop)
 
 ### Added
+- Added ownershipType, groupType, and groupId filters [\#55](https://github.com/raster-foundry/raster-foundry-api-spec/pull/55/)
 
 ### Changed
-
 - Switched to [keepachangelog](https://keepachangelog.com/en/1.0.0/) CHANGELOG format [\#52](https://github.com/raster-foundry/raster-foundry-api-spec/pull/52)
 
 ### Deprecated
 
 ### Removed
+- Outdated text referencing inability for users to create datasources [\#55](https://github.com/raster-foundry/raster-foundry-api-spec/pull/55/)
+- nonexistent organization list endpoint [\#55](https://github.com/raster-foundry/raster-foundry-api-spec/pull/55/)
 
 ### Fixed
 

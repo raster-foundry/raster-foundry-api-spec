@@ -63,9 +63,6 @@ x-resources:
     description: |
       Datasources contain information common to all scenes associated with them, such as the number of bands to expect in images associated with that datasource. A datasource can be specific (e.g. a particular earth observation satellite) or generic (e.g. a 3-band sensor on a UAV). All scenes must have an associated datasource.
 
-      Currently, datasources cannot be created through the API and must be requested (<a href="https://github.com/azavea/raster-foundry/issues" target="_blank">preferably as a Github issue in the source repository</a>).
-
-      In the future, users will be able to manage the creation, amendment, and deletion of datasources directly through the API. Also, users will be able to assign transformations like color correction, band composites, or color maps to datasources as a default for themselves and/or their organizations.
   - name: Tokens
     description: |
       Tokens are used to securely identify users and applications accessing the API.
@@ -258,19 +255,6 @@ paths:
             $ref: '#/definitions/Error'
   /organizations/:
     x-resource: Organizations
-    get:
-      summary: 'Get a list of organizations'
-      tags:
-        - Users
-      parameters:
-        - $ref: '#/parameters/orderingBase'
-        - $ref: '#/parameters/pageSize'
-        - $ref: '#/parameters/page'
-      responses:
-        200:
-          description: 'Paginated list of organizations'
-          schema:
-            $ref: '#/definitions/OrganizationsPaginated'
     post:
       summary: 'Create an organization'
       tags:
@@ -493,6 +477,26 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
+  /platforms/{platformID}/teams/search:
+    x-resource: Admin
+    get:
+      summary: 'Get a list of teams that the user can see on the platform.'
+      tags:
+        - Admin
+      parameters: 
+        - $ref: '#/parameters/platformID'
+        - $ref: '#/parameters/search'
+      responses:
+        200:
+          description: 'List of teams that meet search criteria'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Team'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
   /platforms/{platformID}/organizations/:
     x-resource: Admin
     get:
@@ -651,6 +655,7 @@ paths:
         - $ref: '#/parameters/organizationID'
         - $ref: '#/parameters/pageSize'
         - $ref: '#/parameters/page'
+        - $ref: '#/parameters/search'
       responses:
         200:
           description: 'Organization teams'
@@ -820,6 +825,10 @@ paths:
       parameters:
         - $ref: '#/parameters/owner'
         - $ref: '#/parameters/name'
+        - $ref: '#/parameters/ownershipType'
+        - $ref: '#/parameters/search'
+        - $ref: '#/parameters/groupType'
+        - $ref: '#/parameters/groupId'
       responses:
         200:
           description: SUCCESS
@@ -1154,6 +1163,9 @@ paths:
         - $ref: '#/parameters/ingested'
         - $ref: '#/parameters/ingestStatus'
         - $ref: '#/parameters/forProjectId'
+        - $ref: '#/parameters/ownershipType'
+        - $ref: '#/parameters/groupType'
+        - $ref: '#/parameters/groupId'
         - name: shape
           in: query
           type: string
@@ -1418,6 +1430,9 @@ paths:
         - $ref: '#/parameters/owner'
         - $ref: '#/parameters/organization'
         - $ref: '#/parameters/tags'
+        - $ref: '#/parameters/ownershipType'
+        - $ref: '#/parameters/groupType'
+        - $ref: '#/parameters/groupId'
       responses:
         200:
           description: 'Paginated list of projects the user is authorized to view'
@@ -2552,6 +2567,9 @@ paths:
         - $ref: '#/parameters/toolCategory'
         - $ref: '#/parameters/toolTag'
         - $ref: '#/parameters/search'
+        - $ref: '#/parameters/ownershipType'
+        - $ref: '#/parameters/groupType'
+        - $ref: '#/parameters/groupId'
       responses:
         200:
           description: 'Returns a paginated list of tools'
@@ -2902,6 +2920,9 @@ paths:
         - $ref: '#/parameters/tool'
         - $ref: '#/parameters/owner'
         - $ref: '#/parameters/createdBy'
+        - $ref: '#/parameters/ownershipType'
+        - $ref: '#/parameters/groupType'
+        - $ref: '#/parameters/groupId'
       responses:
         200:
           description: 'Paginated list of tool runs'
@@ -3278,6 +3299,9 @@ paths:
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/ownershipType'
+        - $ref: '#/parameters/groupType'
+        - $ref: '#/parameters/groupId'
       responses:
         200:
           description: 'GeoJSON feature collection containing paginated shapes'
@@ -3625,6 +3649,35 @@ paths:
 
 
 parameters:
+  groupType:
+    name: groupType
+    in: query
+    description: 'Filter by group type. Requires a group id'
+    type: string
+    required: false
+    enum:
+      - PLATFORM
+      - ORGANIZATION
+      - TEAM
+
+  groupId:
+    name: groupId
+    in: query
+    description: 'Filter by group id. Requires a group type'
+    type: string
+    format: uuid
+    required: false
+
+  ownershipType:
+    name: ownershipType
+    in: query
+    description: 'Filter by owned, shared, or inherited'
+    type: string
+    required: false
+    enum:
+      - 'owned'
+      - 'shared'
+      - 'inherited'
   orderingBase:
     name: ordering
     in: query
@@ -4743,19 +4796,61 @@ definitions:
       name:
         type: string
         description: 'Platform display name'
-      settings:
-        type: object
       isActive:
         type: boolean
       defaultOrganizationId:
         type: string
         format: UUID
         description: "Default organization to add users to if one isn't specified"
+      publicSettings:
+        $ref: '#/definitions/PlatformPublicSettings'
+      privateSettings:
+        $ref: '#/definitions/PlatformPrivateSettings'
     required:
       - id
       - name
       - settings
       - isActive
+      - publicSettings
+      - privateSettings
+
+  PlatformPublicSettings:
+    type: object
+    properties:
+      emailUser:
+        type: string
+      emailSmtpHost:
+        type: string
+      emailSmtpPort:
+        type: integer
+      emailSmtpEncryption:
+        type: string
+      emailIngestNotification:
+        type: boolean
+      emailAoiNotification:
+        type: boolean
+      emailExportNotification:
+        type: boolean
+      platformHost:
+        type: string
+      emailFrom:
+        type: string
+    required:
+      - emailuser
+      - emailSmtpHost
+      - emailSmtpPort
+      - emailSmtpEncryption
+      - emailIngestNotification
+      - emailAoiNotification
+      - emailExportNotification
+
+  PlatformPrivateSettings:
+    type: object
+    properties:
+      emailPassword:
+        type: string
+    required:
+      - emailPassword
 
   OrganizationsPaginated:
     allOf:
