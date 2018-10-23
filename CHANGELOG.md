@@ -9,6 +9,7 @@
 ### Deprecated
 
 ### Removed
+- Remove /order GET from /projects/{} since it doesn't exist [\#56](https://github.com/raster-foundry/raster-foundry-api-spec/pull/56)
 
 ### Fixed
 
