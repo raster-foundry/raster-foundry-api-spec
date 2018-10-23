@@ -14,7 +14,12 @@
 
 ### Security
 
-## [1.13.0](https://github.com/raster-foundry/raster-foundry/tree/1.13.0)
+## [1.13.1](https://github.com/raster-foundry/raster-foundry/tree/1.13.1) (2018-10-23)
+
+### Removed
+- Remove /order GET from /projects/{} since it doesn't exist [\#56](https://github.com/raster-foundry/raster-foundry-api-spec/pull/56)
+
+## [1.13.0](https://github.com/raster-foundry/raster-foundry/tree/1.13.0) (2018-10-30)
 
 ### Added
 - Added ownershipType, groupType, and groupId filters [\#55](https://github.com/raster-foundry/raster-foundry-api-spec/pull/55/)

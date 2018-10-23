@@ -2195,23 +2195,6 @@ paths:
             $ref: '#/definitions/Error'
   /projects/{projectID}/order:
     x-resource: Projects
-    get:
-      summary: 'Get a list of scene IDs belonging to a project'
-      tags:
-        - Imagery
-      parameters:
-        - $ref: '#/parameters/projectID'
-      responses:
-        200:
-          description: 'Order of scenes in project for mosaic purposes'
-        403:
-          description: 'Insufficient permissions or object does not exist'
-          schema:
-            $ref: '#/definitions/Error'
-        default:
-          description: 'Unexpected error'
-          schema:
-            $ref: '#/definitions/Error'
     put:
       summary: 'Set a z-index order for scenes within the specified project'
       tags:
