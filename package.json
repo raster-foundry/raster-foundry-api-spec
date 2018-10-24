@@ -6,7 +6,8 @@
   "license": "Apache-2.0",
   "author": "Azavea",
   "scripts": {
-    "test": "swagger-cli validate spec/spec.yml"
+    "validate-api-spec": "swagger-cli validate spec/spec.yml",
+    "validate-prediction-api-spec": "swagger-cli validate spec/prediction-spec.yml"
   },
   "devDependencies": {
     "swagger-cli": "^2.1.0"

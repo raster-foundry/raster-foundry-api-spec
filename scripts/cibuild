@@ -9,7 +9,7 @@ fi
 function usage() {
     echo -n \
 "Usage: $(basename "$0")
-Build container images from templates.
+Installs dependencies and validates specs via Docker Compose.
 "
 }
 
@@ -18,7 +18,6 @@ if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
         usage
     else
         scripts/update
-        
         scripts/test
     fi
 fi
