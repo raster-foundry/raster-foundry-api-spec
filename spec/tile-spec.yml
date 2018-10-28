@@ -1,0 +1,225 @@
+swagger: '2.0'
+info:
+  title: Raster Foundry
+  description: An application to find, view, and analyze geospatial data at any scale
+  version: "0.1.0"
+
+host: backsplash.rasterfoundry.com
+
+schemes:
+  - http
+  - https
+
+basePath: /
+
+produces:
+  - application/json
+  - img/png
+consumes:
+  - application/json
+
+x-top-matter:
+  - title: Introduction
+    level: 1
+    content: |
+      The backsplash server serves tiles and statistical information about tile layers in the Raster Foundry application.
+  - title: Authentication
+    level: 2
+    content: |
+      You can authenticate with the backsplash tile server in one of three ways:
+        - mapToken query parameters: these are in the form of UUIDs included as query parameters. You can get one of these from a project in the Raster Foundry application.
+        - token  query parameter: This is a <a href="https://jwt.io/introduction/" target="_blank">JSON Web Token (JWT)</a> that you include in a query parameter called 'token'. It <i>does not</i> include the 'Bearer ' component of the token.
+        - authorization headers: This is a <a href="https://jwt.io/introduction/" target="_blank">JSON Web Token (JWT)</a>. You can create one with a refresh token created in the Raster Foundry application.
+
+x-resources:
+  - name: Mosaic
+    description: |
+      Single- or multi-band visualization of a project layer.
+  - name: Analysis
+    description: |
+      Visualization of the results of map algebraic computations
+  - name: Healthcheck
+    description: |
+      Assurance that the tile server is still alive
+
+tags:
+  - name: Mosaic
+    description: 'Interact with mosaics'
+  - name: Analysis
+    description: |
+      Visualization of the results of map algebraic computations
+  - name: Healthcheck
+    description: |
+      Assurance that the tile server is still alive
+
+paths:
+  /healthcheck/:
+    x-resource: Healthcheck
+    get:
+      summary: 'Confirm the tile server is available'
+      tags:
+        - Healthcheck
+      responses:
+        200:
+          description: 'OK'
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              reason:
+                type: array
+                items:
+                  type: string
+
+  /tools/{analysisId}/{z}/{x}/{y}/:
+    x-resource: Anslysis
+    get:
+      produces:
+        - image/png
+      summary: Visualize an analysis (or node of an analysis) as a tile
+      tags:
+        - Analysis
+      parameters:
+        - $ref: '#/parameters/zoom'
+        - $ref: '#/parameters/x'
+        - $ref: '#/parameters/y'
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/mapToken'
+        - name: analysisId
+          description: 'ID of the analysis to visualize'
+          in: path
+          type: string
+          format: uuid
+        - name: node
+          description: 'ID of the subnode of this analysis to visualize'
+          in: query
+          type: string
+          format: uuid
+          required: false
+      responses:
+        200:
+          description: OK
+        401:
+          description: 'Authentication failed -- no authentication methods succeeded'
+        403:
+          description: 'Analysis does not exist or user is not authorized to view analysis'
+
+  /{projectId}/{z}/{x}/{y}/:
+    x-resource: Mosaic
+    get:
+      produces:
+        - image/png
+      summary: Visualize a mosaic of a project
+      tags:
+        - Mosaic
+      parameters:
+        - $ref: '#/parameters/zoom'
+        - $ref: '#/parameters/x'
+        - $ref: '#/parameters/y'
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/mapToken'
+        - $ref: '#/parameters/redBandOverride'
+        - $ref: '#/parameters/greenBandOverride'
+        - $ref: '#/parameters/blueBandOverride'
+        - $ref: '#/parameters/projectId'
+      responses:
+        200:
+          description: OK
+        401:
+          description: 'Authentication failed -- no authentication methods succeeded'
+        403:
+          description: 'Project does not exist or user is not authorized to view analysis'
+
+  /{projectId}/histogram/:
+    x-resource: Mosaic
+    get:
+      summary: 'Obtain the histogram of this project\'s mosaic'
+      tags:
+        - Mosaic
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/mapToken'
+        - $ref: '#/parameters/redBandOverride'
+        - $ref: '#/parameters/greenBandOverride'
+        - $ref: '#/parameters/blueBandOverride'
+        - $ref: '#/parameters/projectId'
+      responses:
+        200:
+          description: OK
+        401:
+          description: 'Authentication failed -- no authentication methods succeeded'
+        403:
+          description: 'Project does not exist or user is not authorized to view analysis'
+    post:
+      summary: 'Obtain the histogram for this a subset of the scenes in this project\'s mosaic'
+      tags:
+        - Mosaic
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/mapToken'
+        - $ref: '#/parameters/redBandOverride'
+        - $ref: '#/parameters/greenBandOverride'
+        - $ref: '#/parameters/blueBandOverride'
+        - $ref: '#/parameters/projectId'
+        - type: array
+          items:
+            type: string
+            format: uuid
+          in: body
+
+parameters:
+  projectId:
+    name: projectId
+    in: path
+    description: 'ID of the project to visualize'
+    type: string
+    format: uuid
+
+  zoom:
+    name: z
+    in: path
+    description: 'Zoom level for tile visualization'
+    type: integer
+
+  x:
+    name: x
+    in: path
+    description: 'Column for tile visualization'
+    type: integer
+
+  y:
+    name: y
+    in: path
+    description: 'Row for tile visualization'
+    type: integer
+
+  token:
+    name: token
+    in: query
+    description: 'Token to use for authorization'
+    required: false
+
+  mapToken:
+    name: mapToken
+    in: query
+    description: 'Map token to use for authorization'
+    required: false
+
+  redBandOverride:
+    name: redBand
+    in: query
+    description: 'Specific band to use for red if overriding project settings'
+    type: integer
+
+  greenBandOverride:
+    name: greenBand
+    in: query
+    description: 'Specific band to use for green if overriding project settings'
+    type: integer
+
+  blueBandOverride:
+    name: blueBand
+    in: query
+    description: 'Specific band to use for blue if overriding project settings'
+    type: integer
