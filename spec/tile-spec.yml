@@ -134,7 +134,7 @@ paths:
   /{projectId}/histogram/:
     x-resource: Mosaic
     get:
-      summary: 'Obtain the histogram of this project\'s mosaic'
+      summary: 'Obtain the project mosaic histogram'
       tags:
         - Mosaic
       parameters:
