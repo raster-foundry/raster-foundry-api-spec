@@ -91,6 +91,7 @@ paths:
           in: path
           type: string
           format: uuid
+          required: true
         - name: node
           description: 'ID of the subnode of this analysis to visualize'
           in: query
@@ -152,9 +153,11 @@ paths:
         403:
           description: 'Project does not exist or user is not authorized to view analysis'
     post:
-      summary: 'Obtain the histogram for this a subset of the scenes in this project\'s mosaic'
+      summary: 'Obtain the histogram for this a subset of the scenes in the mosaic for this project'
       tags:
         - Mosaic
+      consumes:
+        - text/plain
       parameters:
         - $ref: '#/parameters/token'
         - $ref: '#/parameters/mapToken'
@@ -162,11 +165,21 @@ paths:
         - $ref: '#/parameters/greenBandOverride'
         - $ref: '#/parameters/blueBandOverride'
         - $ref: '#/parameters/projectId'
-        - type: array
-          items:
-            type: string
-            format: uuid
-          in: body
+        - in: body
+          name: scenesSubset
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+      responses:
+        200:
+          description: OK
+        401:
+          description: 'Authentication failed -- no authentication methods succeeded'
+        403:
+          description: 'Project does not exist or user is not authorized to view analysis'
 
 parameters:
   projectId:
@@ -175,36 +188,43 @@ parameters:
     description: 'ID of the project to visualize'
     type: string
     format: uuid
+    required: true
 
   zoom:
     name: z
     in: path
     description: 'Zoom level for tile visualization'
     type: integer
+    required: true
 
   x:
     name: x
     in: path
     description: 'Column for tile visualization'
     type: integer
+    required: true
 
   y:
     name: y
     in: path
     description: 'Row for tile visualization'
     type: integer
+    required: true
 
   token:
     name: token
     in: query
     description: 'Token to use for authorization'
     required: false
+    type: string
 
   mapToken:
     name: mapToken
     in: query
     description: 'Map token to use for authorization'
     required: false
+    type: string
+    format: uuid
 
   redBandOverride:
     name: redBand
