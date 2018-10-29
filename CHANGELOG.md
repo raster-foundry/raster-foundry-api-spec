@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- Publish spec YAML file to version prefixed directory [\#60](https://github.com/raster-foundry/raster-foundry-api-spec/pull/60)
 
 ### Deprecated
 

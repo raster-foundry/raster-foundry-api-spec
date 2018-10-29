@@ -1,25 +1,26 @@
 language: bash
+
 services: docker
+
+env:
+  - RF_API_SPEC_DEBUG=1
+
 script:
-- "./scripts/cibuild"
+  - ./scripts/cibuild
+
+before_deploy:
+  - pip install --user awscli
+
 deploy:
-  - provider: s3
-    access_key_id: $AWS_ACCESS_KEY_ID
-    secret_access_key: $AWS_SECRET_ACCESS_KEY
-    bucket: rasterfoundry-staging-docs-site-us-east-1
-    upload-dir: spec
-    local_dir: spec
+  - provider: script
+    script: scripts/cipublish rasterfoundry-staging-docs-site-us-east-1
     skip_cleanup: true
     on:
       repo: raster-foundry/raster-foundry-api-spec
       branch: develop
-    
-  - provider: s3
-    access_key_id: $AWS_ACCESS_KEY_ID
-    secret_access_key: $AWS_SECRET_ACCESS_KEY
-    bucket: rasterfoundry-production-docs-site-us-east-1
-    upload-dir: spec
-    local_dir: spec
+
+  - provider: script
+    script: scripts/cipublish rasterfoundry-production-docs-site-us-east-1
     skip_cleanup: true
     on:
       repo: raster-foundry/raster-foundry-api-spec
