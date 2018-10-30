@@ -148,6 +148,10 @@ paths:
       responses:
         200:
           description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Histogram'
         401:
           description: 'Authentication failed -- no authentication methods succeeded'
         403:
@@ -176,6 +180,10 @@ paths:
       responses:
         200:
           description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Histogram'
         401:
           description: 'Authentication failed -- no authentication methods succeeded'
         403:
@@ -243,3 +251,776 @@ parameters:
     in: query
     description: 'Specific band to use for blue if overriding project settings'
     type: integer
+
+definitions:
+  Histogram:
+    type: object
+    properties:
+      0: 
+        required: false
+        type: integer
+      1:
+        required: false
+        type: int
+      2:
+        required: false
+        type: int
+      3:
+        required: false
+        type: int
+      4:
+        required: false
+        type: int
+      5:
+        required: false
+        type: int
+      6:
+        required: false
+        type: int
+      7:
+        required: false
+        type: int
+      8:
+        required: false
+        type: int
+      9:
+        required: false
+        type: int
+      10:
+        required: false
+        type: int
+      11:
+        required: false
+        type: int
+      12:
+        required: false
+        type: int
+      13:
+        required: false
+        type: int
+      14:
+        required: false
+        type: int
+      15:
+        required: false
+        type: int
+      16:
+        required: false
+        type: int
+      17:
+        required: false
+        type: int
+      18:
+        required: false
+        type: int
+      19:
+        required: false
+        type: int
+      20:
+        required: false
+        type: int
+      21:
+        required: false
+        type: int
+      22:
+        required: false
+        type: int
+      23:
+        required: false
+        type: int
+      24:
+        required: false
+        type: int
+      25:
+        required: false
+        type: int
+      26:
+        required: false
+        type: int
+      27:
+        required: false
+        type: int
+      28:
+        required: false
+        type: int
+      29:
+        required: false
+        type: int
+      30:
+        required: false
+        type: int
+      31:
+        required: false
+        type: int
+      32:
+        required: false
+        type: int
+      33:
+        required: false
+        type: int
+      34:
+        required: false
+        type: int
+      35:
+        required: false
+        type: int
+      36:
+        required: false
+        type: int
+      37:
+        required: false
+        type: int
+      38:
+        required: false
+        type: int
+      39:
+        required: false
+        type: int
+      40:
+        required: false
+        type: int
+      41:
+        required: false
+        type: int
+      42:
+        required: false
+        type: int
+      43:
+        required: false
+        type: int
+      44:
+        required: false
+        type: int
+      45:
+        required: false
+        type: int
+      46:
+        required: false
+        type: int
+      47:
+        required: false
+        type: int
+      48:
+        required: false
+        type: int
+      49:
+        required: false
+        type: int
+      50:
+        required: false
+        type: int
+      51:
+        required: false
+        type: int
+      52:
+        required: false
+        type: int
+      53:
+        required: false
+        type: int
+      54:
+        required: false
+        type: int
+      55:
+        required: false
+        type: int
+      56:
+        required: false
+        type: int
+      57:
+        required: false
+        type: int
+      58:
+        required: false
+        type: int
+      59:
+        required: false
+        type: int
+      60:
+        required: false
+        type: int
+      61:
+        required: false
+        type: int
+      62:
+        required: false
+        type: int
+      63:
+        required: false
+        type: int
+      64:
+        required: false
+        type: int
+      65:
+        required: false
+        type: int
+      66:
+        required: false
+        type: int
+      67:
+        required: false
+        type: int
+      68:
+        required: false
+        type: int
+      69:
+        required: false
+        type: int
+      70:
+        required: false
+        type: int
+      71:
+        required: false
+        type: int
+      72:
+        required: false
+        type: int
+      73:
+        required: false
+        type: int
+      74:
+        required: false
+        type: int
+      75:
+        required: false
+        type: int
+      76:
+        required: false
+        type: int
+      77:
+        required: false
+        type: int
+      78:
+        required: false
+        type: int
+      79:
+        required: false
+        type: int
+      80:
+        required: false
+        type: int
+      81:
+        required: false
+        type: int
+      82:
+        required: false
+        type: int
+      83:
+        required: false
+        type: int
+      84:
+        required: false
+        type: int
+      85:
+        required: false
+        type: int
+      86:
+        required: false
+        type: int
+      87:
+        required: false
+        type: int
+      88:
+        required: false
+        type: int
+      89:
+        required: false
+        type: int
+      90:
+        required: false
+        type: int
+      91:
+        required: false
+        type: int
+      92:
+        required: false
+        type: int
+      93:
+        required: false
+        type: int
+      94:
+        required: false
+        type: int
+      95:
+        required: false
+        type: int
+      96:
+        required: false
+        type: int
+      97:
+        required: false
+        type: int
+      98:
+        required: false
+        type: int
+      99:
+        required: false
+        type: int
+      100:
+        required: false
+        type: int
+      101:
+        required: false
+        type: int
+      102:
+        required: false
+        type: int
+      103:
+        required: false
+        type: int
+      104:
+        required: false
+        type: int
+      105:
+        required: false
+        type: int
+      106:
+        required: false
+        type: int
+      107:
+        required: false
+        type: int
+      108:
+        required: false
+        type: int
+      109:
+        required: false
+        type: int
+      110:
+        required: false
+        type: int
+      111:
+        required: false
+        type: int
+      112:
+        required: false
+        type: int
+      113:
+        required: false
+        type: int
+      114:
+        required: false
+        type: int
+      115:
+        required: false
+        type: int
+      116:
+        required: false
+        type: int
+      117:
+        required: false
+        type: int
+      118:
+        required: false
+        type: int
+      119:
+        required: false
+        type: int
+      120:
+        required: false
+        type: int
+      121:
+        required: false
+        type: int
+      122:
+        required: false
+        type: int
+      123:
+        required: false
+        type: int
+      124:
+        required: false
+        type: int
+      125:
+        required: false
+        type: int
+      126:
+        required: false
+        type: int
+      127:
+        required: false
+        type: int
+      128:
+        required: false
+        type: int
+      129:
+        required: false
+        type: int
+      130:
+        required: false
+        type: int
+      131:
+        required: false
+        type: int
+      132:
+        required: false
+        type: int
+      133:
+        required: false
+        type: int
+      134:
+        required: false
+        type: int
+      135:
+        required: false
+        type: int
+      136:
+        required: false
+        type: int
+      137:
+        required: false
+        type: int
+      138:
+        required: false
+        type: int
+      139:
+        required: false
+        type: int
+      140:
+        required: false
+        type: int
+      141:
+        required: false
+        type: int
+      142:
+        required: false
+        type: int
+      143:
+        required: false
+        type: int
+      144:
+        required: false
+        type: int
+      145:
+        required: false
+        type: int
+      146:
+        required: false
+        type: int
+      147:
+        required: false
+        type: int
+      148:
+        required: false
+        type: int
+      149:
+        required: false
+        type: int
+      150:
+        required: false
+        type: int
+      151:
+        required: false
+        type: int
+      152:
+        required: false
+        type: int
+      153:
+        required: false
+        type: int
+      154:
+        required: false
+        type: int
+      155:
+        required: false
+        type: int
+      156:
+        required: false
+        type: int
+      157:
+        required: false
+        type: int
+      158:
+        required: false
+        type: int
+      159:
+        required: false
+        type: int
+      160:
+        required: false
+        type: int
+      161:
+        required: false
+        type: int
+      162:
+        required: false
+        type: int
+      163:
+        required: false
+        type: int
+      164:
+        required: false
+        type: int
+      165:
+        required: false
+        type: int
+      166:
+        required: false
+        type: int
+      167:
+        required: false
+        type: int
+      168:
+        required: false
+        type: int
+      169:
+        required: false
+        type: int
+      170:
+        required: false
+        type: int
+      171:
+        required: false
+        type: int
+      172:
+        required: false
+        type: int
+      173:
+        required: false
+        type: int
+      174:
+        required: false
+        type: int
+      175:
+        required: false
+        type: int
+      176:
+        required: false
+        type: int
+      177:
+        required: false
+        type: int
+      178:
+        required: false
+        type: int
+      179:
+        required: false
+        type: int
+      180:
+        required: false
+        type: int
+      181:
+        required: false
+        type: int
+      182:
+        required: false
+        type: int
+      183:
+        required: false
+        type: int
+      184:
+        required: false
+        type: int
+      185:
+        required: false
+        type: int
+      186:
+        required: false
+        type: int
+      187:
+        required: false
+        type: int
+      188:
+        required: false
+        type: int
+      189:
+        required: false
+        type: int
+      190:
+        required: false
+        type: int
+      191:
+        required: false
+        type: int
+      192:
+        required: false
+        type: int
+      193:
+        required: false
+        type: int
+      194:
+        required: false
+        type: int
+      195:
+        required: false
+        type: int
+      196:
+        required: false
+        type: int
+      197:
+        required: false
+        type: int
+      198:
+        required: false
+        type: int
+      199:
+        required: false
+        type: int
+      200:
+        required: false
+        type: int
+      201:
+        required: false
+        type: int
+      202:
+        required: false
+        type: int
+      203:
+        required: false
+        type: int
+      204:
+        required: false
+        type: int
+      205:
+        required: false
+        type: int
+      206:
+        required: false
+        type: int
+      207:
+        required: false
+        type: int
+      208:
+        required: false
+        type: int
+      209:
+        required: false
+        type: int
+      210:
+        required: false
+        type: int
+      211:
+        required: false
+        type: int
+      212:
+        required: false
+        type: int
+      213:
+        required: false
+        type: int
+      214:
+        required: false
+        type: int
+      215:
+        required: false
+        type: int
+      216:
+        required: false
+        type: int
+      217:
+        required: false
+        type: int
+      218:
+        required: false
+        type: int
+      219:
+        required: false
+        type: int
+      220:
+        required: false
+        type: int
+      221:
+        required: false
+        type: int
+      222:
+        required: false
+        type: int
+      223:
+        required: false
+        type: int
+      224:
+        required: false
+        type: int
+      225:
+        required: false
+        type: int
+      226:
+        required: false
+        type: int
+      227:
+        required: false
+        type: int
+      228:
+        required: false
+        type: int
+      229:
+        required: false
+        type: int
+      230:
+        required: false
+        type: int
+      231:
+        required: false
+        type: int
+      232:
+        required: false
+        type: int
+      233:
+        required: false
+        type: int
+      234:
+        required: false
+        type: int
+      235:
+        required: false
+        type: int
+      236:
+        required: false
+        type: int
+      237:
+        required: false
+        type: int
+      238:
+        required: false
+        type: int
+      239:
+        required: false
+        type: int
+      240:
+        required: false
+        type: int
+      241:
+        required: false
+        type: int
+      242:
+        required: false
+        type: int
+      243:
+        required: false
+        type: int
+      244:
+        required: false
+        type: int
+      245:
+        required: false
+        type: int
+      246:
+        required: false
+        type: int
+      247:
+        required: false
+        type: int
+      248:
+        required: false
+        type: int
+      249:
+        required: false
+        type: int
+      250:
+        required: false
+        type: int
+      251:
+        required: false
+        type: int
+      252:
+        required: false
+        type: int
+      253:
+        required: false
+        type: int
+      254:
+        required: false
+        type: int
+      255:
+        required: false
+        type: int
