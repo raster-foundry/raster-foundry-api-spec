@@ -4,6 +4,8 @@
 
 ### Added
 
+- Created tile server spec [\#61](https://github.com/raster-foundry/raster-foundry-api-spec/pull/61)
+
 ### Changed
 - Publish spec YAML file to version prefixed directory [\#60](https://github.com/raster-foundry/raster-foundry-api-spec/pull/60)
 

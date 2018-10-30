@@ -26,5 +26,9 @@ then
         # Validate Raster Foundry Prediction API spec
         docker-compose run --rm app \
             yarn run validate-prediction-api-spec
+
+        # Validate Raster Foundry Tile spec
+        docker-compose run --rm app \
+                       yarn run validate-tile-spec
     fi
 fi
