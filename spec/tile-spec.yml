@@ -81,7 +81,7 @@ paths:
       tags:
         - Analysis
       parameters:
-        - $ref: '#/parameters/zoom'
+        - $ref: '#/parameters/z'
         - $ref: '#/parameters/x'
         - $ref: '#/parameters/y'
         - $ref: '#/parameters/token'
@@ -115,7 +115,7 @@ paths:
       tags:
         - Mosaic
       parameters:
-        - $ref: '#/parameters/zoom'
+        - $ref: '#/parameters/z'
         - $ref: '#/parameters/x'
         - $ref: '#/parameters/y'
         - $ref: '#/parameters/token'
@@ -198,7 +198,7 @@ parameters:
     format: uuid
     required: true
 
-  zoom:
+  z:
     name: z
     in: path
     description: 'Zoom level for tile visualization'
