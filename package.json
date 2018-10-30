@@ -7,7 +7,7 @@
   "author": "Azavea",
   "scripts": {
     "validate-api-spec": "swagger-cli validate spec/spec.yml",
-    "validate-prediction-api-spec": "swagger-cli validate spec/prediction-spec.yml"
+    "validate-prediction-api-spec": "swagger-cli validate spec/prediction-spec.yml",
     "validate-tile-spec": "swagger-cli validate spec/tile-spec.yml"
   },
   "devDependencies": {
