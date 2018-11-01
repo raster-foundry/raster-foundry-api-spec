@@ -12,6 +12,7 @@
 ### Removed
 
 ### Fixed
+- Corrected project object definition to include single band and other missing fields [\#63](https://github.com/raster-foundry/raster-foundry-api-spec/pull/63)
 
 ### Security
 
