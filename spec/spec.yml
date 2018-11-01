@@ -6317,7 +6317,7 @@ definitions:
           255 bins. Renders with values between 0 and 255 will have less smooth coloring.
         maximum: 255
       colorScheme:
-        $ref: '#/definitions/ColorScheme'
+        type: object
       legendOrientation:
         type: string
         description: 'Unused'
@@ -6351,10 +6351,3 @@ definitions:
             maxItems: 2
           minItems: 1
           maxItems: 1
-
-  ColorScheme:
-    type: array
-    description: 'Colors to blend or categorize values in this visualization over'
-    items:
-      type: string
-      pattern: '^\#([A-Fa-f0-9]{6})$'
