@@ -5267,14 +5267,28 @@ definitions:
           items:
             type: string
         extent:
-          type: object
-          description: 'GeoJSON Geometry of project extent'
+          $ref: '#/definitions/ProjectExtent'
         manualOrder:
           type: boolean
           description: 'Is true if project scenes are manually ordered'
         isAOIProject:
           type: boolean
           description: 'Is true if project is an area-of-interest project'
+        aoiCadenceMillis:
+          type: integer
+          format: int64
+        isSingleBand:
+          type: boolean
+          description: 'Whether to apply single band visualization to this project'
+        singleBandOptions:
+          $ref: '#/definitions/SingleBandOptions'
+        defaultAnnotationGroup:
+          type: string
+          format: uuid
+          description: 'Default annotation group new annotations on this project should be linked to'
+          readOnly: true
+        extras:
+          type: object
   Image:
     allOf:
     - $ref: '#/definitions/BaseModel'
@@ -6280,3 +6294,67 @@ definitions:
         format: uuid
       defaultStyle:
         type: object
+
+  SingleBandOptions:
+    type: object
+    properties:
+      band:
+        type: integer
+        description: 'Which band from scenes in this project to visualize'
+        minimum: 0
+      dataType:
+        type: string
+        description: 'What type of color scheme to use to visualize this project'
+        enum:
+          - DIVERGING
+          - SEQUENTIAL
+          - CATEGORICAL
+      colorBins:
+        type: integer
+        description: |
+          Number of bins to use for continuous color schemes. For example, a value of 255 would assign one
+          value in the color space to each value in the range from 0 to 255. The default value of 0 also uses
+          255 bins. Renders with values between 0 and 255 will have less smooth coloring.
+        maximum: 255
+      colorScheme:
+        $ref: '#/definitions/ColorScheme'
+      legendOrientation:
+        type: string
+        description: 'Unused'
+        enum:
+          - left
+          - right
+      extraNoData:
+        description: 'Additional values to treat as nodata for categorical visualizations. Forthcoming.'
+        type: array
+        items:
+          type: integer
+
+  ProjectExtent:
+    type: object
+    properties:
+      type:
+        type: string
+        description: Geometry type of project
+        enum:
+          - Polygon
+      coordinates:
+        type: array
+        items:
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+              format: float
+            minItems: 2
+            maxItems: 2
+          minItems: 1
+          maxItems: 1
+
+  ColorScheme:
+    type: array
+    description: 'Colors to blend or categorize values in this visualization over'
+    items:
+      type: string
+      pattern: '^\#([A-Fa-f0-9]{6})$'
