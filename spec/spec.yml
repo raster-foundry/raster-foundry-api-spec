@@ -1531,6 +1531,25 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
+  /projects/{projectID}/project-color-mode/:
+    x-resource: Projects
+    post:
+      summary: 'Set the color mode on all scenes in the project'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - type: object
+          properties:
+            redBand:
+              type: integer
+              description: 'Red channel band mapping'
+            greenBand:
+              type: integer
+              description: 'Green channel band mapping'
+            blueBand:
+              type: integer
+              description: 'Blue channel band mapping'
   /projects/{projectID}/labels/:
     x-resource: Projects
     get:
