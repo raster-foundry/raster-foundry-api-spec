@@ -1418,9 +1418,9 @@ paths:
   /projects/:
     x-resource: Projects
     get:
-      summary: 'Get a list of projects'
+      summary: 'Get a paginated list of projects'
       description:  |
-        Only projects that the user has permission to view will be returned.
+        Get a paginated list of all the projects which a user has permission to view.
       tags:
         - Imagery
       parameters:
@@ -1429,13 +1429,15 @@ paths:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/owner'
         - $ref: '#/parameters/organization'
-        - $ref: '#/parameters/tags'
+        - $ref: '#/parameters/tagsInclude'
+        - $ref: '#/parameters/tagsExclude'
         - $ref: '#/parameters/ownershipType'
         - $ref: '#/parameters/groupType'
         - $ref: '#/parameters/groupId'
+        - $ref: '#/parameters/search'
       responses:
         200:
-          description: 'Paginated list of projects the user is authorized to view'
+          description: 'Paginated list of projects'
           schema:
             $ref: '#/definitions/ProjectPaginated'
         default:
@@ -1451,10 +1453,10 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Project'
+            $ref: '#/definitions/ProjectCreate'
       responses:
         201:
-          description: 'Project details; at this point scene processes may be in-progress'
+          description: 'Project creation successful'
           schema:
             $ref: '#/definitions/Project'
         default:
@@ -3654,13 +3656,16 @@ parameters:
   ownershipType:
     name: ownershipType
     in: query
-    description: 'Filter by owned, shared, or inherited'
+    description: |
+      Filter by owned, shared, or inherited.
+      Inherited objects are those which you have been granted permissions for through group membership.
     type: string
     required: false
     enum:
       - 'owned'
       - 'shared'
       - 'inherited'
+
   orderingBase:
     name: ordering
     in: query
@@ -3750,13 +3755,13 @@ parameters:
   page:
     name: page
     in: query
-    description: 'Page of results to go to'
+    description: 'Paginated results page number'
     type: number
     format: int32
   pageSize:
     name: pageSize
     in: query
-    description: 'Number of results per page in paginated response'
+    description: 'Number of results to fetch per response page'
     type: number
     format: int32
   refreshTokenID:
@@ -3950,6 +3955,22 @@ parameters:
     type: string
     required: false
     format: datetime
+  tagsInclude:
+    name: tagsInclude
+    description: 'Only return results that contain these tags'
+    in: query
+    type: array
+    required: false
+    items:
+      type: string
+  tagsExclude:
+    name: tagsExclude
+    description: 'Only return results that omit these tags'
+    in: query
+    type: array
+    required: false
+    items:
+      type: string
   tags:
     name: tags
     description: 'Only return results that contain these tags'
@@ -4153,7 +4174,7 @@ parameters:
     required: false
   owner:
     name: owner
-    description: 'Filter by object owner'
+    description: 'Filter by object owner ID'
     in: query
     type: string
     required: false
@@ -4186,6 +4207,141 @@ parameters:
     required: true
 
 definitions:
+  Geometry:
+    type: object
+    description: GeoJSon geometry
+    discriminator: type
+    required:
+      - type
+    externalDocs:
+        url: https://tools.ietf.org/html/rfc7946#section-3.1
+    properties:
+      type:
+        type: string
+        enum:
+        - Point
+        - LineString
+        - Polygon
+        - MultiPoint
+        - MultiLineString
+        - MultiPolygon
+        description: the geometry type
+
+  Point2D:
+    type: array
+    maxItems: 2
+    minItems: 2
+    items:
+      type: number
+
+  Point:
+    type: object
+    description: GeoJSon geometry
+    externalDocs:
+      url: https://tools.ietf.org/html/rfc7946#section-3.1.2
+    allOf:
+      - $ref: "#/definitions/Geometry"
+      - properties:
+          coordinates:
+            $ref: '#/definitions/Point2D'
+
+  LineString:
+    type: object
+    description: GeoJSon geometry
+    externalDocs:
+      url: https://tools.ietf.org/html/rfc7946#section-3.1.4
+    allOf:
+      - $ref: "#/definitions/Geometry"
+      - properties:
+          coordinates:
+            type: array
+            items:
+              $ref: '#/definitions/Point2D'
+
+  Polygon:
+    type: object
+    description: GeoJSon geometry
+    externalDocs:
+      url: https://tools.ietf.org/html/rfc7946#section-3.1.6
+    allOf:
+      - $ref: "#/definitions/Geometry"
+      - properties:
+          coordinates:
+            type: array
+            items:
+              type: array
+              items:
+                $ref: '#/definitions/Point2D'
+
+  MultiPoint:
+    type: object
+    description: GeoJSon geometry
+    externalDocs:
+      url: https://tools.ietf.org/html/rfc7946#section-3.1.3
+    allOf:
+      - $ref: "#/definitions/Geometry"
+      - properties:
+          coordinates:
+            type: array
+            items:
+              $ref: '#/definitions/Point2D'
+
+  MultiLineString:
+    type: object
+    description: GeoJSon geometry
+    externalDocs:
+      url: https://tools.ietf.org/html/rfc7946#section-3.1.5
+    allOf:
+      - $ref: "#/definitions/Geometry"
+      - properties:
+          coordinates:
+            type: array
+            items:
+              type: array
+              items:
+                $ref: '#/definitions/Point2D'
+
+  MultiPolygon:
+    type: object
+    description: GeoJSon geometry
+    externalDocs:
+      url: https://tools.ietf.org/html/rfc7946#section-3.1.7
+    allOf:
+      - $ref: "#/definitions/Geometry"
+      - properties:
+          coordinates:
+            type: array
+            items:
+              type: array
+              items:
+                type: array
+                items:
+                  $ref: '#/definitions/Point2D'
+
+  GeometryCollection:
+    type: object
+    description: GeoJSon geometry collection
+    required:
+     - type
+     - geometries
+    externalDocs:
+      url: https://tools.ietf.org/html/rfc7946#section-3.1.8
+    properties:
+      type:
+        type: string
+        enum:
+        - GeometryCollection
+      geometries:
+        type: array
+        items:
+          $ref: '#/definitions/Geometry'
+
+  Visibility:
+    type: string
+    enum:
+      - 'PUBLIC'
+      - 'ORGANIZATION'
+      - 'PRIVATE'
   RenderDefinition:
     type: object
     properties:
@@ -4921,59 +5077,6 @@ definitions:
         type: object
         description: 'settings for a team, default to {}'
 
-
-  Geometry:
-      type: object
-      description: GeoJSON geometry
-      discriminator: type
-      required:
-        - type
-      externalDocs:
-        url: https://tools.ietf.org/html/rfc7946#section-3.1
-      properties:
-        type:
-          type: string
-          enum:
-            - MultiPolygon
-            - Polygon
-            - Point2D
-          description: 'the geometry type'
-  Point2D:
-      type: array
-      maxItems: 2
-      minItems: 2
-      items:
-        type: number
-  MultiPolygon:
-      type: object
-      description: 'GeoJSON geometry'
-      externalDocs:
-        url: https://tools.ietf.org/html/rfc7946#section-3.1
-      allOf:
-        - $ref: "#/definitions/Geometry"
-        - properties:
-            coordinates:
-              type: array
-              items:
-                type: array
-                items:
-                  type: array
-                  items:
-                    $ref: '#/definitions/Point2D'
-  Polygon:
-    type: object
-    description: 'GeoJSON geometry'
-    externalDocs:
-      url: https://tools.ietf.org/html/rfc7946#section-3.1
-    allOf:
-      - $ref: "#/definitions/Geometry"
-      - properties:
-          coordinates:
-            type: array
-            items:
-              type: array
-              items:
-                $ref: '#/definitions/Point2D'
   Composite:
     type: object
     description: 'mapping of bands to RGB'
@@ -5232,10 +5335,81 @@ definitions:
       format: integer
     readOnly: true
 
+  SingleBandOptions:
+    type: object
+    properties:
+      band:
+        type: integer
+        description: 'Band number to render'
+      dataType:
+        type: string
+        description: 'Type of data'
+        enum:
+          - DIVERGING
+          - SEQUENTIAL
+          - CATEGORICAL
+      colorBins:
+        type: integer
+        description: |
+          Limit to this number of colors, using interpolation.
+          Defaults to 0, which corresponds to the maximum of 255 (one per normalized pixel value)
+      colorScheme:
+        type: object
+        description: |
+          An array of color hex codes, or an object of breakpoints and their corresponding colors
+          Eg: ["#000000", "#111111", "#222222"]
+          Eg: {"0": "#000000", "10": "#111111", "11": "#222222" }
+      legendOrientation:
+        type: string
+        description: 'Currently unused'
+      extraNoData:
+        description: 'values to treat as NODATA'
+        type: array
+        items:
+          type: integer
+
+  ProjectCreate:
+    type: object
+    properties:
+      name:
+        type: string
+        description: 'The display name of the project'
+      description:
+        type: string
+        description: 'Long-form description of the project'
+      visibility:
+        description: 'Level of restriction on viewing'
+        $ref: '#/definitions/Visibility'
+      tileVisibility:
+        description: 'Level of restriction on viewing'
+        $ref: '#/definitions/Visibility'
+      isAOIProject:
+        type: boolean
+        description: 'Is true if project is an area-of-interest project'
+      aoiCadenceMillis:
+        type: number
+        format: int64
+      owner:
+        type: string
+        description: 'User who owns the project'
+      tags:
+        type: array
+        items:
+          type: string
+      isSingleBand:
+        type: boolean
+        description: 'Use single band options to render instead of bands'
+      singleBandOptions:
+        $ref: '#/definitions/SingleBandOptions'
+      extras:
+        type: object
+        description: 'Optional additional json metadata'
+
   Project:
     allOf:
     - $ref: '#/definitions/BaseModel'
     - $ref: '#/definitions/UserTrackingMixin'
+    - $ref: '#/definitions/TimeModelMixin'
     - type: object
       properties:
         name:
@@ -5249,32 +5423,42 @@ definitions:
           type: string
           description: 'Long-form description of the project'
         visibility:
-          type: string
           description: 'Level of restriction on viewing'
-          enum:
-            - 'PUBLIC'
-            - 'ORGANIZATION'
-            - 'PRIVATE'
+          $ref: '#/definitions/Visibility'
         tileVisibility:
-          type: string
           description: 'Level of restriction on viewing'
-          enum:
-            - 'PUBLIC'
-            - 'ORGANIZATION'
-            - 'PRIVATE'
+          $ref: '#/definitions/Visibility'
+        isAOIProject:
+          type: boolean
+          description: 'Is true if project is an area-of-interest project'
+        aoiCadenceMillis:
+          type: number
+          format: int64
+        aoisLastChecked:
+          type: string
+          format: datetime
         tags:
           type: array
           items:
             type: string
         extent:
-          type: object
-          description: 'GeoJSON Geometry of project extent'
+          $ref: '#/definitions/MultiPolygon'
         manualOrder:
           type: boolean
           description: 'Is true if project scenes are manually ordered'
-        isAOIProject:
+        isSingleBand:
           type: boolean
-          description: 'Is true if project is an area-of-interest project'
+          description: 'Use single band options to render instead of bands'
+        singleBandOptions:
+          $ref: '#/definitions/SingleBandOptions'
+        defaultAnnotationGroup:
+          type: string
+          format: uuid
+          description: 'Default group to add annotations to when they are created'
+        extras:
+          type: object
+          description: 'Optional additional json metadata'
+
   Image:
     allOf:
     - $ref: '#/definitions/BaseModel'
@@ -5383,6 +5567,7 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/Project'
+
   AoiPaginated:
     allOf:
       - $ref: '#/definitions/PaginatedResponse'
