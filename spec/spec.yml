@@ -1473,11 +1473,15 @@ paths:
         - $ref: '#/parameters/projectID'
       responses:
         200:
-          description: 'Project details found'
+          description: 'Project found'
           schema:
             $ref: '#/definitions/Project'
+        404:
+          description: 'Resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1485,7 +1489,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
     put:
-      summary: 'Update a project'
+      summary: 'Perform a complete update of a project.'
       tags:
         - Imagery
       parameters:
@@ -1498,8 +1502,12 @@ paths:
       responses:
         204:
           description: 'Update successful (no further processing needed)'
+        404:
+          description: 'Resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2937,18 +2945,18 @@ paths:
   /tool-runs/{toolRunID}/:
     x-resource: Tools
     get:
-      summary: 'Get details about a tool run'
+      summary: 'Get details about a tool-run'
       tags:
         - Lab
       parameters:
         - $ref: '#/parameters/toolRunID'
       responses:
         200:
-          description: 'Details about object'
+          description: 'Successful tool-run request'
           schema:
             $ref: '#/definitions/ToolRun'
         403:
-          description: 'Insufficient permissions or tool run not found'
+          description: 'Insufficient permissions for resource or tool run not found'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -5370,6 +5378,11 @@ definitions:
 
   ProjectCreate:
     type: object
+    required:
+      - name
+      - visibility
+      - tileVisibility
+      - tags
     properties:
       name:
         type: string
@@ -5378,11 +5391,13 @@ definitions:
         type: string
         description: 'Long-form description of the project'
       visibility:
-        description: 'Level of restriction on viewing'
-        $ref: '#/definitions/Visibility'
+        allOf:
+          - $ref: '#/definitions/Visibility'
+          - description: 'Level of restriction on viewing'
       tileVisibility:
-        description: 'Level of restriction on viewing'
-        $ref: '#/definitions/Visibility'
+        allOf:
+          - $ref: '#/definitions/Visibility'
+          - description: 'Level of restriction on viewing'
       isAOIProject:
         type: boolean
         description: 'Is true if project is an area-of-interest project'
