@@ -1538,18 +1538,27 @@ paths:
       tags:
         - Imagery
       parameters:
+        - name: projectColorMode
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ProjectColorMode'
         - $ref: '#/parameters/projectID'
-        - type: object
-          properties:
-            redBand:
-              type: integer
-              description: 'Red channel band mapping'
-            greenBand:
-              type: integer
-              description: 'Green channel band mapping'
-            blueBand:
-              type: integer
-              description: 'Blue channel band mapping'
+      responses:
+        204:
+          description: 'Update Successful'
+        404:
+          description: 'Resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: 'Insufficient permissions for resource'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
   /projects/{projectID}/labels/:
     x-resource: Projects
     get:
@@ -1588,8 +1597,12 @@ paths:
             type: array
             items:
               $ref: '#/definitions/AnnotationGroup'
+        404:
+          description: 'Resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
         403:
-          description: 'Insufficient permissions for resource or resource does not exist'
+          description: 'Insufficient permissions for resource'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1611,7 +1624,7 @@ paths:
         200:
           description: 'Created annotation group'
           schema:
-            $ref: '#/definitions/AnnotationGroupCreate'
+            $ref: '#/definitions/AnnotationGroup'
         403:
           description: 'Insufficient permissions for resource or resource does not exist'
           schema:
@@ -1620,6 +1633,22 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
+  /projects/{projectID}/annotation-groups/summary/:
+    x-resource: Projects
+    get:
+      summary: 'Get a summary of the label groups on a project'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+      responses:
+        200:
+          description: 'Fetched label summaries'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/LabelSummary'
+
   /projects/{projectID}/annotations-groups/{annotationsGroupID}/:
     x-resource: Projects
     get:
@@ -6476,6 +6505,8 @@ definitions:
 
   AnnotationGroupCreate:
     type: object
+    required:
+      - name
     properties:
       name:
         type: string
@@ -6498,4 +6529,25 @@ definitions:
         type: string
         format: uuid
       defaultStyle:
+        type: object
+
+  ProjectColorMode:
+    type: object
+    properties:
+      redBand:
+        type: integer
+        description: 'Red channel band mapping'
+      greenBand:
+        type: integer
+        description: 'Green channel band mapping'
+      blueBand:
+        type: integer
+        description: 'Blue channel band mapping'
+
+  LabelSummary:
+    type: object
+    properties:
+      label:
+        type: string
+      counts:
         type: object
