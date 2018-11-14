@@ -1648,6 +1648,14 @@ paths:
             type: array
             items:
               $ref: '#/definitions/LabelSummary'
+        404:
+          description: 'Resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
 
   /projects/{projectID}/annotations-groups/{annotationsGroupID}/:
     x-resource: Projects
@@ -4394,10 +4402,11 @@ definitions:
 
   Visibility:
     type: string
-    enum:
+    enum: &VISIBILITY
       - 'PUBLIC'
       - 'ORGANIZATION'
       - 'PRIVATE'
+
   RenderDefinition:
     type: object
     properties:
@@ -5410,16 +5419,18 @@ definitions:
           Limit to this number of colors, using interpolation.
           Defaults to 0, which corresponds to the maximum of 255 (one per normalized pixel value)
       colorScheme:
-        type: object
         description: |
           An array of color hex codes, or an object of breakpoints and their corresponding colors
           Eg: ["#000000", "#111111", "#222222"]
           Eg: {"0": "#000000", "10": "#111111", "11": "#222222" }
+        type: array
+        items:
+          type: string
       legendOrientation:
         type: string
         description: 'Currently unused'
       extraNoData:
-        description: 'values to treat as NODATA'
+        description: 'Values to treat as NODATA for categorical color schemes - Not currently respected'
         type: array
         items:
           type: integer
@@ -5439,13 +5450,13 @@ definitions:
         type: string
         description: 'Long-form description of the project'
       visibility:
-        allOf:
-          - $ref: '#/definitions/Visibility'
-          - description: 'Level of restriction on viewing'
+        description: 'Level of restriction on viewing'
+        type: string
+        enum: *VISIBILITY
       tileVisibility:
-        allOf:
-          - $ref: '#/definitions/Visibility'
-          - description: 'Level of restriction on viewing'
+        description: 'Level of restriction on viewing'
+        type: string
+        enum: *VISIBILITY
       isAOIProject:
         type: boolean
         description: 'Is true if project is an area-of-interest project'
@@ -5487,10 +5498,12 @@ definitions:
           description: 'Long-form description of the project'
         visibility:
           description: 'Level of restriction on viewing'
-          $ref: '#/definitions/Visibility'
+          type: string
+          enum: *VISIBILITY
         tileVisibility:
           description: 'Level of restriction on viewing'
-          $ref: '#/definitions/Visibility'
+          type: string
+          enum: *VISIBILITY
         isAOIProject:
           type: boolean
           description: 'Is true if project is an area-of-interest project'
@@ -5505,7 +5518,7 @@ definitions:
           items:
             type: string
         extent:
-          $ref: '#/definitions/MultiPolygon'
+          $ref: '#/definitions/Polygon'
         manualOrder:
           type: boolean
           description: 'Is true if project scenes are manually ordered'
