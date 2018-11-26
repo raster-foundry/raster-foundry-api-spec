@@ -1657,7 +1657,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /projects/{projectID}/annotations-groups/{annotationsGroupID}/:
+  /projects/{projectID}/annotation-groups/{annotationGroupID}/:
     x-resource: Projects
     get:
       summary: 'Get annotation group for project'
@@ -1665,7 +1665,7 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
-        - $ref: '#/parameters/annotationsGroupID'
+        - $ref: '#/parameters/annotationGroupID'
       responses:
         200:
           description: 'fetched annotation group'
@@ -1685,7 +1685,7 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
-        - $ref: '#/parameters/annotationsGroupID'
+        - $ref: '#/parameters/annotationGroupID'
         - name: annotationGroup
           in: body
           required: true
@@ -1711,7 +1711,7 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
-        - $ref: '#/parameters/annotationsGroupID'
+        - $ref: '#/parameters/annotationGroupID'
       responses:
         200:
           description: 'Number of deleted annotation groups from this request'
@@ -3869,8 +3869,8 @@ parameters:
     required: true
     type: string
     format: uuid
-  annotationsGroupID:
-    name: annotationsGroupID
+  annotationGroupID:
+    name: annotationGroupID
     in: path
     required: true
     type: string
