@@ -1736,7 +1736,7 @@ paths:
       parameters:
         - $ref: '#/parameters/projectID'
         - $ref: '#/parameters/AnnotationLabel'
-        - $ref: '#/parameters/AnnotationQualityCheck'
+        - $ref: '#/parameters/annotationQualityCheck'
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/pageSize'
       responses:
@@ -3743,12 +3743,11 @@ parameters:
         - 'createdAt,asc'
         - 'modifiedAt,desc'
         - 'modifiedAt,asc'
-  AnnotationQualityCheck:
-    name: AnnotationQualityCheck
+  annotationQualityCheck:
+    name: annotationQualityCheck
     description: 'Quality check on annotations'
     in: query
     type: string
-    required: true
     enum:
       - 'PASS'
       - 'FAIL'
