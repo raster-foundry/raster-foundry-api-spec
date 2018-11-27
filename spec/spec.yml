@@ -1531,6 +1531,21 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
+  /projects/{projectID}/datasources/:
+    x-resource: Projects
+    get:
+      summary: 'List datasources for scenes in this project'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+      responses:
+        200:
+          description: 'A list of datasources'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DatasourceThin'
   /projects/{projectID}/project-color-mode/:
     x-resource: Projects
     post:
