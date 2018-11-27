@@ -4565,6 +4565,11 @@ definitions:
         $ref: '#/definitions/CombinedSceneQueryParams'
       isActive:
         type: boolean
+      approvalRequired:
+        type: boolean
+      startTime:
+        type: string
+        format: date-time
   ColorCorrection:
     type: object
     properties:
