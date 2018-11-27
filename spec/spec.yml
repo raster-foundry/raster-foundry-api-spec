@@ -2194,7 +2194,9 @@ paths:
         200:
           description: 'An ordered list of scene IDs and corresponding color correction parameters'
           schema:
-            $ref: '#/definitions/MosaicDefinition'
+            type: array
+            items:
+              $ref: '#/definitions/MosaicDefinition'
         403:
           description: 'Insufficient permissions for resource or resource does not exist'
           schema:
