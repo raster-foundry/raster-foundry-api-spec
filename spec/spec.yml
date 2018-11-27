@@ -2231,7 +2231,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /projects/{projectID}/mosaic/{mosaicID}:
+  /projects/{projectID}/mosaic/{sceneID}:
     x-resource: Projects
     get:
       summary: "Get a project's saved color-correction parameters"
@@ -2239,7 +2239,7 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
-        - $ref: '#/parameters/mosaicID'
+        - $ref: '#/parameters/sceneID'
       responses:
         200:
           description: 'Color correction parameters'
@@ -2259,7 +2259,7 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
-        - $ref: '#/parameters/mosaicID'
+        - $ref: '#/parameters/sceneID'
         - name: updatedColorCorrection
           description: 'Updated color corrections'
           in: body
@@ -3889,12 +3889,6 @@ parameters:
     required: true
     type: string
     format: uuid
-  mosaicID:
-    name: mosaicID
-    in: path
-    required: true
-    type: string
-    format: uuid
   annotationGroupID:
     name: annotationGroupID
     in: path
@@ -4548,7 +4542,7 @@ definitions:
       sceneId:
         type: string
         format: uuid
-      colorCorrection:
+      colorCorrections:
         $ref: '#/definitions/ColorCorrection'
   DropboxAuthRequest:
     type: object
@@ -6139,10 +6133,13 @@ definitions:
         $ref: '#/definitions/ColorCorrection'
 
   CombinedSceneCorrectionParams:
-    type: array
+    type: object
     description: 'Combined color correction parameters for multiple scenes'
-    items:
-      $ref: '#/definitions/SceneCorrectionParam'
+    properties:
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/SceneCorrectionParam'
   ExportCreate:
     type: object
     allOf:
