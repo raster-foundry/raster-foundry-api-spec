@@ -2384,6 +2384,30 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /projects/{projectID}/actions/:
+    get:
+      summary: 'List actions a user is allowed to perform on this project'
+      tags:
+        - Permissions
+      parameters:
+        - $ref: '#/parameters/projectID'
+      responses:
+        200:
+          description: |
+            'List of actions a user is allowed to perform on this project. A * in the response
+            indicates the user has full permissions for this project.'
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - 'VIEW'
+                - 'EDIT'
+                - 'DEACTIVATE'
+                - 'DELETE'
+                - 'ANNOTATE'
+                - '*'
+
   /areas-of-interest/:
     get:
       summary: 'Get a list of areas of interest'
