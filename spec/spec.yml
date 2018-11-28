@@ -2623,9 +2623,9 @@ paths:
             $ref: '#/definitions/Error'
     post:
       summary: |
-        Request a new refresh token
+        Request a new JSON Web Token to use when authenticating with other endpoints
       parameters:
-        - name: refreshToken
+        - name: authBody
           in: body
           required: true
           description: 'Refresh token object to use when requesting a new JWT'
@@ -2638,7 +2638,7 @@ paths:
       tags:
         - Authentication
       responses:
-        201:
+        200:
           description: 'Retrieved a new auth token'
           schema:
             $ref: '#/definitions/AuthToken'
