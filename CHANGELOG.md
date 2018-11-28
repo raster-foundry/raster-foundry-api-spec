@@ -14,7 +14,7 @@
 ### Removed
 
 ### Fixed
-- Audit and fix some project related endpoints [\#66](https://github.com/raster-foundry/raster-foundry-api-spec/pull/66)
+- Audit and fix some project related endpoints [\#66](https://github.com/raster-foundry/raster-foundry-api-spec/pull/66), [\#69](https://github.com/raster-foundry/raster-foundry-api-spec/pull/69)
 
 ### Security
 
