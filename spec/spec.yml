@@ -246,7 +246,7 @@ paths:
         204:
           description: 'Update successful (No Content)'
         403:
-          description: 'Insufficient permissions or object not found'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -875,7 +875,7 @@ paths:
           schema:
             $ref: '#/definitions/Datasource'
         403:
-          description: 'Insufficient permissions to get this datasource'
+          description: 'Insufficient permissions for resource to get this datasource'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -899,7 +899,7 @@ paths:
         204:
           description: 'Update successful (no further processing needed)'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -916,7 +916,7 @@ paths:
         200:
           description: 'Deletion successful (no content)'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -940,7 +940,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions to list permissions on this datasource'
+          description: 'Insufficient permissions for resource to list permissions on this datasource'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -968,7 +968,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -994,7 +994,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1060,7 +1060,7 @@ paths:
           schema:
             $ref: '#/definitions/Upload'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1083,7 +1083,7 @@ paths:
         204:
           description: 'Update successful (no further processing needed)'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1100,7 +1100,7 @@ paths:
         204:
           description: 'Deletion successful (no content)'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1122,7 +1122,7 @@ paths:
           schema:
             $ref: '#/definitions/UploadCredentialsResponse'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1213,7 +1213,7 @@ paths:
           schema:
             $ref: '#/definitions/Scene'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1235,7 +1235,7 @@ paths:
         204:
           description: 'Update successful (no further processing needed)'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1255,7 +1255,7 @@ paths:
         204:
           description: 'Deletion successful (no content)'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1278,7 +1278,7 @@ paths:
             items:
               $ref: '#/definitions/ImageWithDownloadUri'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1301,7 +1301,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1329,7 +1329,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1355,7 +1355,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1376,7 +1376,7 @@ paths:
           schema:
             $ref: '#/definitions/Datasource'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1407,7 +1407,7 @@ paths:
             type: string
             format: binary
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1418,9 +1418,9 @@ paths:
   /projects/:
     x-resource: Projects
     get:
-      summary: 'Get a list of projects'
+      summary: 'Get a paginated list of projects'
       description:  |
-        Only projects that the user has permission to view will be returned.
+        Get a paginated list of all the projects which a user has permission to view.
       tags:
         - Imagery
       parameters:
@@ -1429,13 +1429,15 @@ paths:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/owner'
         - $ref: '#/parameters/organization'
-        - $ref: '#/parameters/tags'
+        - $ref: '#/parameters/tagsInclude'
+        - $ref: '#/parameters/tagsExclude'
         - $ref: '#/parameters/ownershipType'
         - $ref: '#/parameters/groupType'
         - $ref: '#/parameters/groupId'
+        - $ref: '#/parameters/search'
       responses:
         200:
-          description: 'Paginated list of projects the user is authorized to view'
+          description: 'Paginated list of projects'
           schema:
             $ref: '#/definitions/ProjectPaginated'
         default:
@@ -1451,10 +1453,10 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Project'
+            $ref: '#/definitions/ProjectCreate'
       responses:
         201:
-          description: 'Project details; at this point scene processes may be in-progress'
+          description: 'Project creation successful'
           schema:
             $ref: '#/definitions/Project'
         default:
@@ -1471,11 +1473,15 @@ paths:
         - $ref: '#/parameters/projectID'
       responses:
         200:
-          description: 'Project details found'
+          description: 'Project found'
           schema:
             $ref: '#/definitions/Project'
+        404:
+          description: 'Resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1483,7 +1489,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
     put:
-      summary: 'Update a project'
+      summary: 'Perform a complete update of a project.'
       tags:
         - Imagery
       parameters:
@@ -1496,8 +1502,12 @@ paths:
       responses:
         204:
           description: 'Update successful (no further processing needed)'
+        404:
+          description: 'Resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1514,7 +1524,50 @@ paths:
         204:
           description: 'Deletion successful (no content)'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+  /projects/{projectID}/datasources/:
+    x-resource: Projects
+    get:
+      summary: 'List datasources for scenes in this project'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+      responses:
+        200:
+          description: 'A list of datasources'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DatasourceThin'
+  /projects/{projectID}/project-color-mode/:
+    x-resource: Projects
+    post:
+      summary: 'Set the color mode on all scenes in the project'
+      tags:
+        - Imagery
+      parameters:
+        - name: projectColorMode
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ProjectColorMode'
+        - $ref: '#/parameters/projectID'
+      responses:
+        204:
+          description: 'Update Successful'
+        404:
+          description: 'Resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: 'Insufficient permissions for resource'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1537,7 +1590,7 @@ paths:
             items:
               type: string
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1559,8 +1612,12 @@ paths:
             type: array
             items:
               $ref: '#/definitions/AnnotationGroup'
+        404:
+          description: 'Resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1582,16 +1639,40 @@ paths:
         200:
           description: 'Created annotation group'
           schema:
-            $ref: '#/definitions/AnnotationGroupCreate'
+            $ref: '#/definitions/AnnotationGroup'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /projects/{projectID}/annotations-groups/{annotationsGroupID}/:
+  /projects/{projectID}/annotation-groups/summary/:
+    x-resource: Projects
+    get:
+      summary: 'Get a summary of the label groups on a project'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+      responses:
+        200:
+          description: 'Fetched label summaries'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/LabelSummary'
+        404:
+          description: 'Resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
+  /projects/{projectID}/annotation-groups/{annotationGroupID}/:
     x-resource: Projects
     get:
       summary: 'Get annotation group for project'
@@ -1599,14 +1680,14 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
-        - $ref: '#/parameters/annotationsGroupID'
+        - $ref: '#/parameters/annotationGroupID'
       responses:
         200:
           description: 'fetched annotation group'
           schema:
             $ref: '#/definitions/AnnotationGroup'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1619,7 +1700,7 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
-        - $ref: '#/parameters/annotationsGroupID'
+        - $ref: '#/parameters/annotationGroupID'
         - name: annotationGroup
           in: body
           required: true
@@ -1632,7 +1713,7 @@ paths:
             type: number
             format: integer
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1645,7 +1726,7 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
-        - $ref: '#/parameters/annotationsGroupID'
+        - $ref: '#/parameters/annotationGroupID'
       responses:
         200:
           description: 'Number of deleted annotation groups from this request'
@@ -1653,7 +1734,7 @@ paths:
             type: number
             format: integer
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1670,7 +1751,7 @@ paths:
       parameters:
         - $ref: '#/parameters/projectID'
         - $ref: '#/parameters/AnnotationLabel'
-        - $ref: '#/parameters/AnnotationQualityCheck'
+        - $ref: '#/parameters/annotationQualityCheck'
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/pageSize'
       responses:
@@ -1679,7 +1760,7 @@ paths:
           schema:
             $ref: '#/definitions/AnnotationFeatureCollectionPaginated'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1704,7 +1785,7 @@ paths:
           schema:
             $ref: '#/definitions/AnnotationFeatureCollection'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1721,7 +1802,7 @@ paths:
         201:
           description: 'Annotations Deleted'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1741,7 +1822,7 @@ paths:
         200:
           description: 'Annotations retrieved successfully'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1793,7 +1874,7 @@ paths:
           schema:
             $ref: '#/definitions/AnnotationFeature'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1817,7 +1898,7 @@ paths:
         204:
           description: 'No content, update successful'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1836,7 +1917,7 @@ paths:
         204:
           description: 'Deletion successful.'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1861,7 +1942,7 @@ paths:
           schema:
             $ref: '#/definitions/AoiPaginated'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1886,7 +1967,7 @@ paths:
           schema:
             $ref: '#/definitions/AOI'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1932,7 +2013,7 @@ paths:
           schema:
             $ref: '#/definitions/ScenePaginated'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1962,7 +2043,7 @@ paths:
             items:
               $ref: '#/definitions/Scene'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -1992,7 +2073,7 @@ paths:
             items:
               $ref: '#/definitions/Scene'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2018,7 +2099,7 @@ paths:
         204:
           description: 'No content, delete successful'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2038,7 +2119,7 @@ paths:
         204:
           description: 'Successfully accepted the Scene.'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2063,7 +2144,7 @@ paths:
         204:
           description: 'Successfully accepted scenes'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2093,7 +2174,7 @@ paths:
             items:
               $ref: '#/definitions/Scene'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2113,9 +2194,11 @@ paths:
         200:
           description: 'An ordered list of scene IDs and corresponding color correction parameters'
           schema:
-            $ref: '#/definitions/MosaicDefinition'
+            type: array
+            items:
+              $ref: '#/definitions/MosaicDefinition'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2140,7 +2223,7 @@ paths:
         200:
           description: "Successfully updated all scenes' color correction parameters"
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2148,7 +2231,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /projects/{projectID}/mosaic/{mosaicID}:
+  /projects/{projectID}/mosaic/{sceneID}:
     x-resource: Projects
     get:
       summary: "Get a project's saved color-correction parameters"
@@ -2156,14 +2239,14 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
-        - $ref: '#/parameters/mosaicID'
+        - $ref: '#/parameters/sceneID'
       responses:
         200:
           description: 'Color correction parameters'
           schema:
             $ref: '#/definitions/ColorCorrection'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2176,7 +2259,7 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
-        - $ref: '#/parameters/mosaicID'
+        - $ref: '#/parameters/sceneID'
         - name: updatedColorCorrection
           description: 'Updated color corrections'
           in: body
@@ -2186,7 +2269,7 @@ paths:
         204:
           description: 'Successfully updated color correction parameters'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2201,11 +2284,21 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
+        - name: sceneIDs
+          in: body
+          description: |
+            The z order for scenes in this project, relative to each other. The first listed scene will be visualized
+            on top of all the others, and the last listed scene will be visualized below all the others.
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
       responses:
         204:
           description: 'Successfully updated order of scenes in project'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2229,7 +2322,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2257,7 +2350,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2283,13 +2376,55 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
+    delete:
+      summary: 'Remove access control rules on this project'
+      tags:
+        - Permissions
+      parameters:
+        - $ref: '#/parameters/projectID'
+      responses:
+        200:
+          description: 'Access control rules successfully delete'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
+
+  /projects/{projectID}/actions/:
+    get:
+      summary: 'List actions a user is allowed to perform on this project'
+      tags:
+        - Permissions
+      parameters:
+        - $ref: '#/parameters/projectID'
+      responses:
+        200:
+          description: |
+            'List of actions a user is allowed to perform on this project. A * in the response
+            indicates the user has full permissions for this project.'
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - 'VIEW'
+                - 'EDIT'
+                - 'DEACTIVATE'
+                - 'DELETE'
+                - 'ANNOTATE'
+                - '*'
 
   /areas-of-interest/:
     get:
@@ -2318,7 +2453,7 @@ paths:
           schema:
             $ref: '#/definitions/AOI'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2340,7 +2475,7 @@ paths:
         204:
           description: 'Update successful.'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2357,7 +2492,7 @@ paths:
         204:
           description: 'Deletion successful.'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2420,7 +2555,7 @@ paths:
           schema:
             $ref: '#/definitions/MapToken'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2442,7 +2577,7 @@ paths:
         204:
           description: 'Update successful (no further processing needed)'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2459,7 +2594,7 @@ paths:
         204:
           description: 'Deletion successful (no content)'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2488,9 +2623,9 @@ paths:
             $ref: '#/definitions/Error'
     post:
       summary: |
-        Request a new refresh token
+        Request a new JSON Web Token to use when authenticating with other endpoints
       parameters:
-        - name: refreshToken
+        - name: authBody
           in: body
           required: true
           description: 'Refresh token object to use when requesting a new JWT'
@@ -2503,12 +2638,12 @@ paths:
       tags:
         - Authentication
       responses:
-        201:
+        200:
           description: 'Retrieved a new auth token'
           schema:
             $ref: '#/definitions/AuthToken'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2527,7 +2662,7 @@ paths:
         204:
           description: 'Revocation successful, No Content'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2589,7 +2724,7 @@ paths:
           schema:
             $ref: '#/definitions/Tool'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2606,7 +2741,7 @@ paths:
         204:
           description: 'Delete successful'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2623,7 +2758,7 @@ paths:
         204:
           description: 'Update an existing geoprocessing tool'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2677,7 +2812,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2705,7 +2840,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2731,7 +2866,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2752,7 +2887,7 @@ paths:
           schema:
             $ref: '#/definitions/ToolTag'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2769,7 +2904,7 @@ paths:
         204:
           description: 'Successfully deleted a tag'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2786,7 +2921,7 @@ paths:
         204:
           description: 'Successfully updated tag'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2820,7 +2955,7 @@ paths:
           schema:
             $ref: '#/definitions/ToolCategory'
         403:
-          description: 'Insufficient permissions'
+          description: 'Insufficient permissions for resource'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2841,7 +2976,7 @@ paths:
           schema:
             $ref: '#/definitions/ToolCategory'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2860,7 +2995,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
         403:
-          description: 'Insufficient permissions or object not found'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2879,7 +3014,7 @@ paths:
         204:
           description: 'Successfully deleted a tool category'
         403:
-          description: 'Insufficient permissions or tool not found'
+          description: 'Insufficient permissions for resource or tool not found'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2935,18 +3070,18 @@ paths:
   /tool-runs/{toolRunID}/:
     x-resource: Tools
     get:
-      summary: 'Get details about a tool run'
+      summary: 'Get details about a tool-run'
       tags:
         - Lab
       parameters:
         - $ref: '#/parameters/toolRunID'
       responses:
         200:
-          description: 'Details about object'
+          description: 'Successful tool-run request'
           schema:
             $ref: '#/definitions/ToolRun'
         403:
-          description: 'Insufficient permissions or tool run not found'
+          description: 'Insufficient permissions for resource or tool run not found'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2967,7 +3102,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
         403:
-          description: 'Insufficient permissions or object not found'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -2984,7 +3119,7 @@ paths:
         204:
           description: 'Successfully deleted a tool run'
         403:
-          description: 'Insufficient permissions or object not found'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3007,7 +3142,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object not found'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3035,7 +3170,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object not found'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3061,7 +3196,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object not found'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3102,7 +3237,7 @@ paths:
           schema:
             $ref: '#/definitions/ExportPaginated'
         403:
-          description: 'Insufficient permissions or object not found'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3126,7 +3261,7 @@ paths:
           schema:
             $ref: '#/definitions/Export'
         403:
-          description: 'Insufficient permissions or object not found'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3147,7 +3282,7 @@ paths:
           schema:
             $ref: '#/definitions/Export'
         403:
-          description: 'Insufficient permissions or object not found'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3233,7 +3368,7 @@ paths:
             items:
               type: string
         403:
-          description: 'Insufficient permissions, object does not exist, or export is not finished yet'
+          description: 'Insufficient permissions for resource, resource does not exist, or export is not finished yet'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3359,7 +3494,7 @@ paths:
           schema:
             $ref: '#/definitions/ShapeFeature'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3382,7 +3517,7 @@ paths:
         204:
           description: 'Update successful (No Content)'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3400,7 +3535,7 @@ paths:
         204:
           description: 'Deletion successful'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3424,7 +3559,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3452,7 +3587,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3478,7 +3613,7 @@ paths:
             items:
               $ref: '#/definitions/AccessControlRule'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3558,7 +3693,7 @@ paths:
           schema:
             $ref: '#/definitions/Team'
         403:
-          description: 'Insufficient permissions'
+          description: 'Insufficient permissions for resource'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3580,7 +3715,7 @@ paths:
           schema:
             $ref: '#/definitions/Team'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3604,7 +3739,7 @@ paths:
           schema:
             $ref: '#/definitions/Team'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3622,7 +3757,7 @@ paths:
         204:
           description: 'Deletion successful (no content)'
         403:
-          description: 'Insufficient permissions or object does not exist'
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
         default:
@@ -3654,13 +3789,16 @@ parameters:
   ownershipType:
     name: ownershipType
     in: query
-    description: 'Filter by owned, shared, or inherited'
+    description: |
+      Filter by owned, shared, or inherited.
+      Inherited objects are those which you have been granted permissions for through group membership.
     type: string
     required: false
     enum:
       - 'owned'
       - 'shared'
       - 'inherited'
+
   orderingBase:
     name: ordering
     in: query
@@ -3674,12 +3812,11 @@ parameters:
         - 'createdAt,asc'
         - 'modifiedAt,desc'
         - 'modifiedAt,asc'
-  AnnotationQualityCheck:
-    name: AnnotationQualityCheck
+  annotationQualityCheck:
+    name: annotationQualityCheck
     description: 'Quality check on annotations'
     in: query
     type: string
-    required: true
     enum:
       - 'PASS'
       - 'FAIL'
@@ -3750,13 +3887,13 @@ parameters:
   page:
     name: page
     in: query
-    description: 'Page of results to go to'
+    description: 'Paginated results page number'
     type: number
     format: int32
   pageSize:
     name: pageSize
     in: query
-    description: 'Number of results per page in paginated response'
+    description: 'Number of results to fetch per response page'
     type: number
     format: int32
   refreshTokenID:
@@ -3794,14 +3931,8 @@ parameters:
     required: true
     type: string
     format: uuid
-  mosaicID:
-    name: mosaicID
-    in: path
-    required: true
-    type: string
-    format: uuid
-  annotationsGroupID:
-    name: annotationsGroupID
+  annotationGroupID:
+    name: annotationGroupID
     in: path
     required: true
     type: string
@@ -3950,6 +4081,22 @@ parameters:
     type: string
     required: false
     format: datetime
+  tagsInclude:
+    name: tagsInclude
+    description: 'Only return results that contain these tags'
+    in: query
+    type: array
+    required: false
+    items:
+      type: string
+  tagsExclude:
+    name: tagsExclude
+    description: 'Only return results that omit these tags'
+    in: query
+    type: array
+    required: false
+    items:
+      type: string
   tags:
     name: tags
     description: 'Only return results that contain these tags'
@@ -4079,13 +4226,13 @@ parameters:
     required: false
   minResolution:
     name: minResolution
-    description: 'Only return objects that have elements greater than this resolution'
+    description: 'Only return resources that have elements greater than this resolution'
     in: query
     type: number
     required: false
   maxResolution:
     name: maxResolution
-    description: 'Only return objects that have elements with a resolution less than this amount'
+    description: 'Only return resources that have elements with a resolution less than this amount'
     in: query
     type: number
     required: false
@@ -4153,7 +4300,7 @@ parameters:
     required: false
   owner:
     name: owner
-    description: 'Filter by object owner'
+    description: 'Filter by resource owner ID'
     in: query
     type: string
     required: false
@@ -4186,6 +4333,142 @@ parameters:
     required: true
 
 definitions:
+  Geometry:
+    type: object
+    description: GeoJSon geometry
+    discriminator: type
+    required:
+      - type
+    externalDocs:
+        url: https://tools.ietf.org/html/rfc7946#section-3.1
+    properties:
+      type:
+        type: string
+        enum:
+        - Point
+        - LineString
+        - Polygon
+        - MultiPoint
+        - MultiLineString
+        - MultiPolygon
+        description: the geometry type
+
+  Point2D:
+    type: array
+    maxItems: 2
+    minItems: 2
+    items:
+      type: number
+
+  Point:
+    type: object
+    description: GeoJSon geometry
+    externalDocs:
+      url: https://tools.ietf.org/html/rfc7946#section-3.1.2
+    allOf:
+      - $ref: "#/definitions/Geometry"
+      - properties:
+          coordinates:
+            $ref: '#/definitions/Point2D'
+
+  LineString:
+    type: object
+    description: GeoJSon geometry
+    externalDocs:
+      url: https://tools.ietf.org/html/rfc7946#section-3.1.4
+    allOf:
+      - $ref: "#/definitions/Geometry"
+      - properties:
+          coordinates:
+            type: array
+            items:
+              $ref: '#/definitions/Point2D'
+
+  Polygon:
+    type: object
+    description: GeoJSon geometry
+    externalDocs:
+      url: https://tools.ietf.org/html/rfc7946#section-3.1.6
+    allOf:
+      - $ref: "#/definitions/Geometry"
+      - properties:
+          coordinates:
+            type: array
+            items:
+              type: array
+              items:
+                $ref: '#/definitions/Point2D'
+
+  MultiPoint:
+    type: object
+    description: GeoJSon geometry
+    externalDocs:
+      url: https://tools.ietf.org/html/rfc7946#section-3.1.3
+    allOf:
+      - $ref: "#/definitions/Geometry"
+      - properties:
+          coordinates:
+            type: array
+            items:
+              $ref: '#/definitions/Point2D'
+
+  MultiLineString:
+    type: object
+    description: GeoJSon geometry
+    externalDocs:
+      url: https://tools.ietf.org/html/rfc7946#section-3.1.5
+    allOf:
+      - $ref: "#/definitions/Geometry"
+      - properties:
+          coordinates:
+            type: array
+            items:
+              type: array
+              items:
+                $ref: '#/definitions/Point2D'
+
+  MultiPolygon:
+    type: object
+    description: GeoJSon geometry
+    externalDocs:
+      url: https://tools.ietf.org/html/rfc7946#section-3.1.7
+    allOf:
+      - $ref: "#/definitions/Geometry"
+      - properties:
+          coordinates:
+            type: array
+            items:
+              type: array
+              items:
+                type: array
+                items:
+                  $ref: '#/definitions/Point2D'
+
+  GeometryCollection:
+    type: object
+    description: GeoJSon geometry collection
+    required:
+     - type
+     - geometries
+    externalDocs:
+      url: https://tools.ietf.org/html/rfc7946#section-3.1.8
+    properties:
+      type:
+        type: string
+        enum:
+        - GeometryCollection
+      geometries:
+        type: array
+        items:
+          $ref: '#/definitions/Geometry'
+
+  Visibility:
+    type: string
+    enum: &VISIBILITY
+      - 'PUBLIC'
+      - 'ORGANIZATION'
+      - 'PRIVATE'
+
   RenderDefinition:
     type: object
     properties:
@@ -4301,7 +4584,7 @@ definitions:
       sceneId:
         type: string
         format: uuid
-      colorCorrection:
+      colorCorrections:
         $ref: '#/definitions/ColorCorrection'
   DropboxAuthRequest:
     type: object
@@ -4320,6 +4603,11 @@ definitions:
         $ref: '#/definitions/CombinedSceneQueryParams'
       isActive:
         type: boolean
+      approvalRequired:
+        type: boolean
+      startTime:
+        type: string
+        format: date-time
   ColorCorrection:
     type: object
     properties:
@@ -4921,59 +5209,6 @@ definitions:
         type: object
         description: 'settings for a team, default to {}'
 
-
-  Geometry:
-      type: object
-      description: GeoJSON geometry
-      discriminator: type
-      required:
-        - type
-      externalDocs:
-        url: https://tools.ietf.org/html/rfc7946#section-3.1
-      properties:
-        type:
-          type: string
-          enum:
-            - MultiPolygon
-            - Polygon
-            - Point2D
-          description: 'the geometry type'
-  Point2D:
-      type: array
-      maxItems: 2
-      minItems: 2
-      items:
-        type: number
-  MultiPolygon:
-      type: object
-      description: 'GeoJSON geometry'
-      externalDocs:
-        url: https://tools.ietf.org/html/rfc7946#section-3.1
-      allOf:
-        - $ref: "#/definitions/Geometry"
-        - properties:
-            coordinates:
-              type: array
-              items:
-                type: array
-                items:
-                  type: array
-                  items:
-                    $ref: '#/definitions/Point2D'
-  Polygon:
-    type: object
-    description: 'GeoJSON geometry'
-    externalDocs:
-      url: https://tools.ietf.org/html/rfc7946#section-3.1
-    allOf:
-      - $ref: "#/definitions/Geometry"
-      - properties:
-          coordinates:
-            type: array
-            items:
-              type: array
-              items:
-                $ref: '#/definitions/Point2D'
   Composite:
     type: object
     description: 'mapping of bands to RGB'
@@ -5232,10 +5467,90 @@ definitions:
       format: integer
     readOnly: true
 
+  SingleBandOptions:
+    type: object
+    properties:
+      band:
+        type: integer
+        description: 'Band number to render'
+      dataType:
+        type: string
+        description: 'Type of data'
+        enum:
+          - DIVERGING
+          - SEQUENTIAL
+          - CATEGORICAL
+      colorBins:
+        type: integer
+        description: |
+          Limit to this number of colors, using interpolation.
+          Defaults to 0, which corresponds to the maximum of 255 (one per normalized pixel value)
+      colorScheme:
+        description: |
+          An array of color hex codes, or an object of breakpoints and their corresponding colors
+          Eg: ["#000000", "#111111", "#222222"]
+          Eg: {"0": "#000000", "10": "#111111", "11": "#222222" }
+        type: array
+        items:
+          type: string
+      legendOrientation:
+        type: string
+        description: 'Currently unused'
+      extraNoData:
+        description: 'Values to treat as NODATA for categorical color schemes - Not currently respected'
+        type: array
+        items:
+          type: integer
+
+  ProjectCreate:
+    type: object
+    required:
+      - name
+      - visibility
+      - tileVisibility
+      - tags
+    properties:
+      name:
+        type: string
+        description: 'The display name of the project'
+      description:
+        type: string
+        description: 'Long-form description of the project'
+      visibility:
+        description: 'Level of restriction on viewing'
+        type: string
+        enum: *VISIBILITY
+      tileVisibility:
+        description: 'Level of restriction on viewing'
+        type: string
+        enum: *VISIBILITY
+      isAOIProject:
+        type: boolean
+        description: 'Is true if project is an area-of-interest project'
+      aoiCadenceMillis:
+        type: number
+        format: int64
+      owner:
+        type: string
+        description: 'User who owns the project'
+      tags:
+        type: array
+        items:
+          type: string
+      isSingleBand:
+        type: boolean
+        description: 'Use single band options to render instead of bands'
+      singleBandOptions:
+        $ref: '#/definitions/SingleBandOptions'
+      extras:
+        type: object
+        description: 'Optional additional json metadata'
+
   Project:
     allOf:
     - $ref: '#/definitions/BaseModel'
     - $ref: '#/definitions/UserTrackingMixin'
+    - $ref: '#/definitions/TimeModelMixin'
     - type: object
       properties:
         name:
@@ -5249,32 +5564,44 @@ definitions:
           type: string
           description: 'Long-form description of the project'
         visibility:
-          type: string
           description: 'Level of restriction on viewing'
-          enum:
-            - 'PUBLIC'
-            - 'ORGANIZATION'
-            - 'PRIVATE'
+          type: string
+          enum: *VISIBILITY
         tileVisibility:
-          type: string
           description: 'Level of restriction on viewing'
-          enum:
-            - 'PUBLIC'
-            - 'ORGANIZATION'
-            - 'PRIVATE'
+          type: string
+          enum: *VISIBILITY
+        isAOIProject:
+          type: boolean
+          description: 'Is true if project is an area-of-interest project'
+        aoiCadenceMillis:
+          type: number
+          format: int64
+        aoisLastChecked:
+          type: string
+          format: datetime
         tags:
           type: array
           items:
             type: string
         extent:
-          type: object
-          description: 'GeoJSON Geometry of project extent'
+          $ref: '#/definitions/Polygon'
         manualOrder:
           type: boolean
           description: 'Is true if project scenes are manually ordered'
-        isAOIProject:
+        isSingleBand:
           type: boolean
-          description: 'Is true if project is an area-of-interest project'
+          description: 'Use single band options to render instead of bands'
+        singleBandOptions:
+          $ref: '#/definitions/SingleBandOptions'
+        defaultAnnotationGroup:
+          type: string
+          format: uuid
+          description: 'Default group to add annotations to when they are created'
+        extras:
+          type: object
+          description: 'Optional additional json metadata'
+
   Image:
     allOf:
     - $ref: '#/definitions/BaseModel'
@@ -5383,6 +5710,7 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/Project'
+
   AoiPaginated:
     allOf:
       - $ref: '#/definitions/PaginatedResponse'
@@ -5847,10 +6175,13 @@ definitions:
         $ref: '#/definitions/ColorCorrection'
 
   CombinedSceneCorrectionParams:
-    type: array
+    type: object
     description: 'Combined color correction parameters for multiple scenes'
-    items:
-      $ref: '#/definitions/SceneCorrectionParam'
+    properties:
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/SceneCorrectionParam'
   ExportCreate:
     type: object
     allOf:
@@ -6257,6 +6588,8 @@ definitions:
 
   AnnotationGroupCreate:
     type: object
+    required:
+      - name
     properties:
       name:
         type: string
@@ -6279,4 +6612,25 @@ definitions:
         type: string
         format: uuid
       defaultStyle:
+        type: object
+
+  ProjectColorMode:
+    type: object
+    properties:
+      redBand:
+        type: integer
+        description: 'Red channel band mapping'
+      greenBand:
+        type: integer
+        description: 'Green channel band mapping'
+      blueBand:
+        type: integer
+        description: 'Blue channel band mapping'
+
+  LabelSummary:
+    type: object
+    properties:
+      label:
+        type: string
+      counts:
         type: object

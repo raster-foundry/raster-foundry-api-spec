@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -e
+
+if [[ -n "${RF_API_SPEC_DEBUG}" ]]; then
+    set -x
+fi
+
+function usage() {
+    echo -n \
+"Usage: $(basename "$0") <bucket>
+Publishes specs to publicly accessible location on Amazon S3.
+"
+}
+
+if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+    if [ "${1:-}" = "--help" ]; then
+        usage
+    else
+        # Sync specs to most recent version prefixed location
+        aws --region us-east-1 s3 sync \
+            spec/ "s3://${1}/spec/$(git describe --abbrev=0 --tags)/"
+
+        # Sync specs to root location
+        aws --region us-east-1 s3 sync \
+            spec/ "s3://${1}/spec/"
+    fi
+fi
