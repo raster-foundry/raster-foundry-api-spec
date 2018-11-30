@@ -1531,6 +1531,21 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
+  /projects/{projectID}/datasources/:
+    x-resource: Projects
+    get:
+      summary: 'List datasources for scenes in this project'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+      responses:
+        200:
+          description: 'A list of datasources'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DatasourceThin'
   /projects/{projectID}/project-color-mode/:
     x-resource: Projects
     post:
@@ -1657,7 +1672,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /projects/{projectID}/annotations-groups/{annotationsGroupID}/:
+  /projects/{projectID}/annotation-groups/{annotationGroupID}/:
     x-resource: Projects
     get:
       summary: 'Get annotation group for project'
@@ -1665,7 +1680,7 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
-        - $ref: '#/parameters/annotationsGroupID'
+        - $ref: '#/parameters/annotationGroupID'
       responses:
         200:
           description: 'fetched annotation group'
@@ -1685,7 +1700,7 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
-        - $ref: '#/parameters/annotationsGroupID'
+        - $ref: '#/parameters/annotationGroupID'
         - name: annotationGroup
           in: body
           required: true
@@ -1711,7 +1726,7 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
-        - $ref: '#/parameters/annotationsGroupID'
+        - $ref: '#/parameters/annotationGroupID'
       responses:
         200:
           description: 'Number of deleted annotation groups from this request'
@@ -1736,7 +1751,7 @@ paths:
       parameters:
         - $ref: '#/parameters/projectID'
         - $ref: '#/parameters/AnnotationLabel'
-        - $ref: '#/parameters/AnnotationQualityCheck'
+        - $ref: '#/parameters/annotationQualityCheck'
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/pageSize'
       responses:
@@ -2179,7 +2194,9 @@ paths:
         200:
           description: 'An ordered list of scene IDs and corresponding color correction parameters'
           schema:
-            $ref: '#/definitions/MosaicDefinition'
+            type: array
+            items:
+              $ref: '#/definitions/MosaicDefinition'
         403:
           description: 'Insufficient permissions for resource or resource does not exist'
           schema:
@@ -2214,7 +2231,7 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /projects/{projectID}/mosaic/{mosaicID}:
+  /projects/{projectID}/mosaic/{sceneID}:
     x-resource: Projects
     get:
       summary: "Get a project's saved color-correction parameters"
@@ -2222,7 +2239,7 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
-        - $ref: '#/parameters/mosaicID'
+        - $ref: '#/parameters/sceneID'
       responses:
         200:
           description: 'Color correction parameters'
@@ -2242,7 +2259,7 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
-        - $ref: '#/parameters/mosaicID'
+        - $ref: '#/parameters/sceneID'
         - name: updatedColorCorrection
           description: 'Updated color corrections'
           in: body
@@ -2267,6 +2284,16 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
+        - name: sceneIDs
+          in: body
+          description: |
+            The z order for scenes in this project, relative to each other. The first listed scene will be visualized
+            on top of all the others, and the last listed scene will be visualized below all the others.
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
       responses:
         204:
           description: 'Successfully updated order of scenes in project'
@@ -2356,6 +2383,48 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
+    delete:
+      summary: 'Remove access control rules on this project'
+      tags:
+        - Permissions
+      parameters:
+        - $ref: '#/parameters/projectID'
+      responses:
+        200:
+          description: 'Access control rules successfully delete'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
+
+  /projects/{projectID}/actions/:
+    get:
+      summary: 'List actions a user is allowed to perform on this project'
+      tags:
+        - Permissions
+      parameters:
+        - $ref: '#/parameters/projectID'
+      responses:
+        200:
+          description: |
+            'List of actions a user is allowed to perform on this project. A * in the response
+            indicates the user has full permissions for this project.'
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - 'VIEW'
+                - 'EDIT'
+                - 'DEACTIVATE'
+                - 'DELETE'
+                - 'ANNOTATE'
+                - '*'
 
   /areas-of-interest/:
     get:
@@ -2554,9 +2623,9 @@ paths:
             $ref: '#/definitions/Error'
     post:
       summary: |
-        Request a new refresh token
+        Request a new JSON Web Token to use when authenticating with other endpoints
       parameters:
-        - name: refreshToken
+        - name: authBody
           in: body
           required: true
           description: 'Refresh token object to use when requesting a new JWT'
@@ -2569,7 +2638,7 @@ paths:
       tags:
         - Authentication
       responses:
-        201:
+        200:
           description: 'Retrieved a new auth token'
           schema:
             $ref: '#/definitions/AuthToken'
@@ -3743,12 +3812,11 @@ parameters:
         - 'createdAt,asc'
         - 'modifiedAt,desc'
         - 'modifiedAt,asc'
-  AnnotationQualityCheck:
-    name: AnnotationQualityCheck
+  annotationQualityCheck:
+    name: annotationQualityCheck
     description: 'Quality check on annotations'
     in: query
     type: string
-    required: true
     enum:
       - 'PASS'
       - 'FAIL'
@@ -3863,14 +3931,8 @@ parameters:
     required: true
     type: string
     format: uuid
-  mosaicID:
-    name: mosaicID
-    in: path
-    required: true
-    type: string
-    format: uuid
-  annotationsGroupID:
-    name: annotationsGroupID
+  annotationGroupID:
+    name: annotationGroupID
     in: path
     required: true
     type: string
@@ -4522,7 +4584,7 @@ definitions:
       sceneId:
         type: string
         format: uuid
-      colorCorrection:
+      colorCorrections:
         $ref: '#/definitions/ColorCorrection'
   DropboxAuthRequest:
     type: object
@@ -4541,6 +4603,11 @@ definitions:
         $ref: '#/definitions/CombinedSceneQueryParams'
       isActive:
         type: boolean
+      approvalRequired:
+        type: boolean
+      startTime:
+        type: string
+        format: date-time
   ColorCorrection:
     type: object
     properties:
@@ -6108,10 +6175,13 @@ definitions:
         $ref: '#/definitions/ColorCorrection'
 
   CombinedSceneCorrectionParams:
-    type: array
+    type: object
     description: 'Combined color correction parameters for multiple scenes'
-    items:
-      $ref: '#/definitions/SceneCorrectionParam'
+    properties:
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/SceneCorrectionParam'
   ExportCreate:
     type: object
     allOf:
