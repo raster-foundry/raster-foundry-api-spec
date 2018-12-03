@@ -1,5 +1,18 @@
 # Change Log
 
+## [Unreleased](https://github.com/raster-foundry/raster-foundry-api-spec/tree/develop)
+
+### Added
+
+- Added `withGroupName` query parameter to `/users/me/roles` endpoint [\#70](https://github.com/raster-foundry/raster-foundry-api-spec/pull/70)
+
+### Changed
+
+### Fixed
+
+### Removed
+
+
 ## [1.15.0](https://github.com/raster-foundry/raster-foundry/tree/1.15.0) (2018-11-30)
 
 ### Added
