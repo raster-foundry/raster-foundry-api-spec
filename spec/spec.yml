@@ -183,6 +183,8 @@ paths:
       summary: "Get a logged-in user's roles"
       tags:
         - Users
+      parameters:
+        - $ref: '#/parameters/withGroupName'
       responses:
         200:
           description: 'Roles found'
@@ -483,7 +485,7 @@ paths:
       summary: 'Get a list of teams that the user can see on the platform.'
       tags:
         - Admin
-      parameters: 
+      parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/search'
       responses:
@@ -4331,6 +4333,12 @@ parameters:
     in: path
     type: string
     required: true
+  withGroupName:
+    name: withGroupName
+    description: 'Additionally return user group roles with platform, organization, team names if set to true'
+    in: query
+    type: boolean
+    default: false
 
 definitions:
   Geometry:
