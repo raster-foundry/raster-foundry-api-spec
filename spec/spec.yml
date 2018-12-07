@@ -183,15 +183,13 @@ paths:
       summary: "Get a logged-in user's roles"
       tags:
         - Users
-      parameters:
-        - $ref: '#/parameters/withGroupName'
       responses:
         200:
           description: 'Roles found'
           schema:
             type: array
             items:
-              $ref: '#/definitions/UserGroupRole'
+              $ref: '#/definitions/UserGroupRoleWithRelated'
         default:
           description: 'Unexpected error'
           schema:
@@ -4333,12 +4331,6 @@ parameters:
     in: path
     type: string
     required: true
-  withGroupName:
-    name: withGroupName
-    description: 'Additionally return user group roles with platform, organization, team names if set to true'
-    in: query
-    type: boolean
-    default: false
 
 definitions:
   Geometry:
@@ -4998,8 +4990,26 @@ definitions:
           - 'TEAM'
         groupId:
           type: string
-          format: uuid
+          format: uui
+        membershipStatus:
+          type: string
+          enum:
+          - 'REQUESTED'
+          - 'INVITED'
+          - 'APPROVED'
     - $ref: '#/definitions/UserRole'
+  UserGroupRoleWithRelated:
+    type: object
+    allOf:
+    - $ref: '#/definitions/UserGroupRole'
+    - type: object
+      properties:
+        platformName:
+          type: string
+        organizationName:
+          type: string
+        teamName:
+          type: string
   PaginatedResponse:
     type: object
     required:
