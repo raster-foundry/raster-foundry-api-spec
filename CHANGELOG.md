@@ -6,7 +6,7 @@
 
 ### Changed
 
-- Changed the response data model of `/users/me/roles` endpoint [\#70](https://github.com/raster-foundry/raster-foundry-api-spec/pull/70)
+- Changed the response data model of `/users/me/roles` endpoint [\#70](https://github.com/raster-foundry/raster-foundry-api-spec/pull/70) & [\#72](https://github.com/raster-foundry/raster-foundry-api-spec/pull/72) 
 
 ### Fixed
 
