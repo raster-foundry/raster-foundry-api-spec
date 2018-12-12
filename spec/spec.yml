@@ -4990,7 +4990,7 @@ definitions:
           - 'TEAM'
         groupId:
           type: string
-          format: uui
+          format: uuid
         membershipStatus:
           type: string
           enum:
