@@ -189,7 +189,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/UserGroupRole'
+              $ref: '#/definitions/UserGroupRoleWithRelated'
         default:
           description: 'Unexpected error'
           schema:
@@ -483,7 +483,7 @@ paths:
       summary: 'Get a list of teams that the user can see on the platform.'
       tags:
         - Admin
-      parameters: 
+      parameters:
         - $ref: '#/parameters/platformID'
         - $ref: '#/parameters/search'
       responses:
@@ -4991,7 +4991,25 @@ definitions:
         groupId:
           type: string
           format: uuid
+        membershipStatus:
+          type: string
+          enum:
+          - 'REQUESTED'
+          - 'INVITED'
+          - 'APPROVED'
     - $ref: '#/definitions/UserRole'
+  UserGroupRoleWithRelated:
+    type: object
+    allOf:
+    - $ref: '#/definitions/UserGroupRole'
+    - type: object
+      properties:
+        platformName:
+          type: string
+        organizationName:
+          type: string
+        teamName:
+          type: string
   PaginatedResponse:
     type: object
     required:
