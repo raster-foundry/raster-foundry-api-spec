@@ -5004,11 +5004,7 @@ definitions:
     - $ref: '#/definitions/UserGroupRole'
     - type: object
       properties:
-        platformName:
-          type: string
-        organizationName:
-          type: string
-        teamName:
+        groupName:
           type: string
   PaginatedResponse:
     type: object
