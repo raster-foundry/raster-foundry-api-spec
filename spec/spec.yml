@@ -3772,8 +3772,8 @@ parameters:
   analysisId:
     name: analysisId
     in: query
-    description:
-      | UUID for analysis to use as a request\'s authorization context
+    description: |
+      UUID for analysis to use as a request\'s authorization context
     type: string
     format: uuid
     required: false
