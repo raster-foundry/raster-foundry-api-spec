@@ -4,14 +4,15 @@
 
 ### Added
 
+- Added the `analysisId` query param to endpoints that require authorization via analyses [\#73](https://github.com/raster-foundry/raster-foundry-api-spec/pull/73)
+
 ### Changed
 
-- Changed the response data model of `/users/me/roles` endpoint [\#70](https://github.com/raster-foundry/raster-foundry-api-spec/pull/70) & [\#72](https://github.com/raster-foundry/raster-foundry-api-spec/pull/72) 
+- Changed the response data model of `/users/me/roles` endpoint [\#70](https://github.com/raster-foundry/raster-foundry-api-spec/pull/70) & [\#72](https://github.com/raster-foundry/raster-foundry-api-spec/pull/72)
 
 ### Fixed
 
 ### Removed
-
 
 ## [1.15.0](https://github.com/raster-foundry/raster-foundry/tree/1.15.0) (2018-11-30)
 
