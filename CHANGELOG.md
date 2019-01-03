@@ -1,17 +1,24 @@
 # Change Log
 
-## [Unreleased](https://github.com/raster-foundry/raster-foundry-api-spec/tree/develop)
+## [Unreleased](https://github.com/raster-foundry/raster-foundry/tree/develop)
 
 ### Added
 
 ### Changed
 
-- Changed the response data model of `/users/me/roles` endpoint [\#70](https://github.com/raster-foundry/raster-foundry-api-spec/pull/70) & [\#72](https://github.com/raster-foundry/raster-foundry-api-spec/pull/72) 
-
-### Fixed
+### Deprecated
 
 ### Removed
 
+### Fixed
+
+### Security
+
+## [1.16.0](https://github.com/raster-foundry/raster-foundry/tree/1.16.0) (2019-01-03)
+
+### Changed
+
+- Changed the response data model of `/users/me/roles` endpoint [\#70](https://github.com/raster-foundry/raster-foundry-api-spec/pull/70) & [\#72](https://github.com/raster-foundry/raster-foundry-api-spec/pull/72)
 
 ## [1.15.0](https://github.com/raster-foundry/raster-foundry/tree/1.15.0) (2018-11-30)
 
