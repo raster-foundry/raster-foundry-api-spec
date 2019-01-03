@@ -1,0 +1,1100 @@
+swagger: '2.0'
+info:
+  title: Raster Foundry
+  description: An application to find, view, and analyze geospatial data at any scale
+  version: "0.1.0"
+
+host: app.rasterfoundry.com
+
+schemes:
+  - http
+  - https
+
+basePath: /api
+
+produces:
+  - application/json
+consumes:
+  - application/json
+tags:
+  - name: Users
+    description: 'Operations involving users and organizations'
+  - name: Authentication
+    description: 'Resources to obtain, use, and delete API tokens'
+  - name: Imagery
+    description: 'Interact with imagery'
+  - name: Lab
+    description: 'Geospatial processing discovery and endpoints'
+  - name: Statistics
+    description: 'Statistical metadata about geospatial data'
+  - name: Permissions
+    description: 'Resources relating to object-level access'
+  - name: Admin
+    description: 'Resources related to administration'
+paths:
+  /projects/{projectID}/layers/:
+    x-resource: Projects
+    get:
+      summary: 'Get a paginated list of layers for the project'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/orderingLayer'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/colorGroup'
+        - $ref: '#/parameters/search'
+        - $ref: '#/parameters/hasScenes'
+        - $ref: '#/parameters/ingestStatus'
+        - $ref: '#/parameters/dateStart'
+        - $ref: '#/parameters/dateEnd'
+      responses:
+        200:
+          description: 'A list of project layers'
+          schema:
+            $ref: '#/definitions/ProjectLayerPaginated'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create a new project layer
+      tags:
+        - Imagery
+      parameters:
+        - name: ProjectLayer
+          in: body
+          schema:
+            $ref: '#/definitions/ProjectLayerCreate'
+      responses:
+        200:
+          description: Newly created project layer
+          schema:
+            $ref: '#/definitions/ProjectLayer'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+  /projects/{projectID}/layers/{layerID}/:
+    get:
+      summary: 'Get project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+      responses:
+        200:
+          description: Project Layer
+          schema:
+            $ref: '#/definitions/ProjectLayer'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Update project layer
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - name: ProjectLayer
+          in: body
+          schema:
+            $ref: '#/definitions/ProjectLayer'
+      responses:
+        204:
+          description: 'No Content'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: 'Delete a project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+      responses:
+        204:
+          description: 'No content, delete successful'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+  /projects/{projectID}/layers/{layerID}/scenes:
+    get:
+      summary: 'Get a list of scenes for the given layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/ingested'
+        - $ref: '#/parameters/ingestStatus'
+      responses:
+        200:
+          description: Paginated list of scenes associated with this layer
+          schema:
+            $ref: '#/definitions/ScenePaginated'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: 'Add scenes to a project layer by their ID'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - name: scenes
+          in: body
+          required: true
+          description: 'UUIDs of scenes to place in project'
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+      responses:
+        200:
+          description: 'List of scenes added to project'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Scene'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: 'Delete scenes from a project layer'
+      tags:
+        - Imagery
+      parameters:
+        - name: scenes
+          in: body
+          required: true
+          description: 'UUIDs of scenes to delete in project'
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - $ref: '#/parameters/projectID'
+      responses:
+        204:
+          description: 'No content, delete successful'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+  /projects/{projectID}/layers/{layerID}/scenes/{sceneID}:
+    delete:
+      summary: Remove a scene from a project layer
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - $ref: '#/paramters/sceneID'
+      responses:
+        204:
+          description: 'No content, delete successful'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
+  /projects/{projectID}/layers/{layerID}/annotation-groups/:
+    x-resource: Projects
+    get:
+      summary: 'Get annotation groups belonging to a project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+      responses:
+        200:
+          description: 'Array containing annotation groups for this project layer'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AnnotationGroup'
+        404:
+          description: 'Resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: 'Insufficient permissions for resource'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: 'Create annotation group for this project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - name: annotationGroup
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AnnotationGroupCreate'
+      responses:
+        200:
+          description: 'Created annotation group'
+          schema:
+            $ref: '#/definitions/AnnotationGroup'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+  /projects/{projectID}/layers/{layerID}/annotation-groups/summary/:
+    x-resource: Projects
+    get:
+      summary: 'Get a summary of the label groups on a project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+      responses:
+        200:
+          description: 'Fetched label summaries'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/LabelSummary'
+        404:
+          description: 'Resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
+  /projects/{projectID}/layers/{layerID}/annotations-groups/{annotationsGroupID}/:
+    x-resource: Projects
+    get:
+      summary: 'Get annotation group for project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - $ref: '#/parameters/annotationsGroupID'
+      responses:
+        200:
+          description: 'fetched annotation group'
+          schema:
+            $ref: '#/definitions/AnnotationGroup'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: 'Update annotation group'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - $ref: '#/parameters/annotationsGroupID'
+        - name: annotationGroup
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AnnotationGroup'
+      responses:
+        200:
+          description: 'Number of updated annotation groups from this request'
+          schema:
+            type: number
+            format: integer
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: 'Delete annotation group and all associated annotations'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - $ref: '#/parameters/annotationsGroupID'
+      responses:
+        200:
+          description: 'Number of deleted annotation groups from this request'
+          schema:
+            type: number
+            format: integer
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+  /projects/{projectID}/layers/{layerID}/annotations:
+    x-resource: Projects
+    get:
+      summary: 'Get annotations belonging to a project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - $ref: '#/parameters/AnnotationLabel'
+        - $ref: '#/parameters/AnnotationQualityCheck'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/pageSize'
+      responses:
+        200:
+          description: 'GeoJSON feature collection containing paginated annotations of this project layer'
+          schema:
+            $ref: '#/definitions/AnnotationFeatureCollectionPaginated'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: 'Create annotations for a project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - name: annotations
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AnnotationFeatureCollectionCreate'
+      responses:
+        201:
+          description: 'GeoJSON annotations successfully created'
+          schema:
+            $ref: '#/definitions/AnnotationFeatureCollection'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: 'Delete all annotations from a project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+      responses:
+        201:
+          description: 'Annotations Deleted'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+  /projects/{projectID}/layers/{layerID}/annotations/{annotationID}/:
+    get:
+      summary: 'Get an annotation belonging to a project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - $ref: '#/parameters/annotationID'
+      responses:
+        200:
+          description: 'GeoJSON feature containing one annotation from this project layer'
+          schema:
+            $ref: '#/definitions/AnnotationFeature'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: 'Update an annotation of this project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - $ref: '#/parameters/annotationID'
+        - name: annotation
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AnnotationFeatureUpdate'
+      responses:
+        204:
+          description: 'No content, update successful'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: 'Delete an annotation'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - $ref: '#/parameters/annotationID'
+      responses:
+        204:
+          description: 'Deletion successful.'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
+  /projects/{projectID}/analyses/:
+    get:
+      summary: 'Get a list of analysis summaries for the given project'
+      tags:
+        - Lab
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/orderingAnalyses'
+        - $ref: '#/parameters/consolidate'
+      responses:
+        200:
+          description: 'Paginated list of analyses for the project'
+          schema:
+            $ref: '#/definitions/AnalysisPaginated'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: 'Create a new project analysis'
+      tags:
+        - Lab
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - name: analysis
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AnalysisCreate'
+      responses:
+        200:
+          description: 'Analysis created'
+          schema:
+            $ref: '#/definitions/Analysis'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+  /projects/{projectID}/analyses/{analysisID}:
+    get:
+      summary: 'Get an analysis for the given project'
+      tags:
+        - Lab
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/analysisID'
+      responses:
+        200:
+          description: 'Project analysis'
+          schema:
+            $ref: '#/definitions/Analysis'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: 'Update analysis'
+      tags:
+        - Lab
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/analysisID'
+        - name: analysis
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Analysis'
+      responses:
+        204:
+          description: 'No content, update successful'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: 'Delete an Analysis'
+      tags:
+        - Lab
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/analysisID'
+      responses:
+        204:
+          description: 'Deletion successful'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+  
+  /projects/{projectID}/recent-templates/:
+    get:
+      summary: |
+        Fetch a list of templates recently used: a) run on this project b) by the user
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/orderingRecent'
+        - $ref: '#/parameters/ownershipType'
+        - $ref: '#/parameters/tagsInclude'
+        - $ref: '#/parameters/tagsExclude'
+        - $ref: '#/parameters/search'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+      responses:
+        200:
+          description: 'Paginated list of templates used recently on the project and by the user in other projects'
+          schema:
+            $ref: '#/definitions/RecentTemplatePaginated'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        
+  /projects/{projectID}/analyses/{analysisID}/export/:
+    get:
+      summary: Create a data export for the analysis
+      tags:
+        - Lab
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/analysisID'
+      responses:
+        200:
+          description: 'Json export of the analysis including map urls, boundaries, and statistics'
+          schema:
+            $ref:
+              '#/definitions/AnalysisExport'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+      
+  /scenes/statistics/:
+    get:
+      summary: Use to populate the scene timeline when browsing imagery for a layer.
+      tags:
+        - Lab
+      parameters:
+        - $ref: '#/parameters/orderingScene'
+        - $ref: '#/parameters/owner'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/organization'
+        - $ref: '#/parameters/maxCloudCover'
+        - $ref: '#/parameters/minCloudCover'
+        - $ref: '#/parameters/minAcquisitionDatetime'
+        - $ref: '#/parameters/maxAcquisitionDatetime'
+        - $ref: '#/parameters/datasource'
+        - $ref: '#/parameters/maxSunAzimuth'
+        - $ref: '#/parameters/minSunAzimuth'
+        - $ref: '#/parameters/maxSunElevation'
+        - $ref: '#/parameters/minSunElevation'
+        - $ref: '#/parameters/minResolution'
+        - $ref: '#/parameters/maxResolution'
+        - $ref: '#/parameters/tags'
+        - $ref: '#/parameters/bbox'
+        - $ref: '#/parameters/project'
+        - $ref: '#/parameters/ingested'
+        - $ref: '#/parameters/ingestStatus'
+        - $ref: '#/parameters/forProjectId'
+        - $ref: '#/parameters/ownershipType'
+        - $ref: '#/parameters/groupType'
+        - $ref: '#/parameters/groupId'
+        - name: shape
+          in: query
+          type: string
+          format: uuid
+          description: 'UUID of a shape in shapes table'
+      responses:
+        200:
+          description: 'Paginated list of Scene Summaries'
+          schema:
+            $ref: '#/definitions/SceneSummaryPaginated'
+  /analyses/:
+    get:
+      summary: get a paginated list of analyses owned by or shared with the user
+      tags:
+        - Lab
+      parameters:
+        - $ref: '#/parameters/projectId'
+        - $ref: '#/parameters/ownershipType'
+        - $ref: '#/parameters/consolidate'
+        - $ref: '#/parameters/orderingRecent'
+        - $ref: '#/parameters/search'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+      responses:
+        200:
+          description: 'Paginated list of analyses created by or shared with the user'
+          schema:
+            $ref: '#/definitions/AnalysisPaginated'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: 'Create a new project analysis'
+      tags:
+        - Lab
+      parameters:
+        - name: analysis
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AnalysisCreate'
+      responses:
+        200:
+          description: 'Analysis created'
+          schema:
+            $ref: '#/definitions/Analysis'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+  /analyses/{analysisID}:
+    get:
+      summary: 'Get an analysis for the given project'
+      tags:
+        - Lab
+      parameters:
+        - $ref: '#/parameters/analysisID'
+      responses:
+        200:
+          description: 'Project analysis'
+          schema:
+            $ref: '#/definitions/Analysis'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: 'Update analysis'
+      tags:
+        - Lab
+      parameters:
+        - $ref: '#/parameters/analysisID'
+        - name: analysis
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Analysis'
+      responses:
+        204:
+          description: 'No content, update successful'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: 'Delete an Analysis'
+      tags:
+        - Lab
+      parameters:
+        - $ref: '#/parameters/analysisID'
+      responses:
+        204:
+          description: 'Deletion successful'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
+parameters:
+  orderingRecent:
+    name: ordering
+    in: query
+    description: 'order recent templates'
+    type: array
+    collectionFormat: pipes
+    items:
+      type: string
+      enum:
+        - 'createdAt,desc'
+        - 'createdAt,asc'
+        - 'modifiedAt,desc'
+        - 'modifiedAt,asc'
+        - 'timesUsed,desc'
+        - 'timesUsed,asc'
+  orderingLayer:
+    name: ordering
+    in: query
+    description: 'order layers'
+    type: array
+    collectionFormat: pipes
+    items:
+      type: string
+      enum:
+        - 'newest'
+        - 'color'
+        - 'name'
+  analysisID:
+    name: analysisID
+    in: path
+    description: 'id for an analysis'
+    type: string
+    format: uuid
+    required: true
+  hasScenes:
+    name: hasScenes
+    in: query
+    description: 'Filter to layers which have scenes'
+    type: boolean
+  colorGroup:
+    name: colorGroup
+    in: query
+    description: 'Filter by color group hex'
+    type: string
+    required: false
+  layerID:
+    name: layerID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  orderingAnalyses:
+    name: ordering
+    in: query
+    required: false
+    type: string
+    enum:
+      - 'latest'
+      - 'name'
+  consolidate:
+    name: consolidate
+    description: Consolidate recent analyses and only show the most recent created from a template
+    in: query
+    required: false
+    type: boolean
+
+definitions:
+  SceneSummary:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      date:
+        type: string
+        format: datetime
+      geometry:
+        $ref: "#/definitions/Geometry"
+
+  SceneSummaryPaginated:
+    allOf:
+      - $ref: '#/definitions/PaginatedResponse'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/definitions/SceneSummary'
+
+  AnnotationGroupCreate:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+      projectId:
+        type: string
+        format: uuid
+      layerId:
+        type: string
+        format: uuid
+      defaultStyle:
+        type: object
+
+  AnnotationGroup:
+    type: object
+    allOf:
+    - $ref: '#/definitions/BaseModel'
+    - $ref: '#/definitions/TimeModelMixin'
+    - $ref: '#/definitions/UserTrackingMixin'
+    properties:
+      name:
+        type: string
+      projectId:
+        type: string
+        format: uuid
+      layerId:
+        type: string
+        format: uuid
+      defaultStyle:
+        type: object
+
+  ProjectLayer:
+    type: object
+    properties:
+      type:
+        type: string
+      geometry:
+        $ref: '#/definitions/Geometry'
+      properties:
+        allOf:
+        - $ref: '#/definitions/BaseModel'
+        - $ref: '#/definitions/TimeModelMixin'
+        - type: object
+          properties:
+            name:
+              type: string
+            projectId:
+              type: string
+              format: uuid
+            colorGroup:
+              type: string
+      
+  ProjectLayerPaginated:
+    type: object
+    allOf:
+      - $ref: '#/definitions/PaginatedResponse'
+      - type: object
+        properties:
+          type:
+            type: string
+          features:
+            type: array
+            items:
+              $ref: '#/definitions/ProjectLayer'
+
+  AnalysisCreate:
+    type: object
+    properties:
+      project:
+        type: string
+        format: uuid
+      template:
+        type: string
+        format: uuid
+      bandBindings:
+        type: array
+        items:
+          type: object
+          properties:
+            nodeId:
+              type: string
+              format: uuid
+            band:
+              type: number
+      layers:
+        description: array of tool-run ids, one for each project layer
+        type: array
+        items:
+          type: string
+          format: uuid
+  Analysis:
+    type: object
+    allOf:
+      - $ref: '#/definitions/BaseModel'
+      - $ref: '#/definitions/AnalysisCreate'
+
+  AnalysisPaginated:
+    allOf:
+      - $ref: '#/definitions/PaginatedResponse'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/definitions/Analysis'
+
+  AnalysisLayerStatistics:
+    type: object
+    properties:
+      mean:
+        type: number
+      median:
+        type: number
+      mode:
+        type: number
+      stdDev:
+        type: number
+      min:
+        type: number
+      max:
+        type: number
+
+  AnalysisExportLayer:
+    type: object
+    properties:
+      projectId:
+        type: string
+        format: uuid
+      projectName:
+        type: string
+      layerId:
+        type: string
+        format: uuid
+      layername:
+        type: string
+      tileUrl:
+        type: string
+      statistics:
+        $ref: '#/definitions/AnalysisLayerStatistics'
+      histogram:
+        type: object
+        properties:
+          buckets:
+            type: number
+          data:
+            type: array
+            items:
+              description: 'Object map of pixel values to counts'
+              type: object
+      geometry:
+        $ref: '#/definitions/Geometry'
+
+  AnalysisExport:
+    type: object
+    properties:
+      name:
+        type: string
+      exportDate:
+        type: string
+        format: datetime
+      layers:
+        type: array
+        items:
+          $ref: '#/definitions/AnalysisExportLayer'
