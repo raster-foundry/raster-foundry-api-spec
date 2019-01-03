@@ -49,6 +49,7 @@ paths:
         - $ref: '#/parameters/ingestStatus'
         - $ref: '#/parameters/dateStart'
         - $ref: '#/parameters/dateEnd'
+        - $ref: '#/parameters/smartLayer'
       responses:
         200:
           description: 'A list of project layers'
@@ -907,6 +908,12 @@ parameters:
     in: query
     required: false
     type: boolean
+  smartLayer:
+    name: smartLayer
+    description: Return only smart layers or standard layers
+    in: query
+    requred: false
+    type: boolean
 
 definitions:
   SceneSummary:
@@ -965,6 +972,19 @@ definitions:
       defaultStyle:
         type: object
 
+  ProjectLayerSmartSettings:
+    type: object
+    properties:
+      filters:
+        type: string
+        description: Scene filters to apply when creating a new ProjectLayer
+      activeStart:
+        type: string
+        format: datetime
+      activeEnd:
+        type: string
+        format: datetime
+
   ProjectLayer:
     type: object
     properties:
@@ -985,6 +1005,8 @@ definitions:
               format: uuid
             colorGroup:
               type: string
+            smartOptions:
+              $ref: '#/definitions/ProjectLayerSmartSettings'
       
   ProjectLayerPaginated:
     type: object
