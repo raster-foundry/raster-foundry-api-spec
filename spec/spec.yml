@@ -1136,17 +1136,19 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/orderingScene'
+        - $ref: '#/parameters/organizations'
+        - $ref: '#/parameters/createdBy'
+        - $ref: '#/parameters/modifiedBy'
+        - $ref: '#/parameters/minCreateDatetime'
+        - $ref: '#/parameters/maxCreateDatetime'
+        - $ref: '#/parameters/minModifiedDatetime'
+        - $ref: '#/parameters/maxModifiedDatetime'
         - $ref: '#/parameters/owner'
-        - $ref: '#/parameters/pageSize'
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/organization'
+        - $ref: '#/parameters/isActive'
         - $ref: '#/parameters/maxCloudCover'
         - $ref: '#/parameters/minCloudCover'
         - $ref: '#/parameters/minAcquisitionDatetime'
         - $ref: '#/parameters/maxAcquisitionDatetime'
-        - $ref: '#/parameters/minCreateDatetime'
-        - $ref: '#/parameters/maxCreateDatetime'
         - $ref: '#/parameters/datasource'
         - $ref: '#/parameters/month'
         - $ref: '#/parameters/minDayOfMonth'
@@ -1155,27 +1157,45 @@ paths:
         - $ref: '#/parameters/minSunAzimuth'
         - $ref: '#/parameters/maxSunElevation'
         - $ref: '#/parameters/minSunElevation'
-        - $ref: '#/parameters/minResolution'
-        - $ref: '#/parameters/maxResolution'
-        - $ref: '#/parameters/tags'
         - $ref: '#/parameters/bbox'
+        - $ref: '#/parameters/point'
         - $ref: '#/parameters/project'
         - $ref: '#/parameters/ingested'
         - $ref: '#/parameters/ingestStatus'
-        - $ref: '#/parameters/forProjectId'
-        - $ref: '#/parameters/ownershipType'
-        - $ref: '#/parameters/groupType'
-        - $ref: '#/parameters/groupId'
+        - $ref: '#/parameters/pending'
         - name: shape
           in: query
           type: string
           format: uuid
           description: 'UUID of a shape in shapes table'
+        - $ref: '#/parameters/ownershipType'
+        - $ref: '#/parameters/groupType'
+        - $ref: '#/parameters/groupId'
+        - name: exactCount
+          in: query
+          type: boolean
+          description: Return the exact count of scenes for a search. This can cause the query to time out if there are enough scenes
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/orderingScene'
+        - $ref: '#/parameters/forProjectId'
       responses:
         200:
           description: 'Paginated list of scenes'
           schema:
-            $ref: '#/definitions/ScenePaginated'
+            $ref: '#/definitions/SceneBrowsePaginated'
+        503:
+          description: 'Request timed out. Try using more specific filters.'
+          schema:
+            $ref: '#/definitions/Error'
+        504:
+          description: 'Request timed out. Try using more specific filters'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
     post:
       summary: Create a scene
       tags:
@@ -1299,7 +1319,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/AccessControlRule'
+              $ref: '#/definitions/ObjectAccessControlRule'
         403:
           description: 'Insufficient permissions for resource or resource does not exist'
           schema:
@@ -1320,14 +1340,14 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/AccessControlRuleCreate'
+              $ref: '#/definitions/ObjectAccessControlRule'
       responses:
         200:
           description: 'Access control rules replaced with response successfully'
           schema:
             type: array
             items:
-              $ref: '#/definitions/AccessControlRule'
+              $ref: '#/definitions/ObjectAccessControlRule'
         403:
           description: 'Insufficient permissions for resource or resource does not exist'
           schema:
@@ -1346,14 +1366,14 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/AccessControlRuleCreate'
+            $ref: '#/definitions/ObjectAccessControlRule'
       responses:
         200:
           description: 'Access control rule appended successfully'
           schema:
             type: array
             items:
-              $ref: '#/definitions/AccessControlRule'
+              $ref: '#/definitions/ObjectAccessControlRule'
         403:
           description: 'Insufficient permissions for resource or resource does not exist'
           schema:
@@ -1362,6 +1382,45 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
+    delete:
+      summary: 'Remove all access permissions from this scene'
+      tags:
+        - Permissions
+      parameters:
+        - $ref: '#/parameters/sceneID'
+      responses:
+        204:
+          description: 'No Content. Access control rules deleted successfully'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+  /scenes/{sceneID}/actions:
+    x-resource: Scenes
+    get:
+      summary: 'List actions a user is allowed to perform on this scene'
+      tags:
+        - Permissions
+      parameters:
+        - $ref: '#/parameters/projectID'
+      responses:
+        200:
+          description: |
+            'List of actions a user is allowed to perform on this scene. A * in the response
+            indicates the user has full permissions for this project.'
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - 'VIEW'
+                - 'EDIT'
+                - 'DELETE'
+                - '*'
   /scenes/{sceneID}/datasource:
     x-resource: Scenes
     get:
@@ -4506,12 +4565,9 @@ definitions:
       owner:
         type: string
         description: 'Optional during object creation, owner of an object'
-  AccessControlRuleCreate:
+  AccessControlRuleBase:
     type: object
     properties:
-      isActive:
-        type: boolean
-        description: 'Whether this access control rule is active'
       subjectType:
         type: string
         description: 'The target this access control rule applies to'
@@ -4533,6 +4589,16 @@ definitions:
           - 'DEACTIVATE'
           - 'DELETE'
           - 'ANNOTATE'
+  ObjectAccessControlRule:
+    $ref: '#/definitions/AccessControlRule'
+  AccessControlRuleCreate:
+    allOf:
+    - $ref: '#/definitions/AccessControlRuleBase'
+    - type: object
+      properties:
+        isActive:
+          type: boolean
+          description: 'Whether this access control rule is active'
   AccessControlRule:
     allOf:
       - $ref: '#/definitions/AccessControlRuleCreate'
@@ -5366,22 +5432,12 @@ definitions:
           items:
             $ref: '#/definitions/License'
 
-  Scene:
+
+  SceneBase:
     allOf:
       - $ref: '#/definitions/BaseModel'
-      - $ref: '#/definitions/UserTrackingMixin'
-      - $ref: '#/definitions/TimeModelMixin'
       - type: object
         properties:
-          name:
-            type: string
-            description: 'The display name of the project'
-          ingestLocation:
-            type: string
-            description: 'Where scene is ingested (pyramided/tiled)'
-          ingestSizeBytes:
-            type: integer
-            description: 'Size of ingested data in bytes.'
           visibility:
             type: string
             description: 'Level of restriction on viewing'
@@ -5394,27 +5450,21 @@ definitions:
             description: 'Tags associated with image'
             items:
               type: string
-          images:
-            type: array
-            items:
-              $ref: '#/definitions/Image'
-          thumbnails:
-            type: array
-            items:
-              $ref: '#/definitions/Thumbnail'
-          datasource:
-            $ref: '#/definitions/DatasourceThin'
-          dataFootprint:
-            $ref: '#/definitions/MultiPolygon'
-            readOnly: true
-          tileFootprint:
-            $ref: '#/definitions/MultiPolygon'
-            readOnly: true
           sceneMetadata:
             type: object
             description: |
               Metadata about the scene -- some aspects we will eventually want to nail down that will
               be fairly common and/or required for scenes
+          name:
+            type: string
+            description: 'Identifying name for the scene'
+          owner:
+            type: string
+            description: 'User ID to set as owner of the scene.'
+          datafootprint:
+            $ref: '#/definitions/multipolygon'
+          tilefootprint:
+            $ref: '#/definitions/multipolygon'
           metadataFiles:
             type: array
             description: |
@@ -5422,6 +5472,9 @@ definitions:
               images in a scene (e.g. relevant .mtl files or .xml)
             items:
               type: string
+          ingestLocation:
+            type: string
+            description: 'Where scene is ingested (pyramided/tiled)'
           filterFields:
             $ref: '#/definitions/FilterFields'
           statusFields:
@@ -5432,6 +5485,69 @@ definitions:
             enum:
               - 'AVRO'
               - 'COG'
+
+  SceneCreate:
+    allOf:
+      - $ref: '#/definitions/SceneBase'
+      - type: object
+        properties:
+          images:
+            type: array
+            items:
+              $ref: '#/definitions/ImageBanded'
+          thumbnails:
+            type: array
+            items:
+              $ref: '#/definitions/ThumbnailIdentified'
+          datasource:
+            type: string
+            format: uuid
+          
+  Scene:
+    allOf:
+      - $ref: '#/defintions/SceneBase'
+      - $ref: '#/definitions/UserTrackingMixin'
+      - $ref: '#/definitions/TimeModelMixin'
+      - type: object
+        properties:
+          images:
+            type: array
+            items:
+              $ref: '#/definitions/ImageWithRelated'
+          thumbnails:
+            type: array
+            items:
+              $ref: '#/definitions/Thumbnail'
+          datasource:
+            $ref: '#/definitions/DatasourceThin'
+
+  SceneBrowse:
+    allOf:
+      - $ref: '#/defintions/SceneBase'
+      - $ref: '#/definitions/UserTrackingMixin'
+      - $ref: '#/definitions/TimeModelMixin'
+      - $ref:
+      - type: object
+        properties:
+          datasource:
+            $ref: '#/definitions/DatasourceThin'
+          thumbnails:
+            type: array
+            items:
+              $ref: '#/definitions/Thumbnail'
+          inProject:
+            type: boolean
+            description: 'Whether the scene is already added to a given project'
+
+  SceneBrowsePaginated:
+    allOf:
+    - $ref: '#/definitions/PaginatedResponse'
+    - type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/definitions/SceneBrowse'
 
   FilterFields:
     type: object
@@ -5626,105 +5742,80 @@ definitions:
           type: object
           description: 'Optional additional json metadata'
 
+  ImageBase:
+    allOf:
+    - type: object
+      properties:
+        visibility:
+          type: string
+          description: 'Level of restriction on viewing'
+          enum:
+            - 'PUBLIC'
+            - 'ORGANIZATION'
+            - 'PRIVATE'
+        filename:
+          type: string
+          description: 'Name of the image file'
+        resolutionMeters:
+          type: number
+          description: 'Size of pixel in meters'
+        sourceUri:
+          type: string
+          description: 'URI to original source. This should include a protocol-like prefix to identify where it is located http://, s3://, etc.'
+        rawDataBytes:
+          type: integer
+          format: int64
+          description: 'Size of original uploaded imagery in bytes'
+        scene:
+          type: string
+          format: uuid
+          description: 'Scene that image is associated with'
+        image_metadata:
+          type: object
+          description: 'Metadata about this image'
+        metadataFiles:
+          type: array
+          items:
+            type: string
+          description: |
+            Metadata files that should be present for processing all
+            images in a scene (e.g. relevant .mtl files or .xml)
+  ImageBanded:
+    allOf:
+    - $ref: '#/definitions/ImageBase'
+    - type: object
+      properties:
+        owner:
+          type: string
+          description: User id to set as the owner of the image
+        bands:
+          type: array
+          items:
+            $ref: '#/definitions/BandCreate'
   Image:
     allOf:
     - $ref: '#/definitions/BaseModel'
     - $ref: '#/definitions/UserTrackingMixin'
     - type: object
-      properties:
-        visibility:
-          type: string
-          description: 'Level of restriction on viewing'
-          enum:
-            - 'PUBLIC'
-            - 'ORGANIZATION'
-            - 'PRIVATE'
-        filename:
-          type: string
-          description: 'Name of the image file'
-        resolutionMeters:
-          type: number
-          description: 'Size of pixel in meters'
-        sourceUri:
-          type: string
-          description: 'URI to original source. This should include a protocol-like prefix to identify where it is located http://, s3://, etc.'
-        rawDataBytes:
-          type: integer
-          format: int64
-          description: 'Size of original uploaded imagery in bytes'
-        bands:
-          type: array
-          description: 'list of band types for image; a single band denotes a single band image, multiple bands should be listed in order (e.g if it is an RGB tiff then bands should be [red, green blue])'
-          items:
-            $ref: '#/definitions/Band'
-        scene:
-          type: string
-          format: uuid
-          description: 'Scene that image is associated with'
-        image_metadata:
-          type: object
-          description: 'Metadata about this image'
-        metadataFiles:
-          type: array
-          items:
-            type: string
-          description: |
-            Metadata files that should be present for processing all
-            images in a scene (e.g. relevant .mtl files or .xml)
       required:
         - filename
         - sourceUri
-  ImageWithDownloadUri:
-    allOf:
-    - $ref: '#/definitions/BaseModel'
-    - $ref: '#/definitions/UserTrackingMixin'
-    - type: object
       properties:
-        visibility:
-          type: string
-          description: 'Level of restriction on viewing'
-          enum:
-            - 'PUBLIC'
-            - 'ORGANIZATION'
-            - 'PRIVATE'
-        filename:
-          type: string
-          description: 'Name of the image file'
-        resolutionMeters:
-          type: number
-          description: 'Size of pixel in meters'
-        sourceUri:
-          type: string
-          description: 'URI to original source. This should include a protocol-like prefix to identify where it is located http://, s3://, etc.'
-        rawDataBytes:
-          type: integer
-          format: int64
-          description: 'Size of original uploaded imagery in bytes'
         bands:
           type: array
           description: 'list of band types for image; a single band denotes a single band image, multiple bands should be listed in order (e.g if it is an RGB tiff then bands should be [red, green blue])'
           items:
             $ref: '#/definitions/Band'
-        scene:
-          type: string
-          format: uuid
-          description: 'Scene that image is associated with'
-        image_metadata:
-          type: object
-          description: 'Metadata about this image'
-        metadataFiles:
-          type: array
-          items:
-            type: string
-          description: |
-            Metadata files that should be present for processing all
-            images in a scene (e.g. relevant .mtl files or .xml)
+
+  ImageWithDownloadUri:
+    allOf:
+    - $ref: '#/definitions/Image'
+    - type: object
+      properties:
         downloadUri:
           type: string
           description: 'URI to downloadable resource. This is not always the same as `sourceUri`.'
-      required:
-        - filename
-        - sourceUri
+
   ProjectPaginated:
     allOf:
     - $ref: '#/definitions/PaginatedResponse'
@@ -5753,15 +5844,9 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/Image'
-  Band:
+  BandCreate:
     type: object
     properties:
-      id:
-        type: string
-        format: UUID
-      image:
-        type: string
-        format: UUID
       name:
         type: string
         description: 'String representation of band name'
@@ -5772,24 +5857,20 @@ definitions:
         type: array
         items:
           type: integer
-  Thumbnail:
+  Band:
     allOf:
-    - $ref: '#/definitions/BaseModel'
-    - $ref: '#/definitions/TimeModelMixin'
+    - $ref: '#/definitions/BandCreate'
+    - $ref: '#/defintions/BaseModel'
     - type: object
       properties:
-        widthPx:
-          type: integer
-          format: int32
-          description: 'The width of the thumbnail, in pixels'
-        sceneId:
+        image:
           type: string
-          format: uuid
-          description: 'Scene that image is associated with'
-        heightPx:
-          type: integer
-          format: int32
-          description: 'The height of the thumbnail, in pixels'
+          format: UUID
+  ThumbnailIdentified:
+    allOf:
+    - $ref: '#/definitions/BaseModel'
+    - type: object
+      properties:
         thumbnailSize:
           type: string
           description: 'Summary of size'
@@ -5797,10 +5878,29 @@ definitions:
             - 'SMALL'
             - 'LARGE'
             - 'SQUARE'
+        widthPx:
+          type: integer
+          format: int32
+          description: 'The width of the thumbnail, in pixels'
+        heightPx:
+          type: integer
+          format: int32
+          description: 'The height of the thumbnail, in pixels'
+        sceneId:
+          type: string
+          format: uuid
+          description: 'Scene that image is associated with'
         url:
           type: string
           format: uri
           description: 'A client-accessible URL pointing to the image file'
+
+  Thumbnail:
+    allOf:
+    - $ref: '#/definitions/BaseModel'
+    - $ref: '#/definitions/TimeModelMixin'
+    - $ref: '#/defintions/ThumbnailIdentified'
+
   ThumbnailPaginated:
     allOf:
     - $ref: '#/definitions/PaginatedResponse'
