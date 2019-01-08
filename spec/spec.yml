@@ -1136,7 +1136,6 @@ paths:
       tags:
         - Imagery
       parameters:
-        - $ref: '#/parameters/organizations'
         - $ref: '#/parameters/createdBy'
         - $ref: '#/parameters/modifiedBy'
         - $ref: '#/parameters/minCreateDatetime'
@@ -1158,7 +1157,6 @@ paths:
         - $ref: '#/parameters/maxSunElevation'
         - $ref: '#/parameters/minSunElevation'
         - $ref: '#/parameters/bbox'
-        - $ref: '#/parameters/point'
         - $ref: '#/parameters/project'
         - $ref: '#/parameters/ingested'
         - $ref: '#/parameters/ingestStatus'
@@ -1406,7 +1404,7 @@ paths:
       tags:
         - Permissions
       parameters:
-        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/sceneID'
       responses:
         200:
           description: |
@@ -4119,6 +4117,13 @@ parameters:
     type: string
     required: false
     format: datetime
+  minModifiedDatetime:
+    name: minModifiedDatetime
+    description: 'Only return results modified after this datetime'
+    in: query
+    type: string
+    required: false
+    format: datetime
   minSunElevation:
     name: minSunElevation
     description: 'Only return results with sun elevation greater than this value'
@@ -4146,6 +4151,13 @@ parameters:
   maxCreateDatetime:
     name: maxCreateDatetime
     description: 'Only return results created before this datetime'
+    in: query
+    type: string
+    required: false
+    format: datetime
+  maxModifiedDatetime:
+    name: maxModifiedDatetime
+    description: 'Only return results modified before this datetime'
     in: query
     type: string
     required: false
@@ -4367,6 +4379,12 @@ parameters:
     in: query
     type: string
     required: false
+  modifiedBy:
+    name: modifiedBy
+    description: 'Filter by user last modified by'
+    in: query
+    type: string
+    required: false
   owner:
     name: owner
     description: 'Filter by resource owner ID'
@@ -4400,6 +4418,12 @@ parameters:
     in: path
     type: string
     required: true
+  isActive:
+    name: isActive
+    description: 'Filter to active resources'
+    in: query
+    type: boolean
+    required: false
 
 definitions:
   Geometry:
@@ -5462,9 +5486,9 @@ definitions:
             type: string
             description: 'User ID to set as owner of the scene.'
           datafootprint:
-            $ref: '#/definitions/multipolygon'
+            $ref: '#/definitions/MultiPolygon'
           tilefootprint:
-            $ref: '#/definitions/multipolygon'
+            $ref: '#/definitions/MultiPolygon'
           metadataFiles:
             type: array
             description: |
@@ -5505,7 +5529,7 @@ definitions:
           
   Scene:
     allOf:
-      - $ref: '#/defintions/SceneBase'
+      - $ref: '#/definitions/SceneBase'
       - $ref: '#/definitions/UserTrackingMixin'
       - $ref: '#/definitions/TimeModelMixin'
       - type: object
@@ -5513,7 +5537,7 @@ definitions:
           images:
             type: array
             items:
-              $ref: '#/definitions/ImageWithRelated'
+              $ref: '#/definitions/Image'
           thumbnails:
             type: array
             items:
@@ -5523,10 +5547,9 @@ definitions:
 
   SceneBrowse:
     allOf:
-      - $ref: '#/defintions/SceneBase'
+      - $ref: '#/definitions/SceneBase'
       - $ref: '#/definitions/UserTrackingMixin'
       - $ref: '#/definitions/TimeModelMixin'
-      - $ref:
       - type: object
         properties:
           datasource:
@@ -5795,6 +5818,7 @@ definitions:
   Image:
     allOf:
     - $ref: '#/definitions/BaseModel'
+    - $ref: '#/definitions/TimeModelMixin'
     - $ref: '#/definitions/UserTrackingMixin'
     - type: object
       required:
@@ -5860,7 +5884,7 @@ definitions:
   Band:
     allOf:
     - $ref: '#/definitions/BandCreate'
-    - $ref: '#/defintions/BaseModel'
+    - $ref: '#/definitions/BaseModel'
     - type: object
       properties:
         image:
@@ -5899,7 +5923,7 @@ definitions:
     allOf:
     - $ref: '#/definitions/BaseModel'
     - $ref: '#/definitions/TimeModelMixin'
-    - $ref: '#/defintions/ThumbnailIdentified'
+    - $ref: '#/definitions/ThumbnailIdentified'
 
   ThumbnailPaginated:
     allOf:
@@ -6234,8 +6258,6 @@ definitions:
         type: number
         format: float32
       bbox:
-        type: string
-      point:
         type: string
       project:
         type: string
