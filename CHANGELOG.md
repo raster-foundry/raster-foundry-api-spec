@@ -4,6 +4,8 @@
 
 ### Added
 
+- Added the `analysisId` query param to endpoints that require authorization via analyses [\#73](https://github.com/raster-foundry/raster-foundry-api-spec/pull/73)
+
 ### Changed
 
 ### Deprecated
