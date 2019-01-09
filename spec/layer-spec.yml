@@ -945,12 +945,6 @@ definitions:
     properties:
       name:
         type: string
-      projectId:
-        type: string
-        format: uuid
-      layerId:
-        type: string
-        format: uuid
       defaultStyle:
         type: object
 
@@ -984,6 +978,8 @@ definitions:
       activeEnd:
         type: string
         format: datetime
+      periodDays:
+        type: long
 
   ProjectLayer:
     type: object
