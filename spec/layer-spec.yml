@@ -897,7 +897,7 @@ paths:
             $ref: '#/definitions/SceneSummaryPaginated'
   /analyses/:
     get:
-      summary: get a paginated list of analyses owned by or shared with the user
+      summary: get a paginated list of project analyses owned by or shared with the user
       tags:
         - Lab
       parameters:
