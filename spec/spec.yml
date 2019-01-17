@@ -5767,7 +5767,7 @@ definitions:
         defaultLayerId:
           type: string
           format: uuid
-          description: 'Default project layer id for scenes to add to'
+          description: 'Default project layer to interact with'
 
   ImageBase:
     allOf:
