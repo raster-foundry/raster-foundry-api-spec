@@ -5526,7 +5526,7 @@ definitions:
           datasource:
             type: string
             format: uuid
-          
+
   Scene:
     allOf:
       - $ref: '#/definitions/SceneBase'
@@ -5764,6 +5764,10 @@ definitions:
         extras:
           type: object
           description: 'Optional additional json metadata'
+        defaultLayerId:
+          type: string
+          format: uuid
+          description: 'Default project layer id for scenes to add to'
 
   ImageBase:
     allOf:
