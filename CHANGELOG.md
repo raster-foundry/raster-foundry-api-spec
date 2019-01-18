@@ -15,6 +15,7 @@
 
 ### Fixed
 - Audited Scene api spec and updated spec to reflect current endpoints [\#76](https://github.com/raster-foundry/raster-foundry-api-spec/pull/76)
+- Included required image fields in image properties [\#79](https://github.com/raster-foundry/raster-foundry-api-spec/pull/79)
 
 ### Security
 
