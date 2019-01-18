@@ -5834,6 +5834,12 @@ definitions:
           description: 'list of band types for image; a single band denotes a single band image, multiple bands should be listed in order (e.g if it is an RGB tiff then bands should be [red, green blue])'
           items:
             $ref: '#/definitions/Band'
+        filename:
+          type: string
+          description: 'The basename of the file holding this image'
+        sourceUri:
+          type: string
+          description: 'An absolute location for accessing this image somewhere in the universe'
 
   ImageWithDownloadUri:
     allOf:
