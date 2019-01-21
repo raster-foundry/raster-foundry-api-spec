@@ -253,27 +253,6 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /organizations/:
-    x-resource: Organizations
-    post:
-      summary: 'Create an organization'
-      tags:
-        - Users
-      parameters:
-        - name: organization
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/Organization'
-      responses:
-        201:
-          description: 'Get newly created organization'
-          schema:
-            $ref: '#/definitions/Organization'
-        default:
-          description: 'Unexpected error'
-          schema:
-            $ref: '#/definitions/Error'
   /organizations/search/:
     x-resource: Organizations
     get:
@@ -303,24 +282,6 @@ paths:
           description: 'Returned organization'
           schema:
             $ref: '#/definitions/Organization'
-        default:
-          description: 'Unexpected error'
-          schema:
-            $ref: '#/definitions/Error'
-    put:
-      summary: 'Update an organization'
-      tags:
-        - Users
-      parameters:
-        - $ref: '#/parameters/organizationID'
-        - name: organization
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/Organization'
-      responses:
-        204:
-          description: 'Update successful (No Content)'
         default:
           description: 'Unexpected error'
           schema:
