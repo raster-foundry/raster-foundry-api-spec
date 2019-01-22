@@ -3488,7 +3488,9 @@ paths:
         201:
           description: 'GeoJSON shapes successfully created'
           schema:
-            $ref: '#/definitions/ShapeFeatureCollection'
+            type: array
+            items:
+              $ref: '#/definitions/ShapeFeatureCollection'
         400:
           description: 'Invalid shape structure'
           schema:
