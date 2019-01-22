@@ -3456,10 +3456,12 @@ paths:
           schema:
             $ref: '#/definitions/ShapeFeatureCollectionCreate'
       responses:
-        201:
+        200:
           description: GeoJSON shapes successfully created
           schema:
-            $ref: '#/definitions/ShapeFeatureCollection'
+            type: array
+            items:
+              $ref: '#/definitions/ShapeFeatureCollection'
         400:
           description: 'Invalid object'
           schema:
