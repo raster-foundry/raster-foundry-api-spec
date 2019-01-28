@@ -2292,6 +2292,7 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
+
   /projects/{projectID}/order:
     x-resource: Projects
     put:
@@ -2441,6 +2442,136 @@ paths:
                 - 'DELETE'
                 - 'ANNOTATE'
                 - '*'
+
+  /projects/{projectID}/layers/{layerID}/mosaic:
+    x-resource: Projects
+    get:
+      summary: "Get a list of a project layer's scene IDs and their color-correction parameters"
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+      responses:
+        200:
+          description: 'An ordered list of scene IDs and corresponding color correction parameters'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MosaicDefinition'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
+  /projects/{projectID}/layers/{layerID}/mosaic/{sceneID}:
+    x-resource: Projects
+    get:
+      summary: "Get a scene's saved color-correction parameters in a project layer"
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - $ref: '#/parameters/sceneID'
+      responses:
+        200:
+          description: 'Color correction parameters'
+          schema:
+            $ref: '#/definitions/ColorCorrection'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: 'Update color-correction parameters for a particular scene in a project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - $ref: '#/parameters/sceneID'
+        - name: updatedColorCorrection
+          description: 'Updated color corrections'
+          in: body
+          schema:
+            $ref: '#/definitions/ColorCorrection'
+      responses:
+        204:
+          description: 'Successfully updated color correction parameters'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
+  /projects/{projectID}/layers/{layerID}/mosaic/bulk-update-color-corrections/:
+    x-resource: Projects
+    post:
+      summary: 'Set color-correction parameters for all scenes in a project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - name: combinedSceneCorrectionParameters
+          description: 'Combined color correction parameters'
+          in: body
+          schema:
+            $ref: '#/definitions/CombinedSceneCorrectionParams'
+      responses:
+        200:
+          description: "Successfully updated all scenes' color correction parameters"
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
+  /projects/{projectID}/layers/{layerID}/order:
+    x-resource: Projects
+    put:
+      summary: 'Set a z-index order for scenes within the specified project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - name: sceneIDs
+          in: body
+          description: |
+            The z order for scenes in this project, relative to each other. The first listed scene will be visualized
+            on top of all the others, and the last listed scene will be visualized below all the others.
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+      responses:
+        204:
+          description: 'Successfully updated order of scenes in the project layer'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
 
   /areas-of-interest/:
     get:
@@ -3949,6 +4080,12 @@ parameters:
     format: uuid
   projectID:
     name: projectID
+    in: path
+    required: true
+    type: string
+    format: uuid
+  layerID:
+    name: layerID
     in: path
     required: true
     type: string
