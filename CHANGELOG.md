@@ -7,6 +7,7 @@
 - Added the `analysisId` query param to endpoints that require authorization via analyses [\#73](https://github.com/raster-foundry/raster-foundry-api-spec/pull/73)
 - Added an optional `defaultLayerId` field to `Project` data model [\#78](https://github.com/raster-foundry/raster-foundry-api-spec/pull/78)
 - Added spec for project layer mosaic definition and scene order [\#82](https://github.com/raster-foundry/raster-foundry-api-spec/pull/82)
+- Added spec for a QP in annotation shapefile export endpoint [\#84](https://github.com/raster-foundry/raster-foundry-api-spec/pull/84)
 
 ### Changed
 
