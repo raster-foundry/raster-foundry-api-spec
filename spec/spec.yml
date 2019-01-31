@@ -1597,7 +1597,7 @@ paths:
   /projects/{projectID}/labels/:
     x-resource: Projects
     get:
-      summary: 'Get a list of the labels used on a project default layer
+      summary: 'Get a list of the labels used on a project default layer'
       tags:
         - Imagery
       parameters:
@@ -2669,7 +2669,57 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
-  /projects/{projectID}/layers/{layerID}/annotations/{annotationID}:
+  /projects/{projectID}/layers/{layerID}/annotations/shapefile:
+    x-resource: Projects
+    get:
+      summary: 'Get a url for project layer annotations exported to a shapefile'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - $ref: '#/parameters/exportAll'
+      responses:
+        200:
+          description: 'Annotations retrieved successfully'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: 'Import annotations from a shapefile to project layer'
+      tags:
+        - Imagery
+      consumes:
+        - multipart/form-data
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - in: formData
+          name: name
+          type: file
+          description: The shapefile to upload
+      responses:
+        201:
+          description: 'Annotations imported successfully'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AnnotationFeature'
+        400:
+          description: 'Some records could not be parsed to annotations'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
+  /projects/{projectID}/layers/{layerID}/annotations/{annotationID}/:
     x-resouce: Projects
     get:
       summary: 'Get an annotation belonging to a project layer'
@@ -2735,55 +2785,6 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-
-    /projects/{projectID}/layers/{layerID}/annotations/shapefile:
-      x-resource: Projects
-      get:
-        summary: 'Get a url for project layer annotations exported to a shapefile'
-        tags:
-          - Imagery
-        parameters:
-          - $ref: '#/parameters/projectID'
-          - $ref: '#/parameters/layerID'
-        responses:
-          200:
-            description: 'Annotations retrieved successfully'
-          403:
-            description: 'Insufficient permissions for resource or resource does not exist'
-            schema:
-              $ref: '#/definitions/Error'
-          default:
-            description: 'Unexpected error'
-            schema:
-              $ref: '#/definitions/Error'
-      post:
-        summary: 'Import annotations from a shapefile to project layer'
-        tags:
-          - Imagery
-        consumes:
-          - multipart/form-data
-        parameters:
-          - $ref: '#/parameters/projectID'
-          - $ref: '#/parameters/layerID'
-          - in: formData
-            name: name
-            type: file
-            description: The shapefile to upload
-        responses:
-          201:
-            description: 'Annotations imported successfully'
-            schema:
-              type: array
-              items:
-                $ref: '#/definitions/AnnotationFeature'
-          400:
-            description: 'Some records could not be parsed to annotations'
-            schema:
-              $ref: '#/definitions/Error'
-          default:
-            description: 'Unexpected error'
-            schema:
-              $ref: '#/definitions/Error'
 
   /projects/{projectID}/layers/{layerID}/annotation-groups/:
     x-resource: Projects
