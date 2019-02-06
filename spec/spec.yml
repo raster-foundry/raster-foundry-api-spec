@@ -3547,7 +3547,8 @@ paths:
         - $ref: '#/parameters/pageSize'
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/project'
-        - $ref: '#/parameters/tool'
+        - $ref: '#/parameters/template'
+        - $ref: '#/parameters/projectLayer'
         - $ref: '#/parameters/owner'
         - $ref: '#/parameters/createdBy'
         - $ref: '#/parameters/ownershipType'
@@ -4835,9 +4836,16 @@ parameters:
     in: query
     type: boolean
     required: false
-  tool:
-    name: toolId
-    description: "Filter by tool's slug label"
+  template:
+    name: templateId
+    description: "Filter by template this analysis was created from"
+    in: query
+    type: string
+    format: uuid
+    required: false
+  projectLayer:
+    name: projectLayerId
+    description: "Filter by project layer this analysis was created with"
     in: query
     type: string
     format: uuid
