@@ -1838,6 +1838,7 @@ paths:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/exportAll'
       responses:
         200:
           description: 'Annotations retrieved successfully'
@@ -4391,6 +4392,12 @@ parameters:
     description: 'Full text search string'
     in: query
     type: string
+    required: false
+  exportAll:
+    name: exportAll
+    description: 'Export all annotations from a project'
+    in: query
+    type: boolean
     required: false
   minRawDataBytes:
     name: minRawDataBytes
