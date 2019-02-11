@@ -1118,7 +1118,8 @@ paths:
         - $ref: '#/parameters/maxSunElevation'
         - $ref: '#/parameters/minSunElevation'
         - $ref: '#/parameters/bbox'
-        - $ref: '#/parameters/project'
+        - $ref: '#/parameters/inProject'
+        - $ref: '#/parameters/inLayer'
         - $ref: '#/parameters/ingested'
         - $ref: '#/parameters/ingestStatus'
         - $ref: '#/parameters/pending'
@@ -5129,6 +5130,27 @@ parameters:
     type: string
     format: uuid
     required: false
+  layer:
+    name: project
+    description: 'Layer uuid to filter only'
+    in: query
+    type: string
+    format: uuid
+    required: false
+  inProject:
+    name: project
+    description: 'Project uuid to populate inProject scene property'
+    in: query
+    type: string
+    format: uuid
+    required: false
+  inLayer:
+    name: layer
+    description: 'Layer uuid to populate inLayer scene property'
+    in: query
+    type: string
+    format: uuid
+    required: false
   ingested:
     name: ingested
     description: 'Filter by ingest status'
@@ -6334,6 +6356,9 @@ definitions:
           inProject:
             type: boolean
             description: 'Whether the scene is already added to a given project'
+          inLayer:
+            type: boolean
+            description: 'Whether the scene is already added to a given project layer'
 
   SceneBrowsePaginated:
     allOf:
