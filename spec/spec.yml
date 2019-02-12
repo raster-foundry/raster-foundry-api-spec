@@ -2444,6 +2444,28 @@ paths:
                 - 'ANNOTATE'
                 - '*'
 
+  /projects/{projectID}/layers/stats:
+    x-resource: Projects
+    get:
+      summary: "Count scenes in each layer of this project"
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+      responses:
+        200:
+          description: 'A map of project layer IDs to counts of scenes'
+          schema:
+            type: object
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
   /projects/{projectID}/layers/{layerID}/mosaic:
     x-resource: Projects
     get:
