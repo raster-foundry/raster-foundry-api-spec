@@ -6556,7 +6556,7 @@ definitions:
     - $ref: '#/definitions/UserTrackingMixin'
     - type: object
       properties:
-        execution_parameters:
+        executionParameters:
           type: object
           description: 'Parameters for running the tool'
         name:
@@ -6568,6 +6568,19 @@ definitions:
             - 'PUBLIC'
             - 'ORGANIZATION'
             - 'PRIVATE'
+
+  ToolRunWithRelated:
+    allOf:
+      - $ref: '#/definitions/ToolRun'
+      - type: object
+        properties:
+          templateTitle:
+            type: string
+            description: 'Title of the template used to create this analysis'
+          layerColorGroupHex:
+            type: string
+          layerGeometry:
+            $ref: "#/definitions/Geometry"
 
   ToolRunPaginated:
     allOf:
