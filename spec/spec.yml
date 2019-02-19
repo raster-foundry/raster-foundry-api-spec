@@ -2960,6 +2960,29 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /projects/{projectID}/analyses/:
+    get:
+      summary: 'List analyses referencing this project'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+      responses:
+        200:
+          description: 'Paginated list of analyses referencing this project'
+          schema:
+            $ref: '#/definitions/ToolRunWithRelatedPaginated'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
   /areas-of-interest/:
     get:
       summary: 'Get a list of areas of interest'
@@ -6569,6 +6592,16 @@ definitions:
             - 'ORGANIZATION'
             - 'PRIVATE'
 
+  ToolRunPaginated:
+    allOf:
+    - $ref: '#/definitions/PaginatedResponse'
+    - type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/definitions/ToolRun'
+
   ToolRunWithRelated:
     allOf:
       - $ref: '#/definitions/ToolRun'
@@ -6582,15 +6615,15 @@ definitions:
           layerGeometry:
             $ref: "#/definitions/Geometry"
 
-  ToolRunPaginated:
+  ToolRunWithRelatedPaginated:
     allOf:
-    - $ref: '#/definitions/PaginatedResponse'
-    - type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/definitions/ToolRun'
+      - $ref: '#/definitions/PaginatedResponse'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/definitions/ToolRunWithRelated'
 
   Error:
     type: object
