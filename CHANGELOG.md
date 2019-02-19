@@ -11,6 +11,7 @@
 - Added spec for layer annotation related endpoints [\#85](https://github.com/raster-foundry/raster-foundry-api-spec/pull/85)
 - Added project layer ID and changed tool -> template in list endpoint for tool runs [\#83](https://github.com/raster-foundry/raster-foundry-api-spec/pull/83)
 - Added project layer stats endpoint [\#88](https://github.com/raster-foundry/raster-foundry-api-spec/pull/88)
+- Added project analyses endpoint [\#89](https://github.com/raster-foundry/raster-foundry-api-spec/pull/89)
 - Added spec for layer ID QP on export list endpoint [\#90](https://github.com/raster-foundry/raster-foundry-api-spec/pull/90)
 
 ### Changed
