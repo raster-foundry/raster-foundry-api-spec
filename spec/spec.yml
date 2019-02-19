@@ -3766,6 +3766,7 @@ paths:
         - $ref: '#/parameters/project'
         - $ref: '#/parameters/owner'
         - $ref: '#/parameters/exportStatus'
+        - $ref: '#/parameters/layer'
       responses:
         200:
           description: 'Paginated list of exports'
@@ -4836,6 +4837,13 @@ parameters:
   project:
     name: project
     description: 'Project uuid to filter only'
+    in: query
+    type: string
+    format: uuid
+    required: false
+  layer:
+    name: layer
+    description: 'Project layer uuid to filter only'
     in: query
     type: string
     format: uuid
