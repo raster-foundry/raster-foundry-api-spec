@@ -5208,6 +5208,7 @@ definitions:
           features:
             type: array
             items:
+              type: object
               $ref: '#/definitions/ProjectLayer'
   Geometry:
     type: object
