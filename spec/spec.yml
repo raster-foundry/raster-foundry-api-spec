@@ -2444,6 +2444,7 @@ paths:
                 - 'ANNOTATE'
                 - '*'
 
+
   /projects/{projectID}/layers/:
     x-resource: Projects
     get:
@@ -2459,6 +2460,36 @@ paths:
           description: 'A list of project layers'
           schema:
             $ref: '#/definitions/ProjectLayerPaginated'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+            
+  /projects/{projectID}/layers/stats:
+    x-resource: Projects
+    get:
+      summary: "Count scenes in each layer of this project"
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+      responses:
+        200:
+          description: 'A list of project layers'
+          schema:
+            $ref: '#/definitions/ProjectLayerPaginated'
+
+      responses:
+        200:
+          description: 'A map of project layer IDs to counts of scenes'
+          schema:
+            type: object
         403:
           description: 'Insufficient permissions for resource or resource does not exist'
           schema:
@@ -3954,6 +3985,7 @@ paths:
         - $ref: '#/parameters/project'
         - $ref: '#/parameters/owner'
         - $ref: '#/parameters/exportStatus'
+        - $ref: '#/parameters/layer'
       responses:
         200:
           description: 'Paginated list of exports'
@@ -5030,6 +5062,13 @@ parameters:
   project:
     name: project
     description: 'Project uuid to filter only'
+    in: query
+    type: string
+    format: uuid
+    required: false
+  layer:
+    name: layer
+    description: 'Project layer uuid to filter only'
     in: query
     type: string
     format: uuid
