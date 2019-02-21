@@ -2443,7 +2443,7 @@ paths:
                 - 'DELETE'
                 - 'ANNOTATE'
                 - '*'
-                
+
   /projects/{projectID}/layers/:
     x-resource: Projects
     get:
@@ -2490,7 +2490,7 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  
+
   /projects/{projectID}/layers/{layerID}/:
     get:
       summary: 'Get project layer'
@@ -2569,7 +2569,7 @@ paths:
         200:
           description: Paginated list of scenes associated with this layer
           schema:
-            $ref: '#/definitions/ScenePaginated'
+            $ref: '#/definitions/SceneOrderedPaginated'
         403:
           description: 'Insufficient permissions for resource or resource does not exist'
           schema:
@@ -4500,19 +4500,6 @@ parameters:
     description: 'Filter by color group hex'
     type: string
     required: false
-    
-  orderingLayer:
-    name: ordering
-    in: query
-    description: 'order layers'
-    type: array
-    collectionFormat: pipes
-    items:
-      type: string
-      enum:
-        - 'newest'
-        - 'color'
-        - 'name'
   analysisId:
     name: analysisId
     in: query
@@ -5141,37 +5128,36 @@ definitions:
   ProjectLayer:
     type: object
     properties:
-      type:
-        type: string
-      geometry:
-        $ref: '#/definitions/Geometry'
-      properties:
-        allOf:
-        - $ref: '#/definitions/BaseModel'
-        - $ref: '#/definitions/TimeModelMixin'
-        - type: object
-          properties:
-            name:
-              type: string
-              description: Display name for a layer
-            projectId:
-              type: string
-              format: uuid
-            colorGroup:
-              type: string
-              description: Color hex code for visually identifying layers are related and filtering
-            smartLayer:
-              type: string
-              format: uuid
-            rangeStart:
-              type: string
-              format: datetime
-              description: Start date for scene matching when associated with a smart layer
-            rangeEnd:
-              type: string
-              format: datetime
-              description: End date for scene matching when associated with a smart layer
-      
+      allOf:
+      - $ref: '#/definitions/BaseModel'
+      - $ref: '#/definitions/TimeModelMixin'
+      - type: object
+        properties:
+          type:
+            type: string
+          geometry:
+            $ref: '#/definitions/Geometry'
+          name:
+            type: string
+            description: Display name for a layer
+          projectId:
+            type: string
+            format: uuid
+          colorGroupHex:
+            type: string
+            description: Color hex code for visually identifying layers are related and filtering
+          smartLayerId:
+            type: string
+            format: uuid
+          rangeStart:
+            type: string
+            format: datetime
+            description: Start date for scene matching when associated with a smart layer
+          rangeEnd:
+            type: string
+            format: datetime
+            description: End date for scene matching when associated with a smart layer
+
   ProjectLayerPaginated:
     type: object
     allOf:
@@ -5623,7 +5609,7 @@ definitions:
       profileUrl:
         type: string
         description: "User's profile url. Default to an empty string"
-        
+
   UserThin:
     type: object
     properties:
@@ -6184,6 +6170,23 @@ definitions:
           datasource:
             $ref: '#/definitions/DatasourceThin'
 
+  SceneOrdered:
+    allOf:
+      - $ref: '#/definitions/SceneBase'
+      - $ref: '#/definitions/UserTrackingMixin'
+      - $ref: '#/definitions/TimeModelMixin'
+      - type: object
+        properties:
+          thumbnails:
+            type: array
+            items:
+              $ref: '#/definitions/Thumbnail'
+          datasource:
+            $ref: '#/definitions/DatasourceThin'
+          sceneOrder:
+            type: number
+            format: int
+
   SceneBrowse:
     allOf:
       - $ref: '#/definitions/SceneBase'
@@ -6210,6 +6213,16 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/SceneBrowse'
+
+  SceneOrderedPaginated:
+    allOf:
+    - $ref: '#/definitions/PaginatedResponse'
+    - type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/definitions/SceneOrdered'
 
   FilterFields:
     type: object
