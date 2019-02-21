@@ -5159,37 +5159,35 @@ parameters:
 
 definitions:
   ProjectLayer:
-    type: object
-    properties:
-      allOf:
-      - $ref: '#/definitions/BaseModel'
-      - $ref: '#/definitions/TimeModelMixin'
-      - type: object
-        properties:
-          type:
-            type: string
-          geometry:
-            $ref: '#/definitions/Geometry'
-          name:
-            type: string
-            description: Display name for a layer
-          projectId:
-            type: string
-            format: uuid
-          colorGroupHex:
-            type: string
-            description: Color hex code for visually identifying layers are related and filtering
-          smartLayerId:
-            type: string
-            format: uuid
-          rangeStart:
-            type: string
-            format: datetime
-            description: Start date for scene matching when associated with a smart layer
-          rangeEnd:
-            type: string
-            format: datetime
-            description: End date for scene matching when associated with a smart layer
+    allOf:
+    - $ref: '#/definitions/BaseModel'
+    - $ref: '#/definitions/TimeModelMixin'
+    - type: object
+      properties:
+        type:
+          type: string
+        geometry:
+          $ref: '#/definitions/Geometry'
+        name:
+          type: string
+          description: Display name for a layer
+        projectId:
+          type: string
+          format: uuid
+        colorGroupHex:
+          type: string
+          description: Color hex code for visually identifying layers are related and filtering
+        smartLayerId:
+          type: string
+          format: uuid
+        rangeStart:
+          type: string
+          format: datetime
+          description: Start date for scene matching when associated with a smart layer
+        rangeEnd:
+          type: string
+          format: datetime
+          description: End date for scene matching when associated with a smart layer
 
   ProjectLayerPaginated:
     type: object
