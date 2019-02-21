@@ -2484,12 +2484,6 @@ paths:
           description: 'A list of project layers'
           schema:
             $ref: '#/definitions/ProjectLayerPaginated'
-
-      responses:
-        200:
-          description: 'A map of project layer IDs to counts of scenes'
-          schema:
-            type: object
         403:
           description: 'Insufficient permissions for resource or resource does not exist'
           schema:
