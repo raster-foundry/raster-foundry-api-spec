@@ -4896,8 +4896,10 @@ parameters:
     name: owner
     description: 'Filter by resource owner ID'
     in: query
-    type: string
     required: false
+    type: array
+    items:
+      type: string
   exportStatus:
     name: exportStatus
     description: 'Status of export'
