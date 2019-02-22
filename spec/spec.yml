@@ -4520,8 +4520,8 @@ paths:
 
 
 parameters:
-  colorGroup:
-    name: colorGroup
+  colorGroupHex:
+    name: colorGroupHex
     in: query
     description: 'Filter by color group hex'
     type: string
