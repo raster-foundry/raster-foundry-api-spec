@@ -14,6 +14,7 @@
 - Added spec for layer ID QP on export list endpoint [\#90](https://github.com/raster-foundry/raster-foundry-api-spec/pull/90)
 
 ### Changed
+- Change owner qp to array type [/#91](https://github.com/raster-foundry/raster-foundry-api-spec/pull/91)
 
 ### Deprecated
 
