@@ -2444,19 +2444,22 @@ paths:
                 - 'ANNOTATE'
                 - '*'
 
-  /projects/{projectID}/layers/stats:
+
+  /projects/{projectID}/layers/:
     x-resource: Projects
     get:
-      summary: "Count scenes in each layer of this project"
+      summary: 'Get a paginated list of layers for the project'
       tags:
         - Imagery
       parameters:
         - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
       responses:
         200:
-          description: 'A map of project layer IDs to counts of scenes'
+          description: 'A list of project layers'
           schema:
-            type: object
+            $ref: '#/definitions/ProjectLayerPaginated'
         403:
           description: 'Insufficient permissions for resource or resource does not exist'
           schema:
@@ -2465,6 +2468,216 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
+            
+  /projects/{projectID}/layers/stats:
+    x-resource: Projects
+    get:
+      summary: "Count scenes in each layer of this project"
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+      responses:
+        200:
+          description: 'A list of project layers'
+          schema:
+            $ref: '#/definitions/ProjectLayerPaginated'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create a new project layer
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - name: ProjectLayer
+          in: body
+          schema:
+            $ref: '#/definitions/ProjectLayer'
+      responses:
+        200:
+          description: Newly created project layer
+          schema:
+            $ref: '#/definitions/ProjectLayer'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
+  /projects/{projectID}/layers/{layerID}/:
+    get:
+      summary: 'Get project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+      responses:
+        200:
+          description: Project Layer
+          schema:
+            $ref: '#/definitions/ProjectLayer'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Update project layer
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - name: ProjectLayer
+          in: body
+          schema:
+            $ref: '#/definitions/ProjectLayer'
+      responses:
+        204:
+          description: 'No Content'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: 'Delete a project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+      responses:
+        204:
+          description: 'No content, delete successful'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+  /projects/{projectID}/layers/{layerID}/scenes:
+    get:
+      summary: 'Get a list of scenes for the given layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/ingested'
+        - $ref: '#/parameters/ingestStatus'
+        - $ref: '#/parameters/accepted'
+      responses:
+        200:
+          description: Paginated list of scenes associated with this layer
+          schema:
+            $ref: '#/definitions/SceneOrderedPaginated'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: 'Add scenes to a project layer by their ID'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - name: scenes
+          in: body
+          required: true
+          description: 'UUIDs of scenes to place in project'
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+      responses:
+        200:
+          description: 'List of scenes added to project'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Scene'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: 'Delete all scenes from a project layer'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - name: scenes
+          in: body
+          required: true
+          description: 'UUIDs of scenes to delete in project'
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+      responses:
+        204:
+          description: 'No content, delete successful'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+  /projects/{projectID}/layers/{layerID}/datasources:
+    x-resource: Projects
+    get:
+      summary: 'List datasources for scenes in this project'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - $ref: '#/parameters/analysisId'
+      responses:
+        200:
+          description: 'A list of datasources'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DatasourceThin'
 
   /projects/{projectID}/layers/{layerID}/mosaic:
     x-resource: Projects
@@ -4307,6 +4520,12 @@ paths:
 
 
 parameters:
+  colorGroupHex:
+    name: colorGroupHex
+    in: query
+    description: 'Filter by color group hex'
+    type: string
+    required: false
   analysisId:
     name: analysisId
     in: query
@@ -4933,8 +5152,58 @@ parameters:
     in: query
     type: boolean
     required: false
+  accepted:
+    name: accepted
+    description: 'Filter to resources that have been approved by the user'
+    in: query
+    type: boolean
+    required: false
 
 definitions:
+  ProjectLayer:
+    allOf:
+    - $ref: '#/definitions/BaseModel'
+    - $ref: '#/definitions/TimeModelMixin'
+    - type: object
+      properties:
+        type:
+          type: string
+        geometry:
+          $ref: '#/definitions/Geometry'
+        name:
+          type: string
+          description: Display name for a layer
+        projectId:
+          type: string
+          format: uuid
+        colorGroupHex:
+          type: string
+          description: Color hex code for visually identifying layers are related and filtering
+        smartLayerId:
+          type: string
+          format: uuid
+        rangeStart:
+          type: string
+          format: datetime
+          description: Start date for scene matching when associated with a smart layer
+        rangeEnd:
+          type: string
+          format: datetime
+          description: End date for scene matching when associated with a smart layer
+
+  ProjectLayerPaginated:
+    type: object
+    allOf:
+      - $ref: '#/definitions/PaginatedResponse'
+      - type: object
+        properties:
+          type:
+            type: string
+          features:
+            type: array
+            items:
+              type: object
+              $ref: '#/definitions/ProjectLayer'
   Geometry:
     type: object
     description: GeoJSon geometry
@@ -4962,63 +5231,11 @@ definitions:
     items:
       type: number
 
-  Point:
-    type: object
-    description: GeoJSon geometry
-    externalDocs:
-      url: https://tools.ietf.org/html/rfc7946#section-3.1.2
-    allOf:
-      - $ref: "#/definitions/Geometry"
-      - properties:
-          coordinates:
-            $ref: '#/definitions/Point2D'
-
-  LineString:
-    type: object
-    description: GeoJSon geometry
-    externalDocs:
-      url: https://tools.ietf.org/html/rfc7946#section-3.1.4
-    allOf:
-      - $ref: "#/definitions/Geometry"
-      - properties:
-          coordinates:
-            type: array
-            items:
-              $ref: '#/definitions/Point2D'
-
   Polygon:
     type: object
     description: GeoJSon geometry
     externalDocs:
       url: https://tools.ietf.org/html/rfc7946#section-3.1.6
-    allOf:
-      - $ref: "#/definitions/Geometry"
-      - properties:
-          coordinates:
-            type: array
-            items:
-              type: array
-              items:
-                $ref: '#/definitions/Point2D'
-
-  MultiPoint:
-    type: object
-    description: GeoJSon geometry
-    externalDocs:
-      url: https://tools.ietf.org/html/rfc7946#section-3.1.3
-    allOf:
-      - $ref: "#/definitions/Geometry"
-      - properties:
-          coordinates:
-            type: array
-            items:
-              $ref: '#/definitions/Point2D'
-
-  MultiLineString:
-    type: object
-    description: GeoJSon geometry
-    externalDocs:
-      url: https://tools.ietf.org/html/rfc7946#section-3.1.5
     allOf:
       - $ref: "#/definitions/Geometry"
       - properties:
@@ -5046,24 +5263,6 @@ definitions:
                 items:
                   $ref: '#/definitions/Point2D'
 
-  GeometryCollection:
-    type: object
-    description: GeoJSon geometry collection
-    required:
-     - type
-     - geometries
-    externalDocs:
-      url: https://tools.ietf.org/html/rfc7946#section-3.1.8
-    properties:
-      type:
-        type: string
-        enum:
-        - GeometryCollection
-      geometries:
-        type: array
-        items:
-          $ref: '#/definitions/Geometry'
-
   Visibility:
     type: string
     enum: &VISIBILITY
@@ -5071,19 +5270,6 @@ definitions:
       - 'ORGANIZATION'
       - 'PRIVATE'
 
-  RenderDefinition:
-    type: object
-    properties:
-      breakpoints:
-        type: object
-        description: 'Mapping from a tile cell value to associated color'
-      scale:
-        type: string
-        description: |
-          The type of scale to use (e.g. 'continuous', 'qualitative', 'diverging'); qualitative strings will contain a hex color (e.g. 'qualitative[#ff00ffff]')
-      clip:
-        type: string
-        description: "The clipping strategy to use (e.g. 'left', 'right', 'both', 'none')"
   BaseModel:
     type: object
     readOnly: true
@@ -5476,13 +5662,6 @@ definitions:
         email:
           type: string
 
-  UserWithOAuth:
-    type: object
-    properties:
-      user:
-        $ref: '#/definitions/User'
-      oauth:
-        $ref: '#/definitions/Auth0User'
   UserWithRole:
     allOf:
       - $ref: '#/definitions/UserSearched'
@@ -5557,19 +5736,7 @@ definitions:
       token_type:
         type: string
         description: 'Type of token returned by using the refresh token'
-  UserCreate:
-    type: object
-    properties:
-      id:
-        type: string
-        description: 'Auth0 ID for user'
-      role:
-        type: string
-        description: 'Role to create user with in the provided organization'
-        enum:
-          - 'USER'
-          - 'VIEWER'
-          - 'OWNER'
+
   UserRole:
     type: object
     properties:
@@ -6019,23 +6186,6 @@ definitions:
               - 'AVRO'
               - 'COG'
 
-  SceneCreate:
-    allOf:
-      - $ref: '#/definitions/SceneBase'
-      - type: object
-        properties:
-          images:
-            type: array
-            items:
-              $ref: '#/definitions/ImageBanded'
-          thumbnails:
-            type: array
-            items:
-              $ref: '#/definitions/ThumbnailIdentified'
-          datasource:
-            type: string
-            format: uuid
-
   Scene:
     allOf:
       - $ref: '#/definitions/SceneBase'
@@ -6053,6 +6203,23 @@ definitions:
               $ref: '#/definitions/Thumbnail'
           datasource:
             $ref: '#/definitions/DatasourceThin'
+
+  SceneOrdered:
+    allOf:
+      - $ref: '#/definitions/SceneBase'
+      - $ref: '#/definitions/UserTrackingMixin'
+      - $ref: '#/definitions/TimeModelMixin'
+      - type: object
+        properties:
+          thumbnails:
+            type: array
+            items:
+              $ref: '#/definitions/Thumbnail'
+          datasource:
+            $ref: '#/definitions/DatasourceThin'
+          sceneOrder:
+            type: number
+            format: int
 
   SceneBrowse:
     allOf:
@@ -6080,6 +6247,16 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/SceneBrowse'
+
+  SceneOrderedPaginated:
+    allOf:
+    - $ref: '#/definitions/PaginatedResponse'
+    - type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/definitions/SceneOrdered'
 
   FilterFields:
     type: object
@@ -6131,13 +6308,6 @@ definitions:
           - 'INGESTING'
           - 'INGESTED'
           - 'FAILED'
-
-  SceneGrid:
-    type: array
-    items:
-      type: number
-      format: integer
-    readOnly: true
 
   SingleBandOptions:
     type: object
@@ -6279,56 +6449,6 @@ definitions:
           format: uuid
           description: 'Default project layer to interact with'
 
-  ImageBase:
-    allOf:
-    - type: object
-      properties:
-        visibility:
-          type: string
-          description: 'Level of restriction on viewing'
-          enum:
-            - 'PUBLIC'
-            - 'ORGANIZATION'
-            - 'PRIVATE'
-        filename:
-          type: string
-          description: 'Name of the image file'
-        resolutionMeters:
-          type: number
-          description: 'Size of pixel in meters'
-        sourceUri:
-          type: string
-          description: 'URI to original source. This should include a protocol-like prefix to identify where it is located http://, s3://, etc.'
-        rawDataBytes:
-          type: integer
-          format: int64
-          description: 'Size of original uploaded imagery in bytes'
-        scene:
-          type: string
-          format: uuid
-          description: 'Scene that image is associated with'
-        image_metadata:
-          type: object
-          description: 'Metadata about this image'
-        metadataFiles:
-          type: array
-          items:
-            type: string
-          description: |
-            Metadata files that should be present for processing all
-            images in a scene (e.g. relevant .mtl files or .xml)
-  ImageBanded:
-    allOf:
-    - $ref: '#/definitions/ImageBase'
-    - type: object
-      properties:
-        owner:
-          type: string
-          description: User id to set as the owner of the image
-        bands:
-          type: array
-          items:
-            $ref: '#/definitions/BandCreate'
   Image:
     allOf:
     - $ref: '#/definitions/BaseModel'
@@ -6379,15 +6499,7 @@ definitions:
             type: array
             items:
               $ref: '#/definitions/AOI'
-  ImagePaginated:
-    allOf:
-    - $ref: '#/definitions/PaginatedResponse'
-    - type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/definitions/Image'
+
   BandCreate:
     type: object
     properties:
@@ -6445,15 +6557,6 @@ definitions:
     - $ref: '#/definitions/TimeModelMixin'
     - $ref: '#/definitions/ThumbnailIdentified'
 
-  ThumbnailPaginated:
-    allOf:
-    - $ref: '#/definitions/PaginatedResponse'
-    - type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/definitions/Thumbnail'
   Tool:
     allOf:
     - $ref: '#/definitions/BaseModel'
