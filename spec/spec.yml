@@ -3458,6 +3458,7 @@ paths:
         - $ref: '#/parameters/ownershipType'
         - $ref: '#/parameters/groupType'
         - $ref: '#/parameters/groupId'
+        - $ref: '#/parameters/singleSource'
       responses:
         200:
           description: 'Returns a paginated list of tools'
@@ -4548,6 +4549,12 @@ parameters:
     in: query
     description: 'Filter by color group hex'
     type: string
+  singleSource:
+    name: singleSource
+    in: query
+    description: |
+      Whether a template can be sensibly filled in using a single project layer
+    type: boolean
     required: false
   analysisId:
     name: analysisId
