@@ -3173,6 +3173,29 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /projects/{projectID}/analyses/:
+    get:
+      summary: 'List analyses referencing this project'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/page'
+      responses:
+        200:
+          description: 'Paginated list of analyses referencing this project'
+          schema:
+            $ref: '#/definitions/ToolRunWithRelatedPaginated'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+
   /areas-of-interest/:
     get:
       summary: 'Get a list of areas of interest'
@@ -6659,7 +6682,7 @@ definitions:
     - $ref: '#/definitions/UserTrackingMixin'
     - type: object
       properties:
-        execution_parameters:
+        executionParameters:
           type: object
           description: 'Parameters for running the tool'
         name:
@@ -6681,6 +6704,29 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/ToolRun'
+
+  ToolRunWithRelated:
+    allOf:
+      - $ref: '#/definitions/ToolRun'
+      - type: object
+        properties:
+          templateTitle:
+            type: string
+            description: 'Title of the template used to create this analysis'
+          layerColorGroupHex:
+            type: string
+          layerGeometry:
+            $ref: "#/definitions/Geometry"
+
+  ToolRunWithRelatedPaginated:
+    allOf:
+      - $ref: '#/definitions/PaginatedResponse'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/definitions/ToolRunWithRelated'
 
   Error:
     type: object
