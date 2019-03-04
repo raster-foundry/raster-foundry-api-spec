@@ -14,6 +14,7 @@
 - Added project analyses endpoint [\#89](https://github.com/raster-foundry/raster-foundry-api-spec/pull/89)
 - Added spec for layer ID QP on export list endpoint [\#90](https://github.com/raster-foundry/raster-foundry-api-spec/pull/90)
 - Added query parameter for whether templates can sensibly be run with a single project layer [\#92](https://github.com/raster-foundry/raster-foundry-api-spec/pull/92)
+- Added single band options to project layers [\#93](https://github.com/raster-foundry/raster-foundry-api-spec/pull/93)
 
 ### Changed
 - Change owner qp to array type [/#91](https://github.com/raster-foundry/raster-foundry-api-spec/pull/91)

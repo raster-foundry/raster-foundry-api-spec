@@ -5220,6 +5220,11 @@ definitions:
           type: string
           format: datetime
           description: End date for scene matching when associated with a smart layer
+        isSingleBand:
+          type: boolean
+          description: 'Use single band options to render instead of bands'
+        singleBandOptions:
+          $ref: '#/definitions/SingleBandOptions'
 
   ProjectLayerPaginated:
     type: object
