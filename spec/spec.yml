@@ -5215,7 +5215,7 @@ definitions:
         description: 'Name for each of the split layers'
       colorGroupHex:
         type: string
-        description: 'color hex code for the new layers. Defaults to the source layer\'s'
+        description: 'Color hex code for the new layers. Defaults to the source layer hex code'
       rangeStart:
         type: string
         format: date-time
