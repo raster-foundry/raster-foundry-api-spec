@@ -5130,13 +5130,6 @@ parameters:
     type: string
     format: uuid
     required: false
-  layer:
-    name: project
-    description: 'Layer uuid to filter only'
-    in: query
-    type: string
-    format: uuid
-    required: false
   inProject:
     name: project
     description: 'Project uuid to populate inProject scene property'
