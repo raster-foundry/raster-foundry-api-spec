@@ -16,6 +16,7 @@
 - Added query parameter for whether templates can sensibly be run with a single project layer [\#92](https://github.com/raster-foundry/raster-foundry-api-spec/pull/92)
 - Added single band options to project layers [\#93](https://github.com/raster-foundry/raster-foundry-api-spec/pull/93)
 - Added query parameter for filtering layer shape [\#94](https://github.com/raster-foundry/raster-foundry-api-spec/pull/94)
+- Add split layer endpoint and datamodels [\#95](https://github.com/raster-foundry/raster-foundry-api-spec/pull/95)
 
 ### Changed
 - Change owner qp to array type [/#91](https://github.com/raster-foundry/raster-foundry-api-spec/pull/91)
