@@ -2582,6 +2582,18 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
+  /projects/{projectID}/layers/{layerID}/split:
+    post:
+      summary: 'Split the project layer according to the given parameters'
+      tags:
+        - Imagery
+      parameters:
+        - $ref: '#/parameters/projectID'
+        - $ref: '#/parameters/layerID'
+        - name: SplitOptions
+          in: body
+          schema:
+            $ref: '#/definitions/LayerSplitOptions'
   /projects/{projectID}/layers/{layerID}/scenes:
     get:
       summary: 'Get a list of scenes for the given layer'
@@ -5195,6 +5207,36 @@ parameters:
     required: false
 
 definitions:
+  LayerSplitOptions:
+    type: object
+    properties:
+      name:
+        type: string
+        description: 'Name for each of the split layers'
+      colorGroupHex:
+        type: string
+        description: 'color hex code for the new layers. Defaults to the source layer\'s'
+      rangeStart:
+        type: string
+        format: date-time
+        description: 'Start date for the split layers.'
+      rangeEnd:
+        type: string
+        format: date-time
+        description: 'End date for the split layers.'
+      period:
+        type: string
+        description: 'Split the layers by day or by week'
+        enum:
+          - DAY
+          - WEEK
+      splitOnDatasource:
+        type: boolean
+        description: 'Split layers by datasource. Defaults to true.'
+      removeFromLayer:
+        type: boolean
+        description: 'Remove scenes from the source layer once they are added to the split layers'
+
   ProjectLayer:
     allOf:
     - $ref: '#/definitions/BaseModel'
