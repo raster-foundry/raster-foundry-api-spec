@@ -2594,6 +2594,21 @@ paths:
           in: body
           schema:
             $ref: '#/definitions/LayerSplitOptions'
+      responses:
+        200:
+          description: 'List of created layers'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ProjectLayer'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
   /projects/{projectID}/layers/{layerID}/scenes:
     get:
       summary: 'Get a list of scenes for the given layer'
