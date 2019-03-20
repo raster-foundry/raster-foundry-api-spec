@@ -2,7 +2,7 @@ swagger: '2.0'
 info:
   title: Raster Foundry
   description: An application to find, view, and analyze geospatial data at any scale
-  version: "0.1.0"
+  version: "1.18.0"
 
 host: app.rasterfoundry.com
 
@@ -16,6 +16,16 @@ produces:
   - application/json
 consumes:
   - application/json
+
+securityDefinitions:
+   # X-API-Key: abcdef12345
+   APIKeyHeader:
+     type: apiKey
+     in: header
+     name: Authorization
+
+security:
+  - APIKeyHeader: []
 
 x-top-matter:
   - title: Introduction
@@ -3484,15 +3494,12 @@ paths:
         - $ref: '#/parameters/pageSize'
         - $ref: '#/parameters/owner'
         - $ref: '#/parameters/page'
-        - $ref: '#/parameters/minRating'
-        - $ref: '#/parameters/maxRating'
-        - $ref: '#/parameters/toolCategory'
-        - $ref: '#/parameters/toolTag'
         - $ref: '#/parameters/search'
         - $ref: '#/parameters/ownershipType'
         - $ref: '#/parameters/groupType'
         - $ref: '#/parameters/groupId'
         - $ref: '#/parameters/singleSource'
+        - $ref: '#/parameters/organization'
       responses:
         200:
           description: 'Returns a paginated list of tools'
@@ -3504,6 +3511,13 @@ paths:
             $ref: '#/definitions/Error'
     post:
       summary: 'Create a tool'
+      parameters:
+        - name: tool
+          in: body
+          required: true
+          description: 'Tool to create'
+          schema:
+            $ref: '#/definitions/Tool'
       tags:
         - Lab
       responses:
@@ -3559,6 +3573,12 @@ paths:
         - Lab
       parameters:
         - $ref: '#/parameters/toolID'
+        - name: tool
+          in: body
+          required: true
+          description: 'Tool to create'
+          schema:
+            $ref: '#/definitions/Tool'
       responses:
         204:
           description: 'Update an existing geoprocessing tool'
@@ -3570,33 +3590,23 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /tool-tags/:
+  /tools/{toolID}/sources:
     x-resource: Tools
     get:
-      summary: 'Get a list of tool tags'
+      summary: 'Returns the leaf nodes for an AST'
       tags:
         - Lab
       parameters:
-        - $ref: '#/parameters/search'
-        - $ref: '#/parameters/owner'
+        - $ref: '#/parameters/toolID'
       responses:
         200:
-          description: 'Retrieve a paginated list of tool tags'
+          description: 'Geoprocessing tool record'
           schema:
-            $ref: '#/definitions/ToolTagPaginated'
-        default:
-          description: 'Unexpected error'
+            $ref: '#/definitions/Tool'
+        403:
+          description: 'Insufficient permissions for resource or resource does not exist'
           schema:
             $ref: '#/definitions/Error'
-    post:
-      summary: 'Create a tool tag'
-      tags:
-        - Lab
-      responses:
-        201:
-          description: 'Successfully created a new tag for tools'
-          schema:
-            $ref: '#/definitions/ToolTag'
         default:
           description: 'Unexpected error'
           schema:
@@ -3678,155 +3688,28 @@ paths:
           description: 'Unexpected error'
           schema:
             $ref: '#/definitions/Error'
-  /tool-tags/{toolTagID}/:
+  /tools/{toolID}/actions:
     x-resource: Tools
     get:
-      summary: 'Get the details of a tool tag'
+      summary: 'List actions a user is allowed to perform on this scene'
       tags:
-        - Lab
+        - Permissions
       parameters:
-        - $ref: '#/parameters/toolTagID'
+        - $ref: '#/parameters/toolID'
       responses:
         200:
-          description: 'Successfully retrieved a tool tag'
+          description: |
+            'List of actions a user is allowed to perform on this tool. A * in the response
+            indicates the user has full permissions for this tool.'
           schema:
-            $ref: '#/definitions/ToolTag'
-        403:
-          description: 'Insufficient permissions for resource or resource does not exist'
-          schema:
-            $ref: '#/definitions/Error'
-        default:
-          description: 'Unexpected error'
-          schema:
-            $ref: '#/definitions/Error'
-    delete:
-      summary: 'Delete a tool tag'
-      tags:
-        - Lab
-      parameters:
-        - $ref: '#/parameters/toolTagID'
-      responses:
-        204:
-          description: 'Successfully deleted a tag'
-        403:
-          description: 'Insufficient permissions for resource or resource does not exist'
-          schema:
-            $ref: '#/definitions/Error'
-        default:
-          description: 'Unexpected error'
-          schema:
-            $ref: '#/definitions/Error'
-    put:
-      summary: 'Update a tool tag'
-      tags:
-        - Lab
-      parameters:
-        - $ref: '#/parameters/toolTagID'
-      responses:
-        204:
-          description: 'Successfully updated tag'
-        403:
-          description: 'Insufficient permissions for resource or resource does not exist'
-          schema:
-            $ref: '#/definitions/Error'
-        default:
-          description: 'Unexpected error'
-          schema:
-            $ref: '#/definitions/Error'
-  /tool-categories/:
-    x-resource: Tools
-    get:
-      summary: 'Get a list of tool categories'
-      parameters:
-        - $ref: '#/parameters/search'
-      tags:
-        - Lab
-      responses:
-        200:
-          description: 'Paginated list of tool categories'
-          schema:
-            $ref: '#/definitions/ToolCategoryPaginated'
-        default:
-          description: 'Unexpected Error'
-          schema:
-            $ref: '#/definitions/Error'
-    post:
-      summary: 'Create a tool category'
-      tags:
-        - Lab
-      responses:
-        201:
-          description: 'Successfully created a new tool category'
-          schema:
-            $ref: '#/definitions/ToolCategory'
-        403:
-          description: 'Insufficient permissions for resource'
-          schema:
-            $ref: '#/definitions/Error'
-        default:
-          description: 'Unexpected Error'
-          schema:
-            $ref: '#/definitions/Error'
-  /tool-categories/{slugLabel}/:
-    x-resource: Tools
-    get:
-      summary: 'Get the details of a tool category'
-      tags:
-        - Lab
-      parameters:
-        - $ref: '#/parameters/slugLabel'
-      responses:
-        200:
-          description: 'Retrieved a single tool category'
-          schema:
-            $ref: '#/definitions/ToolCategory'
-        403:
-          description: 'Insufficient permissions for resource or resource does not exist'
-          schema:
-            $ref: '#/definitions/Error'
-        default:
-          description: 'Unexpected error'
-          schema:
-            $ref: '#/definitions/Error'
-    put:
-      summary: 'Update a tool category'
-      tags:
-        - Lab
-      responses:
-        204:
-          description: 'Successfully updated a tool category'
-        400:
-          description: 'Invalid object structure'
-          schema:
-            $ref: '#/definitions/Error'
-        403:
-          description: 'Insufficient permissions for resource or resource does not exist'
-          schema:
-            $ref: '#/definitions/Error'
-        default:
-          description: 'Unexpected Error'
-          schema:
-            $ref: '#/definitions/Error'
-      parameters:
-        - $ref: '#/parameters/slugLabel'
-    delete:
-      summary: 'Delete a tool category'
-      tags:
-        - Lab
-      parameters:
-        - $ref: '#/parameters/slugLabel'
-      responses:
-        204:
-          description: 'Successfully deleted a tool category'
-        403:
-          description: 'Insufficient permissions for resource or tool not found'
-          schema:
-            $ref: '#/definitions/Error'
-        default:
-          description: 'Unexpected Error'
-          schema:
-            $ref: '#/definitions/Error'
-
+            type: array
+            items:
+              type: string
+              enum:
+                - 'VIEW'
+                - 'EDIT'
+                - 'DELETE'
+                - '*'
   /tool-runs/:
     x-resource: Tools
     get:
@@ -3838,15 +3721,21 @@ paths:
         - Lab
       parameters:
         - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/modifiedBy'
+        - $ref: '#/parameters/minCreateDatetime'
+        - $ref: '#/parameters/maxCreateDatetime'
+        - $ref: '#/parameters/minModifiedDatetime'
+        - $ref: '#/parameters/maxModifiedDatetime'
         - $ref: '#/parameters/page'
-        - $ref: '#/parameters/project'
-        - $ref: '#/parameters/template'
-        - $ref: '#/parameters/projectLayer'
+        - $ref: '#/parameters/projectId'
         - $ref: '#/parameters/owner'
         - $ref: '#/parameters/createdBy'
         - $ref: '#/parameters/ownershipType'
         - $ref: '#/parameters/groupType'
         - $ref: '#/parameters/groupId'
+        - $ref: '#/parameters/projectLayer'
+        - $ref: '#/parameters/templateId'
+        - $ref: '#/parameters/search'
         - $ref: '#/parameters/queryMapToken'
       responses:
         200:
@@ -4010,6 +3899,27 @@ paths:
           description: 'Unexpected Error'
           schema:
             $ref: '#/definitions/Error'
+  /tool-runs/{toolRunID}/actions:
+    get:
+      summary: 'List actions a user is allowed to perform on this tool run'
+      tags:
+        - Permissions
+      parameters:
+        - $ref: '#/parameters/toolRunID'
+      responses:
+        200:
+          description: |
+            'List of actions a user is allowed to perform on this tool run. A * in the response
+            indicates the user has full permissions for this tool.'
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - 'VIEW'
+                - 'EDIT'
+                - 'DELETE'
+                - '*'
   /feed/:
     get:
       summary: 'Get the cached RSS feed'
@@ -4579,6 +4489,20 @@ paths:
 
 
 parameters:
+  projectLayer:
+    name: projectLayerId
+    description: "Filter by project layer this analysis was created with"
+    in: query
+    type: string
+    format: uuid
+    required: false
+  templateId:
+    name: templateId
+    description: "Filter by template this analysis was created with"
+    in: query
+    type: string
+    format: uuid
+    required: false
   colorGroupHex:
     name: colorGroupHex
     in: query
@@ -4609,7 +4533,6 @@ parameters:
       - PLATFORM
       - ORGANIZATION
       - TEAM
-
   groupId:
     name: groupId
     in: query
@@ -4617,7 +4540,6 @@ parameters:
     type: string
     format: uuid
     required: false
-
   ownershipType:
     name: ownershipType
     in: query
@@ -5173,13 +5095,6 @@ parameters:
   template:
     name: templateId
     description: "Filter by template this analysis was created from"
-    in: query
-    type: string
-    format: uuid
-    required: false
-  projectLayer:
-    name: projectLayerId
-    description: "Filter by project layer this analysis was created with"
     in: query
     type: string
     format: uuid
