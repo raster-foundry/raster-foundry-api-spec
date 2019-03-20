@@ -1506,6 +1506,7 @@ paths:
       parameters:
         - $ref: '#/parameters/projectID'
         - $ref: '#/parameters/analysisId'
+        - $ref: '#/parameters/queryMapToken'
       responses:
         200:
           description: 'Project found'
@@ -3735,6 +3736,7 @@ paths:
         - $ref: '#/parameters/projectLayer'
         - $ref: '#/parameters/templateId'
         - $ref: '#/parameters/search'
+        - $ref: '#/parameters/queryMapToken'
       responses:
         200:
           description: 'Paginated list of tool runs'
@@ -4600,6 +4602,12 @@ parameters:
     in: query
     description: 'JWT in query parameter'
     type: string
+  queryMapToken:
+    name: mapToken
+    in: query
+    description: 'Map token ID in query parameter'
+    type: string
+    format: uuid
   width:
     name: width
     in: query

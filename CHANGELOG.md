@@ -22,6 +22,7 @@
 ### Changed
 - Change owner qp to array type [/#91](https://github.com/raster-foundry/raster-foundry-api-spec/pull/91)
 - Updated spec for feed, removed tool-tags and categories endpoints, and updated tools and tool-runs [/#97](https://github.com/raster-foundry/raster-foundry-api-spec/pull/97)
+- Added mapToken query parameter to /projects/{} and /tool-runs/ [#96](https://github.com/raster-foundry/raster-foundry-api-spec/pull/96)
 
 ### Deprecated
 
