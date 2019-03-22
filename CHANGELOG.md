@@ -18,6 +18,7 @@
 - Added query parameter for filtering layer shape [\#94](https://github.com/raster-foundry/raster-foundry-api-spec/pull/94)
 - Add split layer endpoint and datamodels [\#95](https://github.com/raster-foundry/raster-foundry-api-spec/pull/95)
 - Added layerId parameter to api/scenes, clarified existing project params [\#87](https://github.com/raster-foundry/raster-foundry-api-spec/pull/87)
+- Added map token query parameter support for annotation listing [\#98](https://github.com/raster-foundry/raster-foundry-api-spec/pull/98)
 
 ### Changed
 - Change owner qp to array type [/#91](https://github.com/raster-foundry/raster-foundry-api-spec/pull/91)
