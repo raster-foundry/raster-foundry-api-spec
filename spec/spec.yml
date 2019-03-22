@@ -1791,6 +1791,7 @@ paths:
         - $ref: '#/parameters/annotationQualityCheck'
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/pageSize'
+        - $ref: '#/parameters/queryMapToken'
       responses:
         200:
           description: 'GeoJSON feature collection containing paginated annotations of this project default layer'
